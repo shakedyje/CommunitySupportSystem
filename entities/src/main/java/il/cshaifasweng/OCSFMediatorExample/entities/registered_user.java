@@ -6,7 +6,7 @@ public class registered_user extends User
 {
     private static int nextId = 1; // Static variable to keep track of next available ID
     private int id;
-    private Task task_list;
+    private List<Task> task_list;
     private String SerialNumber;
     private int phone_numbe;
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -14,6 +14,7 @@ public class registered_user extends User
     public registered_user(String userName, int password, String community, Role role, int phone_numbe) {
         super(userName,password,community,role);
         this.phone_numbe = phone_numbe;
+        task_list=new ArrayList<>();
     }
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -23,11 +24,11 @@ public class registered_user extends User
     }
 
 
-    public Task getTask_list() {
+    public List<Task> getTask_list() {
         return task_list;
     }
 
-    public void setTask_list(Task task_list) {
+    public void setTask_list(List<Task> task_list) {
         this.task_list = task_list;
     }
 
