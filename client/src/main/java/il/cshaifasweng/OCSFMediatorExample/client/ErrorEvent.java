@@ -12,4 +12,7 @@ public class ErrorEvent {
     public ErrorEvent(Message message) {
         this.message = message;
     }
+
+
+
 }
