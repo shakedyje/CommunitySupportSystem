@@ -16,6 +16,7 @@ public class Manager extends User
         this.phone_numbe = phone_numbe;
         task_list_All=new ArrayList<>();
     }
+    public  Manager(){}
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 

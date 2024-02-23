@@ -1,30 +1,39 @@
 package il.cshaifasweng.OCSFMediatorExample.entities;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
-
+@Entity
 public class Task {
-    private static int nextId = 1; // Static variable to keep track of next available ID
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String Type_of_task;
     private LocalDateTime Creation_time;
-    private User user;
+    @ManyToOne
+    @JoinColumn(name = "registered_user_id")
+    private Registered_user registered_user;
     private LocalDateTime Deadline;
     private String Situation;
+     @OneToOne
+     @JoinColumn(name = "volunteer_id")
      private User Volunteer;
 
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Constructor
 
-    public Task( String type_of_task, LocalDateTime creation_time, User user, LocalDateTime deadline, String situation, User volunteer) {
-        this.id = nextId++; // Assign the next available ID and then increment it
+    public Task( String type_of_task, Registered_user user, LocalDateTime deadline) {
         Type_of_task = type_of_task;
-        Creation_time = creation_time;
-        this.user = user;
+        Creation_time = LocalDateTime.now();
+        this.registered_user = user;
         Deadline = deadline;
-        Situation = situation;
-        Volunteer = volunteer;
+        Situation = "waiting for approval";
     }
+
+    public Task() {
+
+    }
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Getters and setters
     public int getId() {
@@ -48,11 +57,11 @@ public class Task {
     }
 
     public User getUser() {
-        return user;
+        return registered_user;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(Registered_user user) {
+        this.registered_user = user;
     }
 
     public LocalDateTime getDeadline() {
