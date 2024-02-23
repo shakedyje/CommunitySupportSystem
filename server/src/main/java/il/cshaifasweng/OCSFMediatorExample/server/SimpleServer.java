@@ -11,6 +11,11 @@ import java.util.ArrayList;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
 public class SimpleServer extends AbstractServer {
 	private static ArrayList<SubscribedClient> SubscribersList = new ArrayList<>();
 
