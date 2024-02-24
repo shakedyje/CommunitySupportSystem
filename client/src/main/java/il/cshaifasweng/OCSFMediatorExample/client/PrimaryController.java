@@ -1,10 +1,7 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
-
-
 import java.io.IOException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-
 import il.cshaifasweng.OCSFMediatorExample.entities.Message;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -40,7 +37,10 @@ public class PrimaryController {
 	private TextField DataFromServerTF;
 
 	private int msgId;
-
+    ////////////////////////////////////
+	/////////////////////////////////////\
+	//////////////////////////////////////////////
+	///////////////////////////////////////////////////////BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBb
 	@FXML
 	void sendMessage(ActionEvent event) {
 		try {
@@ -52,11 +52,15 @@ public class PrimaryController {
 			e.printStackTrace();
 		}
 	}
+	////////////////////////////////////
+	/////////////////////////////////////\
+	//////////////////////////////////////////////
+	///////////////////////////////////////////////////////
 
 	@Subscribe
 	public void setDataFromServerTF(MessageEvent event) {
 		DataFromServerTF.setText(event.getMessage().getMessage());
-	}
+	}//////////////////////////////////////////////////////////////////////////////////
 
 	@Subscribe
 	public void setSubmittersTF(UpdateMessageEvent event) {

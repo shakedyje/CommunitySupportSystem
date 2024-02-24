@@ -7,6 +7,9 @@ public class Message implements Serializable {
     int id;
     LocalDateTime timeStamp;
     String message;
+    //////task data///
+
+
     String data;
 
     public Message(int id, LocalDateTime timeStamp, String message) {
