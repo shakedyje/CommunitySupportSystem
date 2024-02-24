@@ -29,6 +29,12 @@ public class Task {
         Deadline = deadline;
         Status = "waiting for approval";
     }
+    public Task( String type_of_task)
+    {
+        Type_of_task = type_of_task;
+        Creation_time = LocalDateTime.now();
+        Status = "waiting for approval";
+    }
 
     public Task()
     {

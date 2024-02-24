@@ -75,7 +75,7 @@ public class Registered_user extends User
         return phone_number;
     }
 
-    public void setPhone_numbe(int phone_numbe) {
-        this.phone_numbe = phone_numbe;
+    public void setPhone_number(String phone_number) {
+        this.phone_number = phone_number;
     }
 }

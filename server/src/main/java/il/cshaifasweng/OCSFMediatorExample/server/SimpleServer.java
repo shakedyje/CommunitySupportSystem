@@ -177,7 +177,7 @@ public class SimpleServer extends AbstractServer {
 		}
 	}
 
-	public void sendToAllClients(Message message) {
+	/*public void sendToAllClients(Message message) {
 		try {
 			for (SubscribedClient SubscribedClient : SubscribersList) {
 				SubscribedClient.getClient().sendToClient(message);
@@ -185,6 +185,6 @@ public class SimpleServer extends AbstractServer {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-	}
+	}*/
 
 }
