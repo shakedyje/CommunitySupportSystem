@@ -31,6 +31,7 @@ public class SimpleChatClient extends Application {
 
     private static Scene scene;
     private SimpleClient client;
+    private static FXMLLoader fxmlLoader;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -38,21 +39,33 @@ public class SimpleChatClient extends Application {
 
     	client = SimpleClient.getClient();
     	client.openConnection();
-        scene = new Scene(loadFXML("show_tasks"), 600, 400);
+        scene = new Scene(loadFXML("main").load(), 600, 600);
         stage.setScene(scene);
         stage.show();
     }
 
     static void setRoot(String fxml) throws IOException {
-        scene.setRoot(loadFXML(fxml));
+        scene.setRoot(loadFXML(fxml).load());
     }
-
+/*
     private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(SimpleChatClient.class.getResource(fxml + ".fxml"));
         return fxmlLoader.load();
+    }*/
+
+
+    private static FXMLLoader loadFXML(String fxml) throws IOException {
+        fxmlLoader = new FXMLLoader(SimpleChatClient.class.getResource(fxml + ".fxml"));
+        return fxmlLoader;
     }
-    
-    
+
+
+    public static FXMLLoader getLoader() {
+        return fxmlLoader;
+    }
+
+
+
 
     @Override
 	public void stop() throws Exception {

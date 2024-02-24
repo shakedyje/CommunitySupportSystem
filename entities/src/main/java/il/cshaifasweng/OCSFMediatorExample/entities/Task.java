@@ -3,35 +3,36 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Tasks")
 public class Task {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String Type_of_task;
     private LocalDateTime Creation_time;
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private Registered_user user;
+    @JoinColumn(name = "registered_user_id")
+    private Registered_user registered_user;
     private LocalDateTime Deadline;
     private String Status;
-    @ManyToOne
-    @JoinColumn(name = "volunteer_id")
-    private Registered_user volunteer;
+     @OneToOne
+     @JoinColumn(name = "volunteer_id")
+     private User Volunteer;
 
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Constructor
-    public Task( String type_of_task, LocalDateTime creation_time, Registered_user user, LocalDateTime deadline, String situation, Registered_user volunteer) {
+
+    public Task( String type_of_task, Registered_user user, LocalDateTime deadline) {
         Type_of_task = type_of_task;
-        Creation_time = creation_time;
-        this.user = user;
+        Creation_time = LocalDateTime.now();
+        this.registered_user = user;
         Deadline = deadline;
-        Status = Status;
-        Volunteer = volunteer;
+        Status = "waiting for approval";
     }
 
-    public Task() {
-
+    public Task()
+    {
+       this.Type_of_task="help";
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -56,12 +57,12 @@ public class Task {
         Creation_time = creation_time;
     }
 
-    public Registered_user getUser() {
-        return user;
+    public User getUser() {
+        return registered_user;
     }
 
-    public void setUser(ser user) {
-        this.ruser = user;
+    public void setUser(Registered_user user) {
+        this.registered_user = user;
     }
 
     public LocalDateTime getDeadline() {
@@ -73,11 +74,11 @@ public class Task {
     }
 
     public String getStatus() {
-        return status;
+        return Status;
     }
 
-    public void setStatus(String status) {
-        status = status;
+    public void setStatus(String situation) {
+        Status = situation;
     }
 
     public User getVolunteer() {
@@ -86,7 +87,7 @@ public class Task {
 
     public void setVolunteer(User volunteer) {
         Volunteer = volunteer;
-    }
+    }
 
 
 }

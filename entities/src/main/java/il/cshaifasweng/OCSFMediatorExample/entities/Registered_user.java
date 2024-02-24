@@ -20,10 +20,10 @@ public class Registered_user extends User
 
     private String password;
 
-//    @OneToMany(mappedBy = "user")
+    //    @OneToMany(mappedBy = "user")
 //    private List <Task> volunteered;
     boolean permission; //1 for manager
-//    private String SerialNumber;
+    private String SerialNumber;
     @Column(name = "phone number")
     private String phone_number;
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -54,14 +54,14 @@ public class Registered_user extends User
         return id;
     }
 
-
+/*
     public List<Task> getTask_list() {
         return task_list;
     }
 
     public void setTask_list(List<Task> task_list) {
         this.task_list = task_list;
-    }
+    }*/
 
     public String getSerialNumber() {
         return SerialNumber;
@@ -71,8 +71,8 @@ public class Registered_user extends User
         SerialNumber = serialNumber;
     }
 
-    public int getPhone_numbe() {
-        return phone_numbe;
+    public String getPhone_number() {
+        return phone_number;
     }
 
     public void setPhone_numbe(int phone_numbe) {

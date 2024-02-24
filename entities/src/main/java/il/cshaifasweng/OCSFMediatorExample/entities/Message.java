@@ -7,7 +7,8 @@ public class Message implements Serializable {
     int id;
     LocalDateTime timeStamp;
     String message;
-    //////task data///
+    Task task=null;
+
 
 
     String data;
@@ -22,6 +23,13 @@ public class Message implements Serializable {
         this.id = id;
         this.timeStamp = LocalDateTime.now();
         this.message = message;
+        this.data = null;
+    }
+    public Message(int id, String message,int deadline) {
+        this.id = id;
+        this.timeStamp = LocalDateTime.now();
+        this.message = message;
+        //this.task=new Task(message,deadline);
         this.data = null;
     }
 
@@ -62,5 +70,9 @@ public class Message implements Serializable {
 
     public void setData(String data) {
         this.data = data;
+    }
+
+    public Task getTask() {
+        return task;
     }
 }

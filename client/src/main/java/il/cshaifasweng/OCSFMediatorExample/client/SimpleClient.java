@@ -10,7 +10,7 @@ import il.cshaifasweng.OCSFMediatorExample.client.ocsf.AbstractClient;
 import java.util.List;
 
 public class SimpleClient extends AbstractClient {
-	
+
 	private static SimpleClient client = null;
 
 	private SimpleClient(String host, int port) {
@@ -40,7 +40,7 @@ public class SimpleClient extends AbstractClient {
 			EventBus.getDefault().post(new MessageEvent(message));
 		}
 	}
-	
+
 	public static SimpleClient getClient() {
 		if (client == null) {
 			client = new SimpleClient("localhost", 3000);
