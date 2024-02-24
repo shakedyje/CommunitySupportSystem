@@ -24,7 +24,12 @@ public class SimpleClient extends AbstractClient {
 			EventBus.getDefault().post(new NewSubscriberEvent(message));
 		}else if(message.getMessage().equals("Error! we got an empty message")){
 			EventBus.getDefault().post(new ErrorEvent(message));
-		}else {
+		}else if(message1.getChangeStatus().equals("the change completed")){
+
+			EventBus.getDefault().post(new NewDetailsEvent(message1));
+		}
+
+		else {
 			EventBus.getDefault().post(new MessageEvent(message));
 		}
 	}
