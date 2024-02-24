@@ -15,12 +15,10 @@ import java.time.format.DateTimeFormatter;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import javax.websocket.*;
 import java.net.URI;
 import java.util.concurrent.CountDownLatch;
 
-import javax.websocket.*;
-import javax.websocket.Session;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;

@@ -2,8 +2,11 @@ package il.cshaifasweng.OCSFMediatorExample.client;
 import java.io.IOException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+
 import il.cshaifasweng.OCSFMediatorExample.entities.Message;
 import il.cshaifasweng.OCSFMediatorExample.entities.MessageOfStatus;
+import il.cshaifasweng.OCSFMediatorExample.entities.Task;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -13,6 +16,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -20,48 +24,28 @@ import org.greenrobot.eventbus.Subscribe;
 public class PrimaryController {
 
 	@FXML
-	private TextField submitterID1;
+	private Button displayTasks;
+
 
 	@FXML
-	private TextField submitterID2;
+	private VBox tasksContainer;
 
-	@FXML
-	private TextField timeTF;
-
-	@FXML
-	private TextField MessageTF;
-
-	@FXML
-	private Button SendBtn;
-
-	@FXML
-	private TextField DataFromServerTF;
 
 	private int msgId;
     ////////////////////////////////////
 	/////////////////////////////////////\
 	//////////////////////////////////////////////
 	///////////////////////////////////////////////////////BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBb
-	@FXML
-	void sendMessage(ActionEvent event) {
-		try {
-			Message message = new Message(msgId++, MessageTF.getText());
-			MessageTF.clear();
-			SimpleClient.getClient().sendToServer(message);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+
 	////////////////////////////////////
 	/////////////////////////////////////\
 	//////////////////////////////////////////////
 	///////////////////////////////////////////////////////
 
 	@FXML
-	void changeRequest(ActionEvent event) {
+	void changeRequest(Task task) {
 		try {
-			MessageOfStatus message = new Message(task, "change status");
+			MessageOfStatus message = new MessageOfStatus(task, "change status");
 			SimpleClient.getClient().sendToServer(message);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -69,10 +53,20 @@ public class PrimaryController {
 		}
 	}
 
-	@Subscribe
+	@FXML
+	void displayTasks(ActionEvent event) {
+		try {
+			SimpleClient.getClient().sendToServer("display tasks");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	/*@Subscribe
 	public void setDataFromServerTF(MessageEvent event) {
 		DataFromServerTF.setText(event.getMessage().getMessage());
-	}//////////////////////////////////////////////////////////////////////////////////
+	}//////////////////////////////////////////////////////////////////////////////////*/
 
 	@Subscribe
 	public void showNewRequest(NewDetailsEvent event) {
@@ -86,10 +80,10 @@ public class PrimaryController {
 									"\nDeadline time: %s\nStatus: %s\nVolunteer: %s",
 							event.getMessage().getTask().getId(),
 							event.getMessage().getTask().getType_of_task(),
-							event.getMessage().getTask().getCreation_time().format(dtf),
+							event.getMessage().getTask().getCreation_time().format(creationTime),
 							event.getMessage().getTask().getUser(),
-							event.getMessage().getTask().getDeadline().format(dtf),
-							event.getMessage().getTask().getSituation(),
+							event.getMessage().getTask().getDeadline().format(deadlineTime),
+							event.getMessage().getTask().getStatus(),
 							event.getMessage().getTask().getVolunteer())
 			);
 			alert.setTitle("Task Information");
@@ -99,10 +93,64 @@ public class PrimaryController {
 	}
 
 	@Subscribe
+	public void displayTasks(TasksMessageEvent event) {
+		tasksContainer.getChildren().clear(); // Clear existing content
+
+		if (event != null) {
+			List<Task> tasks = event.getTasks();
+
+			if (tasks != null && !tasks.isEmpty()) {
+				for (Task task : tasks) {
+					Button taskButton = createTaskButton(task);
+					tasksContainer.getChildren().add(taskButton);
+				}
+			} else {
+				showAlert("Tasks Information", "Tasks Information", "No tasks found in the data base.", Alert.AlertType.INFORMATION);
+
+			}
+		} else {
+			showAlert("Error", "Error", "Invalid event received.", Alert.AlertType.ERROR);
+		}
+	}
+	private void showAlert(String title, String header, String content, Alert.AlertType alertType) {
+		Alert alert = new Alert(alertType, content);
+		alert.setTitle(title);
+		alert.setHeaderText(header);
+		alert.show();
+	}
+
+
+	private Button createTaskButton(Task task) {
+		Button button = new Button(String.format("Task %d", task.getId()));
+
+		/*we'll think as a group what information we'll show here, before displaying tasks*/
+
+		button.setOnAction(event -> handleTaskButtonClick(task));
+
+		return button;
+	}
+
+
+	private void handleTaskButtonClick(Task task){
+		// Construct detailed task information
+
+		String taskDetails = String.format("Task ID: %d\nType: %s\nDeadline: %s\nStatus: %s",
+				task.getId(), task.getType_of_task(), task.getDeadline(), task.getStatus());
+
+		// Update the TextArea with task details
+		DataFromServerTF.setText(taskDetails);
+		DataFromServerTF.setVisible(true);
+		Button button = new Button(String.format("Change Status"));
+		// add button of change status
+		button.setOnAction(event -> changeRequest(task));
+	}
+
+
+	/*@Subscribe
 	public void setSubmittersTF(UpdateMessageEvent event) {
 		submitterID1.setText(event.getMessage().getData().substring(0,9));
 		submitterID2.setText(event.getMessage().getData().substring(11,20));
-	}
+	}*/
 
 	@Subscribe
 	public void getStarterData(NewSubscriberEvent event) {
@@ -136,8 +184,8 @@ public class PrimaryController {
 	@FXML
 	void initialize() {
 		EventBus.getDefault().register(this);
-		MessageTF.clear();
-		DataFromServerTF.clear();
+	//	MessageTF.clear();
+	//	DataFromServerTF.clear();
 		msgId=0;
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
 		Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
