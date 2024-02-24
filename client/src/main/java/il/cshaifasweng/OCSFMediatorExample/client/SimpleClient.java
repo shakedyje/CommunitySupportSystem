@@ -1,6 +1,7 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
 import il.cshaifasweng.OCSFMediatorExample.entities.Message;
+import il.cshaifasweng.OCSFMediatorExample.entities.MessageOfStatus;
 import org.greenrobot.eventbus.EventBus;
 
 import il.cshaifasweng.OCSFMediatorExample.client.ocsf.AbstractClient;
@@ -13,16 +14,11 @@ public class SimpleClient extends AbstractClient {
 		super(host, port);
 	}
 
-
-
-	////////////////////////////////////
-	/////////////////////////////////////\
-	//////////////////////////////////////////////
-	///////////////////////////////////////////////////////CCCCCCCCCCCCCCCCCCCCCCCCCCCc
 	@Override
 	protected void handleMessageFromServer(Object msg) {
 		Message message = (Message) msg;
-		if(message.getMessage().equals("update submitters IDs")){
+		MessageOfStatus message1 =(MessageOfStatus)  msg;
+		if(message1.getChangeStatus().equals("update submitters IDs")){
 			EventBus.getDefault().post(new UpdateMessageEvent(message));
 		}else if(message.getMessage().equals("client added successfully")){
 			EventBus.getDefault().post(new NewSubscriberEvent(message));
@@ -32,11 +28,6 @@ public class SimpleClient extends AbstractClient {
 			EventBus.getDefault().post(new MessageEvent(message));
 		}
 	}
-
-	////////////////////////////////////
-	/////////////////////////////////////\
-	//////////////////////////////////////////////
-	///////////////////////////////////////////////////////CCCCCCCCCCCCCCCCCCCCCCCCCCCc
 	
 	public static SimpleClient getClient() {
 		if (client == null) {
