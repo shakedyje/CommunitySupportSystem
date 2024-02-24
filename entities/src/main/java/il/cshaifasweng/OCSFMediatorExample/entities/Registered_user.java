@@ -4,26 +4,48 @@ import java.util.List;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "Users")
 public class Registered_user extends User
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @OneToMany(mappedBy = "registered_user")
-    private List <Task> task_list;
-    private String SerialNumber;
-    private int phone_numbe;
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    @Column(name = "given name")
+    private String givenName;
+    @Column(name = "family name")
+    private String familyName;
 
-    public Registered_user(String userName, int password, String community, Role role, int phone_numbe) {
-        super(userName,password,community,role);
-        this.phone_numbe = phone_numbe;
-        task_list=new ArrayList<>();
+    private String username;
+
+    private String password;
+
+//    @OneToMany(mappedBy = "user")
+//    private List <Task> volunteered;
+    boolean permission; //1 for manager
+//    private String SerialNumber;
+    @Column(name = "phone number")
+    private String phone_number;
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    private String community;
+
+    // Default constructor for JPA
+    public Registered_user() {
+        // Default constructor required by JPA
     }
 
-    public Registered_user() {
-
+    // Constructor with parameters
+    public Registered_user(String givenName, String familyName, String username, String password,
+                           boolean permission, String phoneNumber, String community) {
+        this.givenName = givenName;
+        this.familyName = familyName;
+        this.username = username;
+        this.password = password;
+        this.permission = permission;
+        this.phone_number = phoneNumber;
+        this.community = community;
+        // Initialize other fields or collections if needed
+        // task_list = new ArrayList<>();
     }
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

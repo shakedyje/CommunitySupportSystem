@@ -3,31 +3,31 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "Tasks")
 public class Task {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String Type_of_task;
     private LocalDateTime Creation_time;
     @ManyToOne
-    @JoinColumn(name = "registered_user_id")
-    private Registered_user registered_user;
+    @JoinColumn(name = "user_id")
+    private Registered_user user;
     private LocalDateTime Deadline;
-    private String Situation;
-     @OneToOne
-     @JoinColumn(name = "volunteer_id")
-     private User Volunteer;
+    private String Status;
+    @ManyToOne
+    @JoinColumn(name = "volunteer_id")
+    private Registered_user volunteer;
 
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Constructor
-
-    public Task( String type_of_task, Registered_user user, LocalDateTime deadline) {
+    public Task( String type_of_task, LocalDateTime creation_time, Registered_user user, LocalDateTime deadline, String situation, Registered_user volunteer) {
         Type_of_task = type_of_task;
-        Creation_time = LocalDateTime.now();
-        this.registered_user = user;
+        Creation_time = creation_time;
+        this.user = user;
         Deadline = deadline;
-        Situation = "waiting for approval";
+        Status = Status;
+        Volunteer = volunteer;
     }
 
     public Task() {
@@ -56,12 +56,12 @@ public class Task {
         Creation_time = creation_time;
     }
 
-    public User getUser() {
-        return registered_user;
+    public Registered_user getUser() {
+        return user;
     }
 
-    public void setUser(Registered_user user) {
-        this.registered_user = user;
+    public void setUser(ser user) {
+        this.ruser = user;
     }
 
     public LocalDateTime getDeadline() {
@@ -72,12 +72,12 @@ public class Task {
         Deadline = deadline;
     }
 
-    public String getSituation() {
-        return Situation;
+    public String getStatus() {
+        return status;
     }
 
-    public void setSituation(String situation) {
-        Situation = situation;
+    public void setStatus(String status) {
+        status = status;
     }
 
     public User getVolunteer() {
@@ -86,7 +86,7 @@ public class Task {
 
     public void setVolunteer(User volunteer) {
         Volunteer = volunteer;
-    }
+    }
 
 
 }
