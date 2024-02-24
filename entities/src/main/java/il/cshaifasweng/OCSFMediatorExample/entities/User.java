@@ -2,7 +2,7 @@ package il.cshaifasweng.OCSFMediatorExample.entities;
 import javax.persistence.*;
 
 // Entity:Abstract User
-enum Role {User,Manager}
+
 
 @Entity
 abstract class User
@@ -13,13 +13,13 @@ abstract class User
     private int id;
 
     private String UserName;
-    private int Password;
+    private String Password;
     private String community;
-    private Role role;
+    private String role;
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public User(String userName, int password, String community, Role role) {
+    public User(String userName, String password, String community, String role) {
         UserName = userName;
         Password = password;
         this.community = community;
@@ -47,11 +47,11 @@ abstract class User
         UserName = userName;
     }
 
-    public int getPassword() {
+    public String getPassword() {
         return Password;
     }
 
-    public void setPassword(int password) {
+    public void setPassword(String password) {
         Password = password;
     }
 
@@ -63,11 +63,11 @@ abstract class User
         this.community = community;
     }
 
-    public Role getRole() {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(String role) {
         this.role = role;
     }
 }

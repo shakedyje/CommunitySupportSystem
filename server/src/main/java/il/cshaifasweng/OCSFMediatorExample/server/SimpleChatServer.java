@@ -1,5 +1,7 @@
+
 package il.cshaifasweng.OCSFMediatorExample.server;
 
+import il.cshaifasweng.OCSFMediatorExample.server.SimpleServer; // Add this import statement
 import java.io.IOException;
 
 

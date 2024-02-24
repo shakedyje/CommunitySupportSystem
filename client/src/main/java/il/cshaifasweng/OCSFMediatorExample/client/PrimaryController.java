@@ -32,15 +32,7 @@ public class PrimaryController {
 
 
 	private int msgId;
-    ////////////////////////////////////
-	/////////////////////////////////////\
-	//////////////////////////////////////////////
-	///////////////////////////////////////////////////////BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBb
 
-	////////////////////////////////////
-	/////////////////////////////////////\
-	//////////////////////////////////////////////
-	///////////////////////////////////////////////////////
 
 	@FXML
 	void changeRequest(Task task) {
@@ -54,7 +46,7 @@ public class PrimaryController {
 	}
 
 	@FXML
-	void displayTasks(ActionEvent event) {
+	void displayTasks() {
 		try {
 			SimpleClient.getClient().sendToServer("display tasks");
 		} catch (IOException e) {
@@ -92,8 +84,9 @@ public class PrimaryController {
 		});
 	}
 
+/************************************************************************************************************/
 	@Subscribe
-	public void displayTasks(TasksMessageEvent event) {
+	public void displayTasks(TasksMessageEvent event) {/////////////////////////////////////////////////////////////////////////////////////////////
 		tasksContainer.getChildren().clear(); // Clear existing content
 
 		if (event != null) {
@@ -125,12 +118,13 @@ public class PrimaryController {
 
 		/*we'll think as a group what information we'll show here, before displaying tasks*/
 
-		button.setOnAction(event -> handleTaskButtonClick(task));
+		//button.setOnAction(event -> handleTaskButtonClick(task));
 
 		return button;
 	}
+/**********************************************************************************************************/
 
-
+/*
 	private void handleTaskButtonClick(Task task){
 		// Construct detailed task information
 
@@ -144,6 +138,7 @@ public class PrimaryController {
 		// add button of change status
 		button.setOnAction(event -> changeRequest(task));
 	}
+*/
 
 
 	/*@Subscribe
