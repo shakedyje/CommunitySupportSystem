@@ -15,6 +15,17 @@ import java.time.format.DateTimeFormatter;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import javax.websocket.*;
+import java.net.URI;
+import java.util.concurrent.CountDownLatch;
+
+import javax.websocket.*;
+import javax.websocket.Session;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.concurrent.CountDownLatch;
+
 /**
  * JavaFX App
  */
@@ -26,6 +37,7 @@ public class SimpleChatClient extends Application {
     @Override
     public void start(Stage stage) throws IOException {
     	EventBus.getDefault().register(this);
+
     	client = SimpleClient.getClient();
     	client.openConnection();
         scene = new Scene(loadFXML("primary"), 640, 480);
@@ -68,8 +80,7 @@ public class SimpleChatClient extends Application {
         });
     }
 
-
-	public static void main(String[] args) {
+    public static void main(String[] args) {
         launch();
     }
 

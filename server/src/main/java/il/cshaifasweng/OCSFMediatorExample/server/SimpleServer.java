@@ -1,6 +1,7 @@
 package il.cshaifasweng.OCSFMediatorExample.server;
 
 import il.cshaifasweng.OCSFMediatorExample.entities.Message;
+import il.cshaifasweng.OCSFMediatorExample.entities.MessageOfStatus;
 import il.cshaifasweng.OCSFMediatorExample.server.ocsf.AbstractServer;
 import il.cshaifasweng.OCSFMediatorExample.server.ocsf.ConnectionToClient;
 import il.cshaifasweng.OCSFMediatorExample.server.ocsf.SubscribedClient;
@@ -26,6 +27,7 @@ public class SimpleServer extends AbstractServer {
 
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
+		MessageOfStatus message1 = (MessageOfStatus) msg;
 		Message message = (Message) msg;
 		String request = message.getMessage();
 		try {
@@ -76,7 +78,7 @@ public class SimpleServer extends AbstractServer {
 
 
 			}
-			else if (request.startsWith("multiply")){
+			else if (request.startsWith("multiply")) {
 				//add code here to multiply 2 numbers received in the message and send result back to client
 				//(use substring method as shown above)
 				//message format: "multiply n*m"
@@ -85,20 +87,53 @@ public class SimpleServer extends AbstractServer {
 				String[] parts = twoParameters.split("\\s+");
 				int n = Integer.parseInt(parts[0]);
 				int m = Integer.parseInt(parts[2]);
-				int result = n*m;
+				int result = n * m;
 				String stringResult = Integer.toString(result);
 				message.setMessage(stringResult);
 				client.sendToClient(message);
 				System.out.println(stringResult);
-			}else{
-				//add code here to send received message to all clients.
-				//The string we received in the message is the message we will send back to all clients subscribed.
-				//Example:
+
+			else if (message1.getChangeStatus().startsWith("change status")) {
+					int entityId = message1.getTask().getId();
+
+					Configuration configuration = new Configuration().configure();
+					try (SessionFactory sessionFactory = configuration.buildSessionFactory();
+						 Session session = sessionFactory.openSession()) {
+
+						// Begin a transaction
+						Transaction transaction = session.beginTransaction();
+
+						// Load the entity from the database
+						Task task = session.get(Task.class, entityId);
+
+						// Check if the entity exists
+						if (task != null) {
+							// Modify the properties of the entity
+							task.setStatus("not performed");
+
+							// Save the changes by committing the transaction
+							transaction.commit();
+
+							MessageOfStatus message2 = new MessageOfStatus(task , "the change completed");
+							// Echo back the received message to the client
+
+							client.sendToClient(message2);
+						} else {
+							System.out.println("Entity not found with id: " + entityId);
+						}
+					}
+
+
+				} else {
+					//add code here to send received message to all clients.
+					//The string we received in the message is the message we will send back to all clients subscribed.
+					//Example:
 					// message received: "Good morning"
 					// message sent: "Good morning"
-				//see code for changing submitters IDs for help
-				message.setMessage(request);
-				sendToAllClients(message);
+					//see code for changing submitters IDs for help
+					message.setMessage(request);
+					sendToAllClients(message);
+				}
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();//

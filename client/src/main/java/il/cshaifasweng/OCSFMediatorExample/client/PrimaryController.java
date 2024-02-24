@@ -6,6 +6,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import il.cshaifasweng.OCSFMediatorExample.entities.Message;
+import il.cshaifasweng.OCSFMediatorExample.entities.MessageOfStatus;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -53,9 +54,44 @@ public class PrimaryController {
 		}
 	}
 
+	@FXML
+	void changeRequest(ActionEvent event) {
+		try {
+			MessageOfStatus message = new Message(task, "change status");
+			SimpleClient.getClient().sendToServer(message);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	@Subscribe
 	public void setDataFromServerTF(MessageEvent event) {
 		DataFromServerTF.setText(event.getMessage().getMessage());
+	}
+
+	@Subscribe
+	public void showNewRequest(NewDetailsEvent event) {
+
+		DateTimeFormatter creationTime = DateTimeFormatter.ofPattern("HH:mm:ss");
+		DateTimeFormatter deadlineTime = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+		Platform.runLater(() -> {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION,
+					String.format("Task ID: %d\nType of task: %s\nCreation time: %s\nUser name: %s" +
+									"\nDeadline time: %s\nStatus: %s\nVolunteer: %s",
+							event.getMessage().getTask().getId(),
+							event.getMessage().getTask().getType_of_task(),
+							event.getMessage().getTask().getCreation_time().format(dtf),
+							event.getMessage().getTask().getUser(),
+							event.getMessage().getTask().getDeadline().format(dtf),
+							event.getMessage().getTask().getSituation(),
+							event.getMessage().getTask().getVolunteer())
+			);
+			alert.setTitle("Task Information");
+			alert.setHeaderText("Task Information:");
+			alert.show();
+		});
 	}
 
 	@Subscribe
@@ -74,6 +110,8 @@ public class PrimaryController {
 			e.printStackTrace();
 		}
 	}
+
+
 
 	@Subscribe
 	public void errorEvent(ErrorEvent event){
