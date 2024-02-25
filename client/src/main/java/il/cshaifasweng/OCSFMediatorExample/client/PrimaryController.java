@@ -94,7 +94,9 @@ public class PrimaryController {
 	@FXML
 	void displayTasks() {
 		try {
+			System.out.println("get into display controller1");
 			SimpleClient.getClient().sendToServer("display tasks");
+			System.out.println("sended to server");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -104,12 +106,15 @@ public class PrimaryController {
 /************************************************************************************************************/
 	@Subscribe
 	public void displayTasks(TasksMessageEvent event) {/////////////////////////////////////////////////////////////////////////////////////////////
+		System.out.println("got into displaytasks func2");
 		tasksContainer.getChildren().clear(); // Clear existing content
 
 		if (event != null) {
 			List<Task> tasks = event.getTasks();
+			System.out.println("recognized event");
 
 			if (tasks != null && !tasks.isEmpty()) {
+				System.out.println("tasks!=null");
 				for (Task task : tasks) {
 					Button taskButton = createTaskButton(task);
 					tasksContainer.getChildren().add(taskButton);
@@ -135,7 +140,7 @@ public class PrimaryController {
 
 		/*we'll think as a group what information we'll show here, before displaying tasks*/
 
-		//button.setOnAction(event -> handleTaskButtonClick(task));
+//		button.setOnAction(event -> handleTaskButtonClick(task));
 
 		return button;
 	}

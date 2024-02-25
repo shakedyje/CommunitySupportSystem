@@ -34,15 +34,17 @@ public class SimpleServer extends AbstractServer {
 
     @Override
     protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
-        MessageOfStatus message1 = (MessageOfStatus) msg;
-        Message message = (Message) msg;
-        String request = message.getMessage();
+        System.out.println("get into handle from client in server class");
+/*        MessageOfStatus message1 = (MessageOfStatus) msg;*/
+//        Message message = (Message) msg;
+        String request = (String)msg;
         try {
-            if (request.isBlank()) {
-                message.setMessage("Error! we got an empty message");
-                client.sendToClient(message);
-            }
-            if (message1.getChangeStatus().startsWith("change status")) {
+//            if (request.isBlank()) {
+//                System.out.println("heyyy");
+//                message.setMessage("Error! we got an empty message");
+//                client.sendToClient(message);
+//            }
+/*            if (message1.getChangeStatus().startsWith("change status")) {
                 int entityId = message1.getTask().getId();
 
                 Configuration configuration = new Configuration().configure();
@@ -71,18 +73,23 @@ public class SimpleServer extends AbstractServer {
                         System.out.println("Entity not found with id: " + entityId);
                     }
                 }
-            } else if (request.equals("display tasks")) {
+            } */if (request.equals("display tasks")) {
+                System.out.println("in desplayyyyyyyy");
                 Configuration configuration = new Configuration().configure();
-                try (SessionFactory sessionFactory = configuration.buildSessionFactory();
+                try (
+                        SessionFactory sessionFactory = configuration.buildSessionFactory();
                      Session session = sessionFactory.openSession()) {
+                    System.out.println("trying send to client4444");
 
                     // Begin a transaction
                     Transaction transaction = session.beginTransaction();
+                    System.out.println("trying send to client33");
 
                     // Create a CriteriaBuilder and CriteriaQuery
                     CriteriaBuilder builder = session.getCriteriaBuilder();
                     CriteriaQuery<Task> query = builder.createQuery(Task.class);
                     Root<Task> root = query.from(Task.class);
+                    System.out.println("trying send to client2222");
 
                     // Set the query to select all tasks
                     query.select(root);
@@ -93,10 +100,14 @@ public class SimpleServer extends AbstractServer {
                     // Commit the transaction
                     transaction.commit();
                     // Send a message to the client indicating no tasks
+                    System.out.println("trying send to client11");
+
                     client.sendToClient(results);
+                    System.out.println("trying send to client");
 
                 }
             } else {
+                System.out.println("in else");
             }
 
 
