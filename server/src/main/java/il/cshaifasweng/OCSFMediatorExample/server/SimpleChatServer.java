@@ -215,8 +215,8 @@ public class SimpleChatServer
     private static Session session;
     private static SimpleServer server;
 
-    private static SessionFactory getSessionFactory() throws
-            HibernateException {
+    private static SessionFactory getSessionFactory() throws HibernateException
+    {
         Configuration configuration = new Configuration();
 
         // Add ALL of your entities here. You can also try adding a whole package.
@@ -228,7 +228,6 @@ public class SimpleChatServer
                 StandardServiceRegistryBuilder()
                 .applySettings(configuration.getProperties())
                 .build();
-
         return configuration.buildSessionFactory(serviceRegistry);
     }
 

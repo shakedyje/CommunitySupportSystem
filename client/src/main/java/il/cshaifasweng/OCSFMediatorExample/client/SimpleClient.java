@@ -19,30 +19,37 @@ public class SimpleClient extends AbstractClient {
 
 	@Override
 	protected void handleMessageFromServer(Object msg) {
-		Message message = (Message) msg;
-		MessageOfStatus message1 =(MessageOfStatus)  msg;
+		System.out.println("got into handleMessageFromServer ");
+
+//		Message message = (Message) msg;
+		if(msg instanceof MessageOfStatus) {
+			MessageOfStatus message1 = (MessageOfStatus) msg;
+			if (message1.getChangeStatus().equals("the change completed")) {
+				EventBus.getDefault().post(new NewDetailsEvent(message1));
+			}
+		}
 //		if(message1.getChangeStatus().equals("update submitters IDs")){
 //			EventBus.getDefault().post(new UpdateMessageEvent(message));
 //		}else if(message.getMessage().equals("client added successfully")){
 //			EventBus.getDefault().post(new NewSubscriberEvent(message));
 //		}else if(message.getMessage().equals("Error! we got an empty message")){
 //			EventBus.getDefault().post(new ErrorEvent(message));
-		if (msg instanceof List<?>) {
+		else if (msg instanceof List<?>) {
 			List<Task> tasks = (List<Task>) msg;
 			EventBus.getDefault().post(new TasksMessageEvent(tasks));
-		}
-		else if(message1.getChangeStatus().equals("the change completed")){
-
-			EventBus.getDefault().post(new NewDetailsEvent(message1));
+			System.out.println("recognized massage as a list of tasks");
 		}
 
-		else {
-			EventBus.getDefault().post(new MessageEvent(message));
-		}
+
+
+//		else {
+//			EventBus.getDefault().post(new MessageEvent(message));
+//		}
 	}
 
 	public static SimpleClient getClient() {
 		if (client == null) {
+			System.out.println("Rinaaaa");
 			client = new SimpleClient("localhost", 3000);
 		}
 		return client;
