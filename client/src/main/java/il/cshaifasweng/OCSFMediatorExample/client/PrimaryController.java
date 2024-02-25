@@ -45,21 +45,11 @@ public class PrimaryController {
 		}
 	}
 
-	@FXML
-	void displayTasks() {
-		try {
-			SimpleClient.getClient().sendToServer("display tasks");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 
 	/*@Subscribe
 	public void setDataFromServerTF(MessageEvent event) {
 		DataFromServerTF.setText(event.getMessage().getMessage());
 	}//////////////////////////////////////////////////////////////////////////////////*/
-
 	@Subscribe
 	public void showNewRequest(NewDetailsEvent event) {
 
@@ -82,6 +72,35 @@ public class PrimaryController {
 			alert.setHeaderText("Task Information:");
 			alert.show();
 		});
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	@FXML
+	void displayTasks() {
+		try {
+			SimpleClient.getClient().sendToServer("display tasks");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 /************************************************************************************************************/
@@ -124,8 +143,12 @@ public class PrimaryController {
 	}
 /**********************************************************************************************************/
 
-/*
-	private void handleTaskButtonClick(Task task){
+
+
+
+
+
+/*	private void handleTaskButtonClick(Task task){
 		// Construct detailed task information
 
 		String taskDetails = String.format("Task ID: %d\nType: %s\nDeadline: %s\nStatus: %s",
@@ -137,8 +160,7 @@ public class PrimaryController {
 		Button button = new Button(String.format("Change Status"));
 		// add button of change status
 		button.setOnAction(event -> changeRequest(task));
-	}
-*/
+	}*/
 
 
 	/*@Subscribe
