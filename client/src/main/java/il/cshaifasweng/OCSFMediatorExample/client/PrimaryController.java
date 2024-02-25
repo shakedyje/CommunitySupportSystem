@@ -16,20 +16,26 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import static il.cshaifasweng.OCSFMediatorExample.client.SimpleClient.getClient;
+
 public class PrimaryController {
 
 	@FXML
-	private Button displayTasks;
-
+	public VBox tasksContainer;
+	@FXML
+	public VBox newVbox;
+	@FXML
+	public AnchorPane btn1;
+	public VBox tasksContaine;
 
 	@FXML
-	private VBox tasksContainer;
-
+	private Button displayTasks;
 
 	private int msgId;
 
@@ -72,25 +78,6 @@ public class PrimaryController {
 		});
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	@FXML
 	void displayTasks() {
 		try {
@@ -107,17 +94,17 @@ public class PrimaryController {
 	@Subscribe
 	public void displayTasks(TasksMessageEvent event) {/////////////////////////////////////////////////////////////////////////////////////////////
 		System.out.println("got into displaytasks func2");
-		tasksContainer.getChildren().clear(); // Clear existing content
+		tasksContaine.getChildren().clear(); // Clear existing content
 
 		if (event != null) {
-			List<Task> tasks = event.getTasks();
+			List<Task> tasks = event.getTasksE().getTasks();
 			System.out.println("recognized event");
 
 			if (tasks != null && !tasks.isEmpty()) {
 				System.out.println("tasks!=null");
 				for (Task task : tasks) {
 					Button taskButton = createTaskButton(task);
-					tasksContainer.getChildren().add(taskButton);
+					tasksContaine.getChildren().add(taskButton);
 				}
 			} else {
 				showAlert("Tasks Information", "Tasks Information", "No tasks found in the data base.", Alert.AlertType.INFORMATION);
@@ -204,7 +191,12 @@ public class PrimaryController {
 	@FXML
 	void initialize() {
 		EventBus.getDefault().register(this);
-	//	MessageTF.clear();
+        try {
+            getClient().sendToServer("display tasks");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        //	MessageTF.clear();
 	//	DataFromServerTF.clear();
 		msgId=0;
 	/*	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");

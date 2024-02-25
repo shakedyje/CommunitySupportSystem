@@ -1,5 +1,6 @@
 package il.cshaifasweng.OCSFMediatorExample.server;
 
+import il.cshaifasweng.OCSFMediatorExample.client.SimpleClient;
 import il.cshaifasweng.OCSFMediatorExample.entities.*;
 import il.cshaifasweng.OCSFMediatorExample.server.ocsf.AbstractServer;
 import il.cshaifasweng.OCSFMediatorExample.server.ocsf.ConnectionToClient;
@@ -183,9 +184,12 @@ public class SimpleServer extends AbstractServer {
 
                     List<Task> tasks = getAllTasks(session);
                     for (Task task : tasks) {
-                        System.out.println(task.getId());
+                        System.out.println(task.getType_of_task());
                     }
-                    client.sendToClient(tasks);
+                    DisplayTasksMassage dis=new DisplayTasksMassage(tasks);
+                    System.out.println(dis.getTasks().get(0).getId());
+                    client.sendToClient(dis);
+//                    SimpleClient.getClient().sen
                     tx2.commit();
                 } catch (RuntimeException e) {
                     if (tx2 != null) tx2.rollback();
