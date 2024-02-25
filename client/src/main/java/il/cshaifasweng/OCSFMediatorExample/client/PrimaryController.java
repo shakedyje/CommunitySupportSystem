@@ -58,15 +58,13 @@ public class PrimaryController {
 
 		Platform.runLater(() -> {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION,
-					String.format("Task ID: %d\nType of task: %s\nCreation time: %s\nUser name: %s" +
-									"\nDeadline time: %s\nStatus: %s\nVolunteer: %s",
+					String.format("Task ID: %d\nType of task: %s\nCreation time: %s\n" +
+									"\nDeadline time: %s\nStatus: %s\n",
 							event.getMessage().getTask().getId(),
 							event.getMessage().getTask().getType_of_task(),
 							event.getMessage().getTask().getCreation_time().format(creationTime),
-							event.getMessage().getTask().getUser(),
 							event.getMessage().getTask().getDeadline().format(deadlineTime),
-							event.getMessage().getTask().getStatus(),
-							event.getMessage().getTask().getVolunteer())
+							event.getMessage().getTask().getStatus())
 			);
 			alert.setTitle("Task Information");
 			alert.setHeaderText("Task Information:");
