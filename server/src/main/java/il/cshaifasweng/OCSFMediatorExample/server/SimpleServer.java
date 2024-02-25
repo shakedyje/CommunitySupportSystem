@@ -151,9 +151,8 @@ public class SimpleServer extends AbstractServer {
 
 						// Commit the transaction
 						transaction.commit();
-						if (results.isEmpty())
 							// Send a message to the client indicating no tasks
-							client.sendToClient(results);
+						client.sendToClient(results);
 
 						}
 					}
