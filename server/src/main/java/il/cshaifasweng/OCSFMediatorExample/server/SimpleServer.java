@@ -86,11 +86,76 @@ public class SimpleServer extends AbstractServer {
     /*            message.setMessage("Error! we got an empty message");
                 client.sendToClient(message);*/
            }
-            if (request.equals("change status")) {
-                System.out.println("this enter to change status ********************");
+                /*
 
+                int entityId = message1.getTask().getId();
+                Configuration configuration = new Configuration().configure();
+                try (SessionFactory sessionFactory = configuration.buildSessionFactory();
+                     Session session = sessionFactory.openSession()) {
+
+                    // Begin a transaction
+                    Transaction transaction = session.beginTransaction();
+
+                    // Load the entity from the database
+                    Task task = session.get(Task.class, entityId);
+
+                    // Check if the entity exists
+                    if (task != null) {
+                        // Modify the properties of the entity
+                        task.setStatus("not performed yet");
+
+                        // Save the changes by committing the transaction
+                        transaction.commit();
+
+                        MessageOfStatus message2 = new MessageOfStatus(task, "the change completed");
+                        // Echo back the received message to the client
+
+                        client.sendToClient(message2);
+                    } else {
+                        System.out.println("Entity not found with id: " + entityId);
+                    }
+                }*/
+
+            else if (request.equals("change status")) {
+                System.out.println("in change status");
+                int id= myTask.getId();
+
+                SessionFactory sessionFactory = FactoryUtil.getSessionFactory();
+                session = sessionFactory.openSession();
+
+                Transaction tx2 = null;
+                try {
+                    tx2 = session.beginTransaction();
+
+                    // Perform operations with the second session
+                    System.out.println("in try");
+                    Task task = session.get(Task.class, id);
+
+                    // Check if the entity exists
+                    if (task != null) {
+                        // Modify the properties of the entity
+                        task.setStatus("not performed yet");
+                        System.out.println("not null");
+
+                        // Save the changes by committing the transaction
+                        tx2.commit();
+
+                        MessageOfStatus message2 = new MessageOfStatus(task, "the change completed");
+                        // Echo back the received message to the client
+
+                        client.sendToClient(message2);
+                        tx2.commit();
+                        System.out.println("send to client");
+                    }
+                } catch (RuntimeException e) {
+                    if (tx2 != null) tx2.rollback();
+                    throw e;
+                } finally {
+                    session.close(); // Close the second session
+                }
             }
-            if (request.equals("display tasks")) {
+
+                else if (request.equals("display tasks")) {
                 System.out.println("in desplayyyyyyyy");
 
 
@@ -123,23 +188,6 @@ public class SimpleServer extends AbstractServer {
             } else {
                 System.out.println("in else");
             }
-
-
-//					} else {
-//					//add code here to send received message to all clients.
-//					//The string we received in the message is the message we will send back to all clients subscribed.
-//					//Example:
-//					// message received: "Good morning"
-//					// message sent: "Good morning"
-//					//see code for changing submitters IDs for help
-//					message.setMessage(request);
-//					sendToAllClients(message);
-//				}
-//
-//			}
-       /* } catch (IOException e1) {
-            e1.printStackTrace();//
-        }*/
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
