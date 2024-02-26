@@ -161,7 +161,8 @@ public class PrimaryController {
 
 
 
-	private void handleTaskButtonClick(Task task){
+	private void handleTaskButtonClick(Task task
+	){
 		// Construct detailed task information
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); // Define your desired date format
@@ -177,7 +178,6 @@ public class PrimaryController {
 		DataFromServerTF.setWrapText(true);
 		// Set the font to the TextArea
 		DataFromServerTF.setFont(font);
-
 		Button button = new Button(String.format("Change Status"));
 
 
@@ -196,7 +196,7 @@ public class PrimaryController {
 		button.setMaxWidth(Double.MAX_VALUE);
 		button.setPrefWidth(Control.USE_PREF_SIZE);
 		// add button of change status
-		button.setOnAction(event -> changeRequest(task));
+		//button.setOnAction(event -> changeRequest(task));
 	}
 
 
