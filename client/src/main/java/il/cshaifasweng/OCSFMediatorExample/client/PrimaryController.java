@@ -245,8 +245,9 @@ public class PrimaryController {
 		// Construct detailed task information
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		String formattedDeadline = task.getDeadline().format(formatter);
-		String taskDetails = String.format("Task ID: %d\n\nType: %s\n\nDeadline: %s\n\nStatus: %s",
-				task.getId(), task.getType_of_task(), formattedDeadline, task.getStatus());
+		String taskDetails = String.format("Task ID: %d\n\nType: %s\n\nDeadline: %s\n\nStatus: %s\n\nName: %s %s",
+				task.getId(), task.getType_of_task(), formattedDeadline, task.getStatus(),
+				task.getRegistered_user().getGivenName(), task.getRegistered_user().getFamilyName());
 
 		// Update the TextArea with task details
 		DataFromServerTF.setText(taskDetails);
