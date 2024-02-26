@@ -56,6 +56,7 @@ public class PrimaryController {
 	@FXML
 	void changeRequest(Task task)
 	{
+		System.out.println("enter to void changeRequest(Task task)");
 		try {
 			MessageOfStatus message = new MessageOfStatus(task, "change status");
 			SimpleClient.getClient().sendToServer(message);
@@ -178,7 +179,8 @@ public class PrimaryController {
 		DataFromServerTF.setWrapText(true);
 		// Set the font to the TextArea
 		DataFromServerTF.setFont(font);
-		Button button = new Button(String.format("Change Status"));
+
+	Button button = new Button(String.format("Change Status"));
 
 
 		button.setPrefHeight(40); // Adjust the height as needed
@@ -195,8 +197,11 @@ public class PrimaryController {
 		// Set the button to use its preferred width
 		button.setMaxWidth(Double.MAX_VALUE);
 		button.setPrefWidth(Control.USE_PREF_SIZE);
-		// add button of change status
-		//button.setOnAction(event -> changeRequest(task));
+		System.out.println("B call  to void changeRequest(Task task)");
+
+		//changeRequest(task);//add at 12:32*/
+		///add button of change status
+		button.setOnAction(event -> changeRequest(task));
 	}
 
 
