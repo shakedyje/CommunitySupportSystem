@@ -66,15 +66,28 @@ public class SimpleServer extends AbstractServer {
     @Override
     protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
         System.out.println("get into handle from client in server class");
-        /*        MessageOfStatus message1 = (MessageOfStatus) msg;*/
+               //MessageOfStatus message1 = (MessageOfStatus) msg;
+
 //        Message message = (Message) msg;
-        String request = (String) msg;
+
+
+
+        String request = (String) msg;///////last thing
+
+/*        String request = null;
+        
+        if(msg instanceof String)
+            request = (String) msg;*/
+
+
+
+
         try {
-//            if (request.isBlank()) {
-//                System.out.println("heyyy");
-//                message.setMessage("Error! we got an empty message");
-//                client.sendToClient(message);
-//            }
+/*            if (request.isBlank()) {
+               System.out.println("heyyy");
+                message.setMessage("Error! we got an empty message");
+                client.sendToClient(message);
+           }*/
 /*            if (message1.getChangeStatus().startsWith("change status")) {
                 int entityId = message1.getTask().getId();
 
@@ -104,7 +117,7 @@ public class SimpleServer extends AbstractServer {
                         System.out.println("Entity not found with id: " + entityId);
                     }
                 }
-            } */
+            }*/
             if (request.equals("display tasks")) {
                 System.out.println("in desplayyyyyyyy");
 /*
