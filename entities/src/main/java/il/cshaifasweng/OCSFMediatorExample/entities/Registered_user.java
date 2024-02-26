@@ -159,13 +159,45 @@ public class Registered_user implements Serializable { //extends User
         this.task_list = task_list;
     }*/
 
-/*    public String getSerialNumber() {
-        return SerialNumber;
+    public String getGivenName() {
+        return givenName;
     }
 
-    public void setSerialNumber(String serialNumber) {
-        SerialNumber = serialNumber;
-    }*/
+    public void setGivenName(String givenName) {
+        this.givenName = givenName;
+    }
+
+    public String getFamilyName() {
+        return familyName;
+    }
+
+    public void setFamilyName(String familyName) {
+        this.familyName = familyName;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public boolean isPermission() {
+        return permission;
+    }
+
+    public void setPermission(boolean permission) {
+        this.permission = permission;
+    }
+
+    public String getCommunity() {
+        return community;
+    }
+
+    public void setCommunity(String community) {
+        this.community = community;
+    }
 
     public String getPhone_number() {
         return phone_number;

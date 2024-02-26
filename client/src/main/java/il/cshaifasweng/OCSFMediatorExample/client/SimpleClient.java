@@ -8,6 +8,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import il.cshaifasweng.OCSFMediatorExample.client.ocsf.AbstractClient;
 
+import java.io.IOException;
 import java.util.List;
 
 public class SimpleClient extends AbstractClient {
@@ -21,7 +22,7 @@ public class SimpleClient extends AbstractClient {
 
 
 	@Override
-	protected void handleMessageFromServer(Object msg) {
+	protected void handleMessageFromServer(Object msg) throws IOException {
 		System.out.println("got into handleMessageFromServer ");
 
 //		Message message = (Message) msg;
@@ -29,6 +30,7 @@ public class SimpleClient extends AbstractClient {
 			MessageOfStatus message1 = (MessageOfStatus) msg;
 			if (message1.getChangeStatus().equals("the change completed")) {
 				EventBus.getDefault().post(new NewDetailsEvent(message1));
+				getClient().sendToServer("display tasks");
 			}
 		}
 //		if(message1.getChangeStatus().equals("update submitters IDs")){

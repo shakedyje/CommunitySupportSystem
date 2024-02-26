@@ -1,10 +1,15 @@
 package il.cshaifasweng.OCSFMediatorExample.server;
 import il.cshaifasweng.OCSFMediatorExample.entities.Registered_user;
 import il.cshaifasweng.OCSFMediatorExample.entities.Task;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.NativeQuery;
 import org.hibernate.service.ServiceRegistry;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import java.math.BigInteger;
 
 public class FactoryUtil {
 
@@ -37,3 +42,4 @@ public class FactoryUtil {
         }
 
 }
+
