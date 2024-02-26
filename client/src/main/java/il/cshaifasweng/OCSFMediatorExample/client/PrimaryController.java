@@ -1,4 +1,3 @@
-
 package il.cshaifasweng.OCSFMediatorExample.client;
 import java.io.IOException;
 import java.time.LocalTime;
@@ -57,13 +56,22 @@ public class PrimaryController {
 	@FXML
 	void changeRequest(Task task)
 	{
-		System.out.println("enter to void changeRequest(Task task)");
-		try {
-			MessageOfStatus message = new MessageOfStatus(task, "change status");
-			SimpleClient.getClient().sendToServer(message);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(!task.getStatus().equals("not performed yet"))
+		{
+			System.out.println("enter to void changeRequest(Task task)");
+			try {
+				MessageOfStatus message = new MessageOfStatus(task, "change status");
+				SimpleClient.getClient().sendToServer(message);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else
+		{
+			System.out.println("print error");
+
+			showErrorThatTaken(task);
 		}
 	}
 
@@ -94,6 +102,21 @@ public class PrimaryController {
 		});
 	}
 
+
+	public void showErrorThatTaken(Task task) {
+
+
+		Platform.runLater(() -> {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION,
+					String.format("Error \n already has a volunteer for Task ID: %d\n\nType of task: %s",
+							task.getId(), task.getType_of_task())
+			);
+			alert.setTitle("Error");
+			alert.setHeaderText("Error:");
+			alert.show();
+		});
+	}
+
 	@FXML
 	void displayTasks() {
 		try {
@@ -110,7 +133,6 @@ public class PrimaryController {
 	//
 	@Subscribe
 	public void displayTasks(TasksMessageEvent event) {
-		System.out.println("got into displaytasks func2");
 
 		Platform.runLater(() -> {
 			tasksContaine.getChildren().clear(); // Clear existing content
@@ -156,98 +178,16 @@ public class PrimaryController {
 
 		return button;
 	}
-//
 
 
-
-
-
-
-	/*private void handleTaskButtonClick(Task task
-	){
-		// Construct detailed task information
-
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); // Define your desired date format
-		String formattedDeadline = task.getDeadline().format(formatter); // Format the deadline date
-
-		String taskDetails = String.format("Task ID: %d\n\nType: %s\n\nDeadline: %s\n\nStatus: %s",
-				task.getId(), task.getType_of_task(), formattedDeadline, task.getStatus());
-
-		// Update the TextArea with task details
-		DataFromServerTF.setText(taskDetails);
-		DataFromServerTF.setVisible(true);
-		// Enable text wrapping
-		DataFromServerTF.setWrapText(true);
-		// Set the font to the TextArea
-		DataFromServerTF.setFont(font);
-
-	Button button = new Button(String.format("Change Status"));
-
-
-		button.setPrefHeight(40); // Adjust the height as needed
-
-		// Apply CSS to change the text color of the button
-		button.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
-		button.setFont(font);
-		// Remove the second element from showingVbox if it exists
-		if (showingVbox.getChildren().size() > 1) {
-			showingVbox.getChildren().remove(1);
-		}
-
-	    showingVbox.getChildren().add(button);
-		// Set the button to use its preferred width
-		button.setMaxWidth(Double.MAX_VALUE);
-		button.setPrefWidth(Control.USE_PREF_SIZE);
-		System.out.println("B call  to void changeRequest(Task task)");
-
-		//changeRequest(task);//add at 12:32
-		///add button of change status
-		button.setOnAction(event -> changeRequest(task));
-	}*/
-
-
-/*private void handleTaskButtonClick(Task task) {
-	// Construct detailed task information
-	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-	String formattedDeadline = task.getDeadline().format(formatter);
-
-	String taskDetails = String.format("Task ID: %d\n\nType: %s\n\nDeadline: %s\n\nStatus: %s",
-			task.getId(), task.getType_of_task(), formattedDeadline, task.getStatus());
-
-	// Update the TextArea with task details
-	DataFromServerTF.setText(taskDetails);
-	DataFromServerTF.setVisible(true);
-	DataFromServerTF.setWrapText(true);
-	DataFromServerTF.setFont(font);
-
-	Button button = new Button(String.format("Change Status"));
-	button.setPrefHeight(40);
-	button.setFont(font);
-
-	// Remove the second element from showingVbox if it exists
-	if (showingVbox.getChildren().size() > 1) {
-		showingVbox.getChildren().remove(1);
-	}
-
-	// Add the button to the container using Platform.runLater()
-	Platform.runLater(() -> {
-		showingVbox.getChildren().add(button);
-	});
-
-	button.setMaxWidth(Double.MAX_VALUE);
-	button.setPrefWidth(Control.USE_PREF_SIZE);
-	button.setOnAction(event -> changeRequest(task));
-
-
-}*/
 
 	private void handleTaskButtonClick(Task task) {
 		// Construct detailed task information
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		String formattedDeadline = task.getDeadline().format(formatter);
-		String taskDetails = String.format("Task ID: %d\n\nType: %s\n\nDeadline: %s\n\nStatus: %s",
-				task.getId(), task.getType_of_task(), formattedDeadline, task.getStatus());
-
+		String taskDetails = String.format("Task ID: %d\n\nType: %s\n\nDeadline: %s\n\nStatus: %s\n\nName: %s %s",
+				task.getId(), task.getType_of_task(), formattedDeadline, task.getStatus(),
+				task.getRegistered_user().getGivenName(), task.getRegistered_user().getFamilyName());
 		// Update the TextArea with task details
 		DataFromServerTF.setText(taskDetails);
 		DataFromServerTF.setVisible(true);

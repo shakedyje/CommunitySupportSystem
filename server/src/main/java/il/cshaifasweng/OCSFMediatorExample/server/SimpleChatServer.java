@@ -196,8 +196,7 @@ import org.hibernate.Session;
 
 import java.time.LocalDateTime;
 
-public class SimpleChatServer
-{
+public class SimpleChatServer {
 
 
     private static Session session;
@@ -220,54 +219,84 @@ public class SimpleChatServer
     }*/
 
 
-    public static void main( String[] args ) throws IOException
-    {
+    public static void main(String[] args) throws IOException {
         server = new SimpleServer(3000);
 
-        try {
-            SessionFactory sessionFactory = FactoryUtil.getSessionFactory();
-            session = sessionFactory.openSession();
-            session.beginTransaction();
-            System.out.println("1");
+        DataBaseCheck DB = new DataBaseCheck();
+        SessionFactory sessionFactory = FactoryUtil.getSessionFactory();
 
-            Registered_user aba = new Registered_user("StringgivenName ", "String familyName",  "username",  "password", true,  "phoneNumber",  "community");
-            Registered_user abd = new Registered_user("StringgivenName ", "String familyName",  "username",  "password",  true,"phoneNumber",  "community");
-            Registered_user abc = new Registered_user("StringgivenName ", "String familyName",  "username",  "password",  true,"phoneNumber",  "community");
+        if (!DB.isDatabaseNotEmpty()) {
+            try {
+                session = sessionFactory.openSession();
+                session.beginTransaction();
+                System.out.println("1");
 
-
-            session.save(abc);
-            //  session.getTransaction().commit(); // Save everything.
-
-            System.out.println("2");
-            session.save(abd);
-            session.save(aba);
-            session.flush();
-            LocalDateTime time = LocalDateTime.now();
-            Task t1 = new Task("clean house",aba , time);
-            Task t2 = new Task("buy food", abc, time);
-            Task t3 = new Task("Babysitter",abd,time);
-            Task t4 = new Task("take my dog out",abd,time);
+                Registered_user user1 = new Registered_user("Rom","Levi","rom_levi1","123",false,"0507773121","Haifa");
+                Registered_user user2 = new Registered_user("Yarin","Rabinobi","yarin_rabinobi2","1234",false,"0524373191","Tel-Aviv");
+                Registered_user user3 = new Registered_user("Dan","Shimoni","dan_shimoni1","1235",false,"0547373199","Haifa");
+                Registered_user user4 = new Registered_user("Linoy","Ohaion","linoyOhaion2","1232",true,"0502213188","Jerusalem");
+                Registered_user user5 = new Registered_user("Roman","Shapira","romanroman","1231",false,"0521153111","Jerusalem");
+                Registered_user user6 = new Registered_user("Shira","Omer","ShiraOmer22","1220",false,"0502479900","Haifa");
+                Registered_user user7 = new Registered_user("Yarden","Mesgav","yarden_yarden3","1230",false,"0532251580","Tel-Aviv");
 
 
+                session.save(user1);
+                session.save(user2);
+                session.save(user3);
+                session.save(user4);
+                session.save(user5);
+                session.save(user6);
+                session.save(user7);
+                //  session.getTransaction().commit(); // Save everything.
 
-            session.save(t1);
-            session.save(t2);
-            session.save(t3);
-            session.save(t4);
-            session.flush();
-            System.out.println("5");
+                System.out.println("2");
 
-            session.getTransaction().commit(); // Save everything.
-        } catch (Exception exception) {
-            if (session != null) {
-                session.getTransaction().rollback();
+
+                session.flush();
+
+                LocalDateTime now = LocalDateTime.now();
+                LocalDateTime futureDeadline1 = now.plusDays(7);
+                Task t1 = new Task("Help with supermarket shopping",user1 , futureDeadline1);
+                LocalDateTime futureDeadline2 = now.plusDays(4);
+                Task t2 = new Task("Ordering medication",user2 , futureDeadline2);
+                LocalDateTime futureDeadline3 = now.plusDays(12);
+                Task t3 = new Task("A ride somewhere",user3 , futureDeadline3);
+                LocalDateTime futureDeadline4 = now.plusDays(1);
+                Task t4 = new Task("Babysitter",user4 , futureDeadline4);
+                LocalDateTime futureDeadline5 = now.plusDays(10);
+                Task t5 = new Task("Help with supermarket shopping",user5 , futureDeadline5);
+
+
+
+
+
+                System.out.println("3");
+
+
+                session.save(t1);
+                System.out.println("4");
+
+
+                session.save(t2);
+                session.save(t3);
+                session.save(t4);
+                session.save(t5);
+
+                session.flush();
+                System.out.println("5");
+
+                session.getTransaction().commit(); // Save everything.
+            } catch (Exception exception) {
+                if (session != null) {
+                    session.getTransaction().rollback();
+                }
+                System.err.println("An error occured, changes have been rolled back.");
+                exception.printStackTrace();
+            } finally {
+                session.close();
             }
-            System.err.println("An error occured, changes have been rolled back.");
-            exception.printStackTrace();
-        } finally {
-            session.close();
-        }
 
+        }
         System.out.println("server is listening");
         server.listen();
     }
