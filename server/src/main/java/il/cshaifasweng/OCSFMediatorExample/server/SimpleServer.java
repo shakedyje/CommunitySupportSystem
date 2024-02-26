@@ -1,5 +1,5 @@
 package il.cshaifasweng.OCSFMediatorExample.server;
-
+import il.cshaifasweng.OCSFMediatorExample.entities.Task;
 import il.cshaifasweng.OCSFMediatorExample.client.SimpleClient;
 import il.cshaifasweng.OCSFMediatorExample.entities.*;
 import il.cshaifasweng.OCSFMediatorExample.server.ocsf.AbstractServer;
@@ -38,15 +38,15 @@ public class SimpleServer extends AbstractServer {
         return query.getResultList();
     }
 
-    private static List<Task> getAllPatient() throws Exception {
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        System.out.println("List<Task> getAllPatient() throws Exception");
-        CriteriaQuery<Task> query = builder.createQuery(Task.class);
-        query.from(Task.class);
-        List<Task> data = session.createQuery(query).getResultList();
-        session.close();
-        return data;
-    }
+//    private static List<Task> getAllPatient() throws Exception {
+//        CriteriaBuilder builder = session.getCriteriaBuilder();
+//        System.out.println("List<Task> getAllPatient() throws Exception");
+//        CriteriaQuery<Task> query = builder.createQuery(Task.class);
+//        query.from(Task.class);
+//        List<Task> data = session.createQuery(query).getResultList();
+//        session.close();
+//        return data;
+//    }
     private static SessionFactory getSessionFactory() throws HibernateException
     {
         Configuration configuration = new Configuration();
@@ -69,14 +69,8 @@ public class SimpleServer extends AbstractServer {
     @Override
     protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
         System.out.println("get into handle from client in server class");
-
-     //   String request ;= (String) msg;///////last thing
-
-        
         Task myTask=null;
         String request = null;
-
-
         if(msg instanceof String)
         {
             request = (String) msg;
@@ -86,10 +80,6 @@ public class SimpleServer extends AbstractServer {
             myTask=((MessageOfStatus) msg).getTask();
 
         }
-
-
-
-
         try {
             if (request.isBlank()) {
                System.out.println("heyyy");
@@ -99,34 +89,6 @@ public class SimpleServer extends AbstractServer {
             if (request.equals("change status")) {
                 System.out.println("this enter to change status ********************");
 
-               /*
-                int entityId = message1.getTask().getId();
-                Configuration configuration = new Configuration().configure();
-                try (SessionFactory sessionFactory = configuration.buildSessionFactory();
-                     Session session = sessionFactory.openSession()) {
-
-                    // Begin a transaction
-                    Transaction transaction = session.beginTransaction();
-
-                    // Load the entity from the database
-                    Task task = session.get(Task.class, entityId);
-
-                    // Check if the entity exists
-                    if (task != null) {
-                        // Modify the properties of the entity
-                        task.setStatus("not performed yet");
-
-                        // Save the changes by committing the transaction
-                        transaction.commit();
-
-                        MessageOfStatus message2 = new MessageOfStatus(task, "the change completed");
-                        // Echo back the received message to the client
-
-                        client.sendToClient(message2);
-                    } else {
-                        System.out.println("Entity not found with id: " + entityId);
-                    }
-                }*/
             }
             if (request.equals("display tasks")) {
                 System.out.println("in desplayyyyyyyy");
