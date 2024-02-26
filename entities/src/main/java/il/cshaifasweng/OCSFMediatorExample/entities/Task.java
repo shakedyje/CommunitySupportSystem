@@ -37,7 +37,7 @@ public class Task implements Serializable {
         Type_of_task = type_of_task;
         Creation_time = LocalDateTime.now();
         this.Deadline=LocalDateTime.now();
-        Status = "waiting for approval";
+        Status = "A task waiting for a volunteer";
     }
 
     public Task()

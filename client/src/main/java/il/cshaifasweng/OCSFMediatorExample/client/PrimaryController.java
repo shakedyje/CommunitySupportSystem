@@ -37,6 +37,8 @@ public class PrimaryController {
 
 	@FXML
 	private Button displayTasks;
+	@FXML
+	private VBox showingVbox;
 
 	private int msgId;
 
@@ -52,7 +54,8 @@ public class PrimaryController {
 
 
 	@FXML
-	void changeRequest(Task task) {
+	void changeRequest(Task task)
+	{
 		try {
 			MessageOfStatus message = new MessageOfStatus(task, "change status");
 			SimpleClient.getClient().sendToServer(message);
@@ -127,6 +130,7 @@ public class PrimaryController {
 		}
 		// Set the vertical spacing between buttons
 		tasksContaine.setSpacing(10); // Adjust the spacing as neede
+	showingVbox.setSpacing(10);
 	}
 	private void showAlert(String title, String header, String content, Alert.AlertType alertType) {
 		Alert alert = new Alert(alertType, content);
@@ -175,16 +179,26 @@ public class PrimaryController {
 		DataFromServerTF.setFont(font);
 
 		Button button = new Button(String.format("Change Status"));
+
+
+		button.setPrefHeight(40); // Adjust the height as needed
+
+		// Apply CSS to change the text color of the button
+		button.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+		button.setFont(font);
+		// Remove the second element from showingVbox if it exists
+		if (showingVbox.getChildren().size() > 1) {
+			showingVbox.getChildren().remove(1);
+		}
+
+	    showingVbox.getChildren().add(button);
+		// Set the button to use its preferred width
+		button.setMaxWidth(Double.MAX_VALUE);
+		button.setPrefWidth(Control.USE_PREF_SIZE);
 		// add button of change status
 		button.setOnAction(event -> changeRequest(task));
 	}
 
-
-	/*@Subscribe
-	public void setSubmittersTF(UpdateMessageEvent event) {
-		submitterID1.setText(event.getMessage().getData().substring(0,9));
-		submitterID2.setText(event.getMessage().getData().substring(11,20));
-	}*/
 
 	@Subscribe
 	public void getStarterData(NewSubscriberEvent event) {
