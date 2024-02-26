@@ -17,11 +17,11 @@ public class MessageOfStatus implements Serializable{
         this.task = task;
 
     }
-    public MessageOfStatus( String changeStatus)
-    {
-        this.changeStatus = changeStatus;
-
-    }
+//    public MessageOfStatus( String changeStatus)
+//    {
+//        this.changeStatus = changeStatus;
+//
+//    }
 
     public String getChangeStatus(){
         return changeStatus;

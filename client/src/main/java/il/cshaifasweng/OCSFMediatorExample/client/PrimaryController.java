@@ -1,3 +1,4 @@
+
 package il.cshaifasweng.OCSFMediatorExample.client;
 import java.io.IOException;
 import java.time.LocalTime;
@@ -105,33 +106,33 @@ public class PrimaryController {
 		}
 	}
 
-/************************************************************************************************************/
+
+	//
 	@Subscribe
-	public void displayTasks(TasksMessageEvent event) {/////////////////////////////////////////////////////////////////////////////////////////////
+	public void displayTasks(TasksMessageEvent event) {
 		System.out.println("got into displaytasks func2");
-		tasksContaine.getChildren().clear(); // Clear existing content
 
-		//for(Task T:tasks) System.out.println(T.getType_of_task());
-		if (event != null) {
-			System.out.println("evet is not null");
+		Platform.runLater(() -> {
+			tasksContaine.getChildren().clear(); // Clear existing content
 
-			List<Task> tasks = event.getTasksE().getTasks();
-			if (tasks != null && !tasks.isEmpty()) {
-				System.out.println("tasks!=null");
-				for (Task task : tasks) {
-					Button taskButton = createTaskButton(task);
-					tasksContaine.getChildren().add(taskButton);
+			if (event != null) {
+				List<Task> tasks = event.getTasksE().getTasks();
+				if (tasks != null && !tasks.isEmpty()) {
+					for (Task task : tasks) {
+						Button taskButton = createTaskButton(task);
+						tasksContaine.getChildren().add(taskButton);
+					}
+				} else {
+					showAlert("Tasks Information", "Tasks Information", "No tasks found in the data base.", Alert.AlertType.INFORMATION);
 				}
 			} else {
-				showAlert("Tasks Information", "Tasks Information", "No tasks found in the data base.", Alert.AlertType.INFORMATION);
-
+				showAlert("Error", "Error", "Invalid event received.", Alert.AlertType.ERROR);
 			}
-		} else {
-			showAlert("Error", "Error", "Invalid event received.", Alert.AlertType.ERROR);
-		}
-		// Set the vertical spacing between buttons
-		tasksContaine.setSpacing(10); // Adjust the spacing as neede
-	showingVbox.setSpacing(10);
+
+			// Set the vertical spacing between buttons
+			tasksContaine.setSpacing(10);
+			showingVbox.setSpacing(10);
+		});
 	}
 	private void showAlert(String title, String header, String content, Alert.AlertType alertType) {
 		Alert alert = new Alert(alertType, content);
@@ -149,20 +150,20 @@ public class PrimaryController {
 		// Set the preferred height of the button
 		button.setPrefHeight(40); // Adjust the height as needed
 
-		/*we'll think as a group what information we'll show here, before displaying tasks*/
+		//we'll think as a group what information we'll show here, before displaying tasks
 
 		button.setOnAction(event -> handleTaskButtonClick(task));
 
 		return button;
 	}
-/**********************************************************************************************************/
+//
 
 
 
 
 
 
-	private void handleTaskButtonClick(Task task
+	/*private void handleTaskButtonClick(Task task
 	){
 		// Construct detailed task information
 
@@ -199,10 +200,80 @@ public class PrimaryController {
 		button.setPrefWidth(Control.USE_PREF_SIZE);
 		System.out.println("B call  to void changeRequest(Task task)");
 
-		//changeRequest(task);//add at 12:32*/
+		//changeRequest(task);//add at 12:32
 		///add button of change status
 		button.setOnAction(event -> changeRequest(task));
+	}*/
+
+
+/*private void handleTaskButtonClick(Task task) {
+	// Construct detailed task information
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	String formattedDeadline = task.getDeadline().format(formatter);
+
+	String taskDetails = String.format("Task ID: %d\n\nType: %s\n\nDeadline: %s\n\nStatus: %s",
+			task.getId(), task.getType_of_task(), formattedDeadline, task.getStatus());
+
+	// Update the TextArea with task details
+	DataFromServerTF.setText(taskDetails);
+	DataFromServerTF.setVisible(true);
+	DataFromServerTF.setWrapText(true);
+	DataFromServerTF.setFont(font);
+
+	Button button = new Button(String.format("Change Status"));
+	button.setPrefHeight(40);
+	button.setFont(font);
+
+	// Remove the second element from showingVbox if it exists
+	if (showingVbox.getChildren().size() > 1) {
+		showingVbox.getChildren().remove(1);
 	}
+
+	// Add the button to the container using Platform.runLater()
+	Platform.runLater(() -> {
+		showingVbox.getChildren().add(button);
+	});
+
+	button.setMaxWidth(Double.MAX_VALUE);
+	button.setPrefWidth(Control.USE_PREF_SIZE);
+	button.setOnAction(event -> changeRequest(task));
+
+
+}*/
+
+	private void handleTaskButtonClick(Task task) {
+		// Construct detailed task information
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		String formattedDeadline = task.getDeadline().format(formatter);
+		String taskDetails = String.format("Task ID: %d\n\nType: %s\n\nDeadline: %s\n\nStatus: %s",
+				task.getId(), task.getType_of_task(), formattedDeadline, task.getStatus());
+
+		// Update the TextArea with task details
+		DataFromServerTF.setText(taskDetails);
+		DataFromServerTF.setVisible(true);
+		DataFromServerTF.setWrapText(true);
+		DataFromServerTF.setFont(font);
+
+		Button button = new Button(String.format("Change Status"));
+		button.setPrefHeight(40);
+		button.setFont(font);
+
+		// Remove the second element from showingVbox if it exists
+		if (showingVbox.getChildren().size() > 1) {
+			showingVbox.getChildren().remove(1);
+		}
+
+		// Add the button to the container using Platform.runLater()
+		Platform.runLater(() -> {
+			showingVbox.getChildren().add(button);
+		});
+
+		button.setMaxWidth(Double.MAX_VALUE);
+		button.setPrefWidth(Control.USE_PREF_SIZE);
+		button.setOnAction(event -> changeRequest(task));
+	}
+
+
 
 
 	@Subscribe
@@ -237,13 +308,13 @@ public class PrimaryController {
 	@FXML
 	void initialize() {
 		EventBus.getDefault().register(this);
-        try {
-            getClient().sendToServer("display tasks");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        //	MessageTF.clear();
-	//	DataFromServerTF.clear();
+		try {
+			getClient().sendToServer("display tasks");
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		//	MessageTF.clear();
+		//	DataFromServerTF.clear();
 		msgId=0;
 	/*	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
 		Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
