@@ -168,7 +168,7 @@ public abstract class AbstractClient implements Runnable
    * @param msg   The message to be sent.
    * @exception IOException if an I/O error occurs when sending
    */
-  public void sendToServer(Object msg) throws IOException
+  public void sendToServer(Object msg) throws IOException/****************************/
   {
     if (clientSocket == null || output == null) {
       throw new SocketException("socket does not exist");
@@ -353,7 +353,7 @@ public abstract class AbstractClient implements Runnable
    *
    * @param msg   the message sent.
    */
-  protected abstract void handleMessageFromServer(Object msg);
+  protected abstract void handleMessageFromServer(Object msg) throws IOException;
 
 
 // METHODS TO BE USED FROM WITHIN THE FRAMEWORK ONLY ----------------

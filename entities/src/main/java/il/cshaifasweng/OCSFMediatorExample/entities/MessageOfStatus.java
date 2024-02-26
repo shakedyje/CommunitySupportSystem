@@ -1,7 +1,4 @@
 package il.cshaifasweng.OCSFMediatorExample.entities;
-
-import jdk.jfr.Registered;
-
 import java.io.Serializable;
 public class MessageOfStatus implements Serializable{
 
@@ -20,11 +17,11 @@ public class MessageOfStatus implements Serializable{
         this.task = task;
 
     }
-    public MessageOfStatus( String changeStatus)
-    {
-        this.changeStatus = changeStatus;
-
-    }
+//    public MessageOfStatus( String changeStatus)
+//    {
+//        this.changeStatus = changeStatus;
+//
+//    }
 
     public String getChangeStatus(){
         return changeStatus;
