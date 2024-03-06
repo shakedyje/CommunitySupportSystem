@@ -118,16 +118,16 @@ public class PrimaryController {
 	}
 
 	@FXML
-	void displayTasks() {
-		try {
-			System.out.println("get into display controller1");
-			SimpleClient.getClient().sendToServer("display tasks");
-			System.out.println("sended to server");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+//	void displayTasks() {
+//		try {
+//			System.out.println("get into display controller1");
+//			SimpleClient.getClient().sendToServer("display tasks");
+//			System.out.println("sended to server from display_tasks");
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
 
 
 	//
@@ -247,24 +247,17 @@ public class PrimaryController {
 
 	@FXML
 	void initialize() {
+		System.out.println("initialized");
 		EventBus.getDefault().register(this);
 		try {
 			getClient().sendToServer("display tasks");
+			System.out.println("sended msg from initialized");
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		//	MessageTF.clear();
-		//	DataFromServerTF.clear();
+
 		msgId=0;
-	/*	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
-		Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
-			LocalTime currentTime = LocalTime.now();
-			timeTF.setText(currentTime.format(dtf));
-		}),
-				new KeyFrame(Duration.seconds(1))
-		)*
-		clock.setCycleCount(Animation.INDEFINITE);
-		clock.play();*/
+
 		try {
 			Message message = new Message(msgId, "add client");
 			SimpleClient.getClient().sendToServer(message);

@@ -156,18 +156,17 @@ public class SimpleServer extends AbstractServer {
             }
 
                 else if (request.equals("display tasks")) {
-                System.out.println("in desplayyyyyyyy");
+                System.out.println("in displayyyyyyyy");
 
 
                 SessionFactory sessionFactory = FactoryUtil.getSessionFactory();
                 session = sessionFactory.openSession();
-
                 Transaction tx2 = null;
                 try {
                     tx2 = session.beginTransaction();
 
                     // Perform operations with the second session
-                    System.out.println("in desplayyyyyyyy");
+                    System.out.println("in displayyyyyyyy");
 
                     List<Task> tasks = getAllTasks(session);
                     for (Task task : tasks) {
