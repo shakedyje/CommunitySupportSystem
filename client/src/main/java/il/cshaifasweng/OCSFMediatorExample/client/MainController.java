@@ -43,7 +43,6 @@ public class MainController {
         Platform.runLater(() -> {
             try {
                 setRoot("All_tasks_fxml");
-                System.out.println("main controller");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

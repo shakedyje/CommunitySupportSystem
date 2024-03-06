@@ -56,7 +56,6 @@ public class SimpleClient extends AbstractClient {
 		if (client == null) {
 			System.out.println("Rinaaaa");
 			client = new SimpleClient("localhost", 3000);
-			//"192.168.137.1"
 		}
 		return client;
 	}

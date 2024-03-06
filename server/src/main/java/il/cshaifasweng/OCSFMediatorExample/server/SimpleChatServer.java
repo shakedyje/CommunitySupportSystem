@@ -187,6 +187,7 @@ package il.cshaifasweng.OCSFMediatorExample.server;
 import il.cshaifasweng.OCSFMediatorExample.entities.Registered_user;
 import il.cshaifasweng.OCSFMediatorExample.entities.Task;
 
+import il.cshaifasweng.OCSFMediatorExample.entities.TaskType;
 import org.hibernate.SessionFactory;
 
 import java.io.IOException;
@@ -256,15 +257,15 @@ public class SimpleChatServer {
 
                 LocalDateTime now = LocalDateTime.now();
                 LocalDateTime futureDeadline1 = now.plusDays(7);
-                Task t1 = new Task("Help with supermarket shopping",user1 , futureDeadline1);
+                Task t1 = new Task(TaskType.BABYSITTING,user1 , futureDeadline1, "in my house loaction: horev 10");
                 LocalDateTime futureDeadline2 = now.plusDays(4);
-                Task t2 = new Task("Ordering medication",user2 , futureDeadline2);
+                Task t2 = new Task(TaskType.CAR_CLEANING,user2 , futureDeadline2);
                 LocalDateTime futureDeadline3 = now.plusDays(12);
-                Task t3 = new Task("A ride somewhere",user3 , futureDeadline3);
+                Task t3 = new Task(TaskType.DOG_WALKING,user3 , futureDeadline3);
                 LocalDateTime futureDeadline4 = now.plusDays(1);
-                Task t4 = new Task("Babysitter",user4 , futureDeadline4);
+                Task t4 = new Task(TaskType.RIDE,user4 , futureDeadline4);
                 LocalDateTime futureDeadline5 = now.plusDays(10);
-                Task t5 = new Task("Help with supermarket shopping",user5 , futureDeadline5);
+                Task t5 = new Task(TaskType.YARD_WORK,user5 , futureDeadline5);
 
 
 
