@@ -211,6 +211,53 @@ public class SimpleServer extends AbstractServer {
                         throw new RuntimeException(e);
                     }
                 }
+                else if (msg instanceof Message) {
+                    System.out.println("in sever /Confirm information ");
+
+
+                    String username = ((Message) msg).getUserName();
+                    String password = ((Message) msg).getPassword();
+                    System.out.println(username + "    " + password);
+
+
+                    SessionFactory sessionFactory = FactoryUtil.getSessionFactory();
+                    session = sessionFactory.openSession();
+                    Transaction tx2 = null;
+
+                    try {
+                        tx2 = session.beginTransaction();
+
+                        // Perform operations with the second session
+                        System.out.println("Confirm");
+                        // Use a query to get all users
+                        List<Registered_user> users = session.createQuery("FROM Registered_user", Registered_user.class).getResultList();
+                        // Check if the entity exists
+                        if (users != null) {
+
+                            Message message2 = null;
+                            for (Registered_user user : users) {
+
+                                if (user.getUsername().equals(username)) {
+                                    if (user.getPassword().equals(password)) {
+                                        message2 = new Message("correct");
+                                        message2.setUser(user);
+                                        System.out.println("correct");
+
+                                    } else {
+                                        message2 = new Message("wrongPassword");
+                                        System.out.println("wrongPassword");
+
+                                    }
+                                }
+                            }
+                            if (message2 == null)
+                                message2 = new Message("user is not exist");
+                            client.sendToClient(message2);
+                        }
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
                 else {
                 System.out.println("in else");
             }

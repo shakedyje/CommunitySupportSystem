@@ -28,7 +28,7 @@ public class UserMainController {
     @FXML
     private void initialize() {
         // Assuming you have the username stored in a variable named 'username'
-        String username = UserClient.getLoggedInUser().getUsername();
+        String username = UserClient.getLoggedInUser().getGivenName();
         // Set the text of the welcome_label to the username
         welcome_label.setText("Welcome " + username);
         welcome_label.setAlignment(Pos.CENTER);

@@ -44,6 +44,12 @@ public class SimpleClient extends AbstractClient {
 			EventBus.getDefault().post(new TasksMessageEvent(dis));
 			System.out.println("recognized massage as a list of tasks");
 		}
+		else if (msg instanceof Message) {
+			System.out.println("in client/handlefrom serverr /in message inst");
+			Message message=(Message)msg;
+			System.out.println(message.getMessage());
+			EventBus.getDefault().post(new NewVerifiedInformationEvent(message));
+		}
 
 
 

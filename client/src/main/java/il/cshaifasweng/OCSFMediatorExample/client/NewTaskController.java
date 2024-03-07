@@ -74,24 +74,30 @@ public class NewTaskController {
 
     @FXML
     private void check_confirm_display_task() throws IOException {
-        LocalDateTime deadline = deadlineDp.getValue().atStartOfDay();
+        LocalDateTime deadline = deadlineDp.getValue() == null ? null : deadlineDp.getValue().atStartOfDay();
         TaskType selectedTaskType = taskTypeComboBox.getValue();
         String details= detailsTxt.getText();
+        int remaining= (int) ChronoUnit.DAYS.between(LocalDateTime.now(), deadline);
         details= details == null? "": details;
-
+        ++remaining;
         if (selectedTaskType == null) {
             // Display the selected task type in an alert dialog
             // If no task type is selected, show an error message
             showErrorDialog("Please select a task type.");
         }
-        else if (deadline.isBefore(LocalDateTime.now())) {
+        else if (deadline == null) {
+            // Display the selected task type in an alert dialog
+            // If no task type is selected, show an error message
+            showErrorDialog("Please select a deadline.");
+        }
+        else if (remaining<=0) {
             showErrorDialog("Please select a future date.");
         }
         else {
             showAlert("Task Information",
                     "Your task type is: " + selectedTaskType + "\n\n"
                             + "Time of the task creation: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
-                            + "\n\nThe task needs to be completed in " + ChronoUnit.DAYS.between(LocalDateTime.now(), deadline) + " days\n\n"
+                            + "\n\nThe task needs to be completed in " +(remaining) + " days\n\n"
                             + "Task additional Details: " + details
                             + "\n\n\nPlease note: The task will be published after the approval of the manager"
                             + "\n\nThe system uploads your task...");
