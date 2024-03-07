@@ -12,13 +12,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import static il.cshaifasweng.OCSFMediatorExample.client.SimpleChatClient.setRoot;
 
 public class NewTaskController {
 
@@ -92,32 +91,47 @@ public class NewTaskController {
             showAlert("Task Information",
                     "Your task type is: " + selectedTaskType + "\n\n"
                             + "Time of the task creation: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
-                            + "\n\nThe task needs to be completed in " + deadline.until(LocalDateTime.now(), ChronoUnit.DAYS) + " days\n\n"
+                            + "\n\nThe task needs to be completed in " + ChronoUnit.DAYS.between(LocalDateTime.now(), deadline) + " days\n\n"
                             + "Task additional Details: " + details
                             + "\n\n\nPlease note: The task will be published after the approval of the manager"
                             + "\n\nThe system uploads your task...");
             UserClient.getClient().sendToServer(new NewTaskMessage(deadline,details,selectedTaskType,UserClient.getLoggedInUser())); //here i want to get to the relevant client - it can be more than one- so we need to change getclient method.
         }
     }
-    @Subscribe
-    public void informNTuploaded(NewTaskEvent event) {
-        Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("System Notice");
-            alert.setHeaderText("System Notice");
-            alert.setContentText("Your task has been included in the queue of tasks awaiting approval.");
-            alert.show();
-        });
-    }
-
-    // Helper method to show an alert dialog
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);
-        alert.setContentText(content);
+
+        // Custom GridPane to allow for more content
+        GridPane gridPane = new GridPane();
+        Label label = new Label(content);
+        label.setWrapText(true); // Allow text wrapping
+        gridPane.add(label, 0, 0);
+        alert.getDialogPane().setContent(gridPane);
+
         alert.showAndWait();
     }
+
+    @Subscribe
+    public void informNTuploaded(NewTaskEvent event) {
+        Platform.runLater(() -> {
+//            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//            alert.setTitle("System Notice");
+//            alert.setHeaderText("System Notice");
+//            alert.setContentText("Your task has been included in the queue of tasks awaiting approval.");
+//            alert.show();
+                    showAlert("Atis saved your task!", "Your task has been included in the queue of tasks awaiting approval.");
+                    try {
+                        setRoot("user_main");
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+    }
+
+
+
 
     // Helper method to show an error dialog
     private void showErrorDialog(String message) {
