@@ -150,14 +150,7 @@ public class Registered_user implements Serializable { //extends User
         return id;
     }
 
-/*
-    public List<Task> getTask_list() {
-        return task_list;
-    }
 
-    public void setTask_list(List<Task> task_list) {
-        this.task_list = task_list;
-    }*/
 
     public String getGivenName() {
         return givenName;
@@ -181,6 +174,14 @@ public class Registered_user implements Serializable { //extends User
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public boolean isPermission() {

@@ -33,23 +33,18 @@ public class SimpleClient extends AbstractClient {
 				getClient().sendToServer("display tasks");
 			}
 		}
-//		if(message1.getChangeStatus().equals("update submitters IDs")){
-//			EventBus.getDefault().post(new UpdateMessageEvent(message));
-//		}else if(message.getMessage().equals("client added successfully")){
-//			EventBus.getDefault().post(new NewSubscriberEvent(message));
-//		}else if(message.getMessage().equals("Error! we got an empty message")){
-//			EventBus.getDefault().post(new ErrorEvent(message));
+
 		else if (msg instanceof DisplayTasksMassage) {
 			DisplayTasksMassage dis = (DisplayTasksMassage) msg;
 			EventBus.getDefault().post(new TasksMessageEvent(dis));
-			System.out.println("recognized massage as a list of tasks");
+
+		} else if (msg instanceof Message) {
+			System.out.println("in client/handlefrom serverr /in message inst");
+			Message message=(Message)msg;
+			System.out.println(message.getMessage());
+			EventBus.getDefault().post(new NewVerifiedInformationEvent(message));
 		}
 
-
-
-//		else {
-//			EventBus.getDefault().post(new MessageEvent(message));
-//		}
 	}
 
 	public static SimpleClient getClient() {

@@ -1,4 +1,5 @@
 package il.cshaifasweng.OCSFMediatorExample.server;
+
 import il.cshaifasweng.OCSFMediatorExample.entities.Task;
 import il.cshaifasweng.OCSFMediatorExample.client.SimpleClient;
 import il.cshaifasweng.OCSFMediatorExample.entities.*;
@@ -6,6 +7,7 @@ import il.cshaifasweng.OCSFMediatorExample.server.ocsf.AbstractServer;
 import il.cshaifasweng.OCSFMediatorExample.server.ocsf.ConnectionToClient;
 import il.cshaifasweng.OCSFMediatorExample.server.ocsf.SubscribedClient;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import java.util.List;
@@ -38,17 +40,7 @@ public class SimpleServer extends AbstractServer {
         return query.getResultList();
     }
 
-//    private static List<Task> getAllPatient() throws Exception {
-//        CriteriaBuilder builder = session.getCriteriaBuilder();
-//        System.out.println("List<Task> getAllPatient() throws Exception");
-//        CriteriaQuery<Task> query = builder.createQuery(Task.class);
-//        query.from(Task.class);
-//        List<Task> data = session.createQuery(query).getResultList();
-//        session.close();
-//        return data;
-//    }
-    private static SessionFactory getSessionFactory() throws HibernateException
-    {
+    private static SessionFactory getSessionFactory() throws HibernateException {
         Configuration configuration = new Configuration();
 
         // Add ALL of your entities here. You can also try adding a whole package.
@@ -64,71 +56,43 @@ public class SimpleServer extends AbstractServer {
     }
 
 
-
-
     @Override
     protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
         System.out.println("get into handle from client in server class");
-        Task myTask=null;
+        Task myTask = null;
         String request = null;
-        if(msg instanceof String)
-        {
+        if (msg instanceof String) {
+            System.out.println("in string inst");
+
             request = (String) msg;
         } else if (msg instanceof MessageOfStatus) {
             System.out.println("hello00");
-            request= ((MessageOfStatus) msg).getChangeStatus();
-            myTask=((MessageOfStatus) msg).getTask();
-
+            request = ((MessageOfStatus) msg).getChangeStatus();
+            myTask = ((MessageOfStatus) msg).getTask();
+        } else if (msg instanceof Message) {
+            System.out.println("in Message inst");
+            request = ((Message) msg).getMessage();
         }
+        else System.out.println("is nothing");
+
+        System.out.println(request);
+
         try {
             if (request.isBlank()) {
-               System.out.println("heyyy");
-    /*            message.setMessage("Error! we got an empty message");
-                client.sendToClient(message);*/
-           }
-                /*
+                System.out.println("isblank");
 
-                int entityId = message1.getTask().getId();
-                Configuration configuration = new Configuration().configure();
-                try (SessionFactory sessionFactory = configuration.buildSessionFactory();
-                     Session session = sessionFactory.openSession()) {
-
-                    // Begin a transaction
-                    Transaction transaction = session.beginTransaction();
-
-                    // Load the entity from the database
-                    Task task = session.get(Task.class, entityId);
-
-                    // Check if the entity exists
-                    if (task != null) {
-                        // Modify the properties of the entity
-                        task.setStatus("not performed yet");
-
-                        // Save the changes by committing the transaction
-                        transaction.commit();
-
-                        MessageOfStatus message2 = new MessageOfStatus(task, "the change completed");
-                        // Echo back the received message to the client
-
-                        client.sendToClient(message2);
-                    } else {
-                        System.out.println("Entity not found with id: " + entityId);
-                    }
-                }*/
-
-            else if (request.equals("change status")) {
+            } else if (request.equals("change status")) {
                 System.out.println("in change status");
-                int id= myTask.getId();
+                int id = myTask.getId();
 
                 SessionFactory sessionFactory = FactoryUtil.getSessionFactory();
                 session = sessionFactory.openSession();
 
-                Transaction tx2 = null;
+                Transaction tx2 = null; /////////////////////////////////////////////////////////////////////////////////
                 try {
                     tx2 = session.beginTransaction();
 
                     // Perform operations with the second session
-                    System.out.println("in try");
                     Task task = session.get(Task.class, id);
 
                     // Check if the entity exists
@@ -145,7 +109,6 @@ public class SimpleServer extends AbstractServer {
 
                         client.sendToClient(message2);
                         tx2.commit();
-                        System.out.println("send to client");
                     }
                 } catch (RuntimeException e) {
                     if (tx2 != null) tx2.rollback();
@@ -153,9 +116,7 @@ public class SimpleServer extends AbstractServer {
                 } finally {
                     session.close(); // Close the second session
                 }
-            }
-
-                else if (request.equals("display tasks")) {
+            } else if (request.equals("display tasks")) {
                 System.out.println("in desplayyyyyyyy");
 
 
@@ -165,18 +126,9 @@ public class SimpleServer extends AbstractServer {
                 Transaction tx2 = null;
                 try {
                     tx2 = session.beginTransaction();
-
-                    // Perform operations with the second session
-                    System.out.println("in desplayyyyyyyy");
-
                     List<Task> tasks = getAllTasks(session);
-                    for (Task task : tasks) {
-                        System.out.println(task.getType_of_task());
-                    }
-                    DisplayTasksMassage dis=new DisplayTasksMassage(tasks);
-                    System.out.println(dis.getTasks().get(0).getId());
+                    DisplayTasksMassage dis = new DisplayTasksMassage(tasks);
                     client.sendToClient(dis);
-//                    SimpleClient.getClient().sen
                     tx2.commit();
                 } catch (RuntimeException e) {
                     if (tx2 != null) tx2.rollback();
@@ -184,23 +136,57 @@ public class SimpleServer extends AbstractServer {
                 } finally {
                     session.close(); // Close the second session
                 }
+            } else if (request.equals("Confirm information")) {
+                System.out.println("in sever /Confirm information ");
 
+
+                String username = ((Message) msg).getUserName();
+                String password = ((Message) msg).getPassword();
+                System.out.println(username +"    "+password);
+
+
+                SessionFactory sessionFactory = FactoryUtil.getSessionFactory();
+                session = sessionFactory.openSession();
+                Transaction tx2 = null;
+
+                try {
+                    tx2 = session.beginTransaction();
+
+                    // Perform operations with the second session
+                    System.out.println("Confirm");
+                    // Use a query to get all users
+                    List<Registered_user> users = session.createQuery("FROM Registered_user", Registered_user.class).getResultList();
+                    // Check if the entity exists
+                    if (users != null) {
+
+                        Message message2=null;
+                        for (Registered_user user : users) {
+
+                            if (user.getUsername().equals(username)) {
+                                if (user.getPassword().equals(password)) {
+                                    message2 = new Message("correct");
+                                    message2.setUser(user);
+                                    System.out.println("correct");
+
+                                } else {
+                                    message2 = new Message("wrongPassword");
+                                    System.out.println("wrongPassword");
+
+                                }
+                            }
+                        }
+                        if(message2 == null)
+                            message2 = new Message("user is not exist");
+                        client.sendToClient(message2);
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             } else {
                 System.out.println("in else");
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-	/*public void sendToAllClients(Message message) {
-		try {
-			for (SubscribedClient SubscribedClient : SubscribersList) {
-				SubscribedClient.getClient().sendToClient(message);
-			}
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-	}*/
-
     }
 }
