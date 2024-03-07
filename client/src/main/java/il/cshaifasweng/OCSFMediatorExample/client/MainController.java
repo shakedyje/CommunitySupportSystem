@@ -30,6 +30,9 @@ public class MainController {
 
 
     @FXML
+    private TextField TF_forErrro;
+
+    @FXML
     private TextField Username_TF;
 
     @FXML
@@ -52,40 +55,51 @@ public class MainController {
     }
 
 
-
-
     @FXML
     void LogIN_check_info(ActionEvent event) throws IOException {
-        String password=password_TF.getText();
-        String username=Username_TF.getText();
-        System.out.println(password+"   "+username);
+        String password = password_TF.getText();
+        String username = Username_TF.getText();
+        System.out.println(password + "   " + username);
         password_TF.clear();
         Username_TF.clear();
-        Message message=new Message("Confirm information",username,password);
+        Message message = new Message("Confirm information", username, password);
         SimpleClient.getClient().sendToServer(message);
 
     }
 
 
-    @Subscribe
-    public void result_user_input(NewVerifiedInformationEvent event)
-    {
-        System.out.println("in client/after event/result_user_input");
-        if(event.getMessage().getMessage().equals("correct"))switchToMainOfUser(event.getMessage().getUser().getGivenName());
-        else if(event.getMessage().getMessage().equals("wrongPassword"))
-            showAlert("Error","wrong password","you try to write a wrong password,please try againe",Alert.AlertType.ERROR);
-        else if(event.getMessage().getMessage().equals("user is not exist"))
-            showAlert("Error","wrong UserName","you try to write a wrong username,please try againe",Alert.AlertType.ERROR);
-    }
+        @Subscribe
+        public void result_user_input(NewVerifiedInformationEvent event)
+        {
+            System.out.println("in client/after event/result_user_input");
+            if(event.getMessage().getMessage().equals("correct"))
+            {
+                switchToMainOfUser(event.getMessage().getUser().getGivenName());
+
+            }
+            else if(event.getMessage().getMessage().equals("wrongPassword"))
+            {
+
+             TF_forErrro.setText("you try to write a wrong password,please try againe");
+
+               // showAlert("Error","wrong password","you try to write a wrong password,please try againe",Alert.AlertType.ERROR);
+            }
+            else if(event.getMessage().getMessage().equals("user is not exist"))
+            {
+                TF_forErrro.setText("you try to write a wrong username,please try againe");
+
+                showAlert("Error","wrong UserName","you try to write a wrong username,please try againe",Alert.AlertType.ERROR);
+            }
+        }
 
 
-    void switchToMainOfUser(String name)
-    {
+
+    void switchToMainOfUser(String name) {
         Platform.runLater(() -> {
             try {
                 setRoot("main");
-              //  String currentText = user_name_label.getText(); // Get the current text
-              //  String newText = currentText + " " + name; // Concatenate with the new name
+                //  String currentText = user_name_label.getText(); // Get the current text
+                //  String newText = currentText + " " + name; // Concatenate with the new name
                 user_name_label.setText(name); // Set the new text
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -96,26 +110,10 @@ public class MainController {
     }
 
 
-
-
-
-    @FXML
-    void switchToAllTask(ActionEvent event) throws IOException {
-        Platform.runLater(() -> {
-            try {
-                setRoot("All_tasks_fxml");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-    }
-
-
-
     @FXML
     void initialize() {
         EventBus.getDefault().register(this);
-        msgId=0;
+        msgId = 0;
         try {
             Message message = new Message(msgId, "add client");
             SimpleClient.getClient().sendToServer(message);
