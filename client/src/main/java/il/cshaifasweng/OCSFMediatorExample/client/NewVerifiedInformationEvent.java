@@ -20,5 +20,5 @@ public class NewVerifiedInformationEvent {
 
     public Message getMessage() {
         return message;
-    }
+}
 }

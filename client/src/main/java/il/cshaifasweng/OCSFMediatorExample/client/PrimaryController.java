@@ -14,25 +14,19 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Polygon;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import static il.cshaifasweng.OCSFMediatorExample.client.SimpleChatClient.setRoot;
 import static il.cshaifasweng.OCSFMediatorExample.client.SimpleClient.getClient;
 
 public class PrimaryController {
 
 	@FXML
 	public VBox tasksContainer;
-
-	@FXML
-	private Button back_btn;
 	@FXML
 	public TextArea DataFromServerTF;
 	@FXML
@@ -46,6 +40,7 @@ public class PrimaryController {
 	@FXML
 	private VBox showingVbox;
 
+	private int msgId;
 
 
 	// Define the font size and family you want to use
@@ -157,7 +152,7 @@ public class PrimaryController {
 			}
 
 			// Set the vertical spacing between buttons
-			tasksContaine.setSpacing(15);
+			tasksContaine.setSpacing(10);
 			showingVbox.setSpacing(10);
 		});
 	}
@@ -175,7 +170,7 @@ public class PrimaryController {
 		button.setMaxWidth(Double.MAX_VALUE);
 		button.setPrefWidth(Control.USE_PREF_SIZE);
 		// Set the preferred height of the button
-		button.setPrefHeight(50); // Adjust the height as needed
+		button.setPrefHeight(40); // Adjust the height as needed
 
 		//we'll think as a group what information we'll show here, before displaying tasks
 
@@ -200,7 +195,7 @@ public class PrimaryController {
 		DataFromServerTF.setFont(font);
 
 		Button button = new Button(String.format("Change Status"));
-		button.setPrefHeight(50);
+		button.setPrefHeight(40);
 		button.setFont(font);
 
 		// Remove the second element from showingVbox if it exists
@@ -221,8 +216,16 @@ public class PrimaryController {
 
 
 
-
-
+	@Subscribe
+	public void getStarterData(NewSubscriberEvent event) {
+		try {
+			Message message = new Message(msgId, "send Submitters IDs");
+			SimpleClient.getClient().sendToServer(message);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 
 
@@ -243,20 +246,6 @@ public class PrimaryController {
 	}
 
 	@FXML
-	void switchToMain(ActionEvent event)
-	{
-		Platform.runLater(() -> {
-			try {
-				setRoot("Main");
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
-		});
-
-
-	}
-
-	@FXML
 	void initialize() {
 		EventBus.getDefault().register(this);
 		try {
@@ -264,18 +253,16 @@ public class PrimaryController {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		//	MessageTF.clear();
-		//	DataFromServerTF.clear();
-	/*	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
-		Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
-			LocalTime currentTime = LocalTime.now();
-			timeTF.setText(currentTime.format(dtf));
-		}),
-				new KeyFrame(Duration.seconds(1))
-		)*
-		clock.setCycleCount(Animation.INDEFINITE);
-		clock.play();*/
 
+		msgId=0;
+
+		try {
+			Message message = new Message(msgId, "add client");
+			SimpleClient.getClient().sendToServer(message);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 }

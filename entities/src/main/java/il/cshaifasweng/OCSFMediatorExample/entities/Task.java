@@ -10,7 +10,9 @@ public class Task implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String Type_of_task;
+
+    private String moredetails;
+    private TaskType Type_of_task;
     private LocalDateTime Creation_time;
     @ManyToOne
     @JoinColumn(name = "registered_user_id", referencedColumnName = "id")
@@ -25,14 +27,22 @@ public class Task implements Serializable {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Constructor
 
-    public Task(String type_of_task, Registered_user user, LocalDateTime time) {
+    public Task(TaskType type_of_task, Registered_user user, LocalDateTime time, String details) {
+        moredetails = details;
         Type_of_task = type_of_task;
         Creation_time = LocalDateTime.now();
         this.registered_user = user;
         Deadline = time;
         Status = "waiting for approval";
     }
-    public Task( String type_of_task)
+    public Task(TaskType type_of_task, Registered_user user, LocalDateTime time) {
+        Type_of_task = type_of_task;
+        Creation_time = LocalDateTime.now();
+        this.registered_user = user;
+        Deadline = time;
+        Status = "waiting for approval";
+    }
+    public Task(TaskType type_of_task)
     {
         Type_of_task = type_of_task;
         Creation_time = LocalDateTime.now();
@@ -40,10 +50,14 @@ public class Task implements Serializable {
         Status = "A task waiting for a volunteer";
     }
 
-    public Task()
-    {
-       this.Type_of_task="help";
+    public Task() {
+
     }
+
+//    public Task()
+//    {
+//       this.Type_of_task="help";
+//    }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Getters and setters
@@ -56,11 +70,11 @@ public class Task implements Serializable {
         this.id = id;
     }
 
-    public String getType_of_task() {
+    public TaskType getType_of_task() {
         return Type_of_task;
     }
 
-    public void setType_of_task(String type_of_task) {
+    public void setType_of_task(TaskType type_of_task) {
         Type_of_task = type_of_task;
     }
 
