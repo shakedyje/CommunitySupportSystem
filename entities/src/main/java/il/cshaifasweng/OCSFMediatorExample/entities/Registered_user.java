@@ -184,7 +184,7 @@ public class Registered_user implements Serializable { //extends User
         this.password = password;
     }
 
-    public boolean isPermission() {
+    public boolean getPermission() {
         return permission;
     }
 

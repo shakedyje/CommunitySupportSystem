@@ -47,12 +47,7 @@ public class MainController {
     private int msgId;
 
 
-//    private void showAlert(String title, String header, String content, Alert.AlertType alertType) {
-//        Alert alert = new Alert(alertType, content);
-//        alert.setTitle(title);
-//        alert.setHeaderText(header);
-//        alert.show();
-//    }
+
 private void showAlert(String title, String content) {
     Alert alert = new Alert(Alert.AlertType.INFORMATION);
     alert.setTitle(title);
@@ -94,7 +89,12 @@ private void showAlert(String title, String content) {
         System.out.println("in client/after event/result_user_input");
         if (event.getMessage().getMessage().equals("correct")) {
             UserClient.setLoggedInUser(event.getMessage().getUser());
-            switchToMainOfUser();
+            if(UserClient.getLoggedInUser().getPermission())//1 for manager
+            {
+                System.out.println("result_user_input in manager");
+                switchToMainOfManager();
+            }else
+                switchToMainOfUser();
 
         } else if (event.getMessage().getMessage().equals("wrongPassword")) {
 
@@ -120,7 +120,18 @@ private void showAlert(String title, String content) {
             }
         });
 
+    }
+    void switchToMainOfManager()
+    {
+        System.out.println("switchToMainOfManager in manager");
 
+        Platform.runLater(() -> {
+            try {
+                setRoot("manager_main");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
 
@@ -128,13 +139,5 @@ private void showAlert(String title, String content) {
     void initialize() {
         EventBus.getDefault().register(this);
         msgId = 0;
-//        try {
-////            Message message = new Message(msgId, "add client");
-//////            UserClient.getClient().sendToServer(message);
-//        } catch (IOException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//
-//        }
     }
 }

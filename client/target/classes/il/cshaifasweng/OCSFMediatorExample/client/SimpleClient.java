@@ -15,6 +15,8 @@ public class SimpleClient extends AbstractClient {
 
 	private static SimpleClient client = null;
 
+
+
 	private SimpleClient(String host, int port) {
 		super(host, port);
 	}
@@ -44,12 +46,17 @@ public class SimpleClient extends AbstractClient {
 			System.out.println(message.getMessage());
 			EventBus.getDefault().post(new NewVerifiedInformationEvent(message));
 		}
+		else if (msg instanceof Message) {
+			System.out.println("in client/handlefrom serverr /in message inst");
+			Message message=(Message)msg;
+			System.out.println(message.getMessage());
+			EventBus.getDefault().post(new NewVerifiedInformationEvent(message));
+		}
 
 	}
 
 	public static SimpleClient getClient() {
 		if (client == null) {
-			System.out.println("Rinaaaa");
 			client = new SimpleClient("localhost", 3000);
 		}
 		return client;

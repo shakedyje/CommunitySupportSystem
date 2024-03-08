@@ -47,35 +47,6 @@ public class UserClient extends AbstractClient {
             EventBus.getDefault().post(new NewTaskEvent(ntm));
 
         }
-////		Message message = (Message) msg;
-//        if(msg instanceof MessageOfStatus) {
-//            MessageOfStatus message1 = (MessageOfStatus) msg;
-//            if (message1.getChangeStatus().equals("the change completed")) {
-//                EventBus.getDefault().post(new NewDetailsEvent(message1));
-//                getClient().sendToServer("display tasks");
-//            }
-//        }
-//		if(message1.getChangeStatus().equals("update submitters IDs")){
-//			EventBus.getDefault().post(new UpdateMessageEvent(message));
-//		}else if(message.getMessage().equals("client added successfully")){
-//			EventBus.getDefault().post(new NewSubscriberEvent(message));
-//		}else if(message.getMessage().equals("Error! we got an empty message")){
-//			EventBus.getDefault().post(new ErrorEvent(message));
-//        else if (msg instanceof DisplayTasksMassage) {
-//            DisplayTasksMassage dis = (DisplayTasksMassage) msg;
-//            EventBus.getDefault().post(new TasksMessageEvent(dis));
-//            System.out.println("recognized massage as a list of tasks");
-//        }
-//        if (msg instanceof NewTaskMessage) {
-
-//            DisplayTasksMassage dis = (DisplayTasksMassage) msg;
-//            EventBus.getDefault().post(new TasksMessageEvent(dis));
-//            System.out.println("recognized massage as a list of tasks");
-
-
-//		else {
-//			EventBus.getDefault().post(new MessageEvent(message));
-//		}
         else if (msg instanceof Message) {
             System.out.println("in client/handlefrom serverr /in message inst");
             Message message=(Message)msg;

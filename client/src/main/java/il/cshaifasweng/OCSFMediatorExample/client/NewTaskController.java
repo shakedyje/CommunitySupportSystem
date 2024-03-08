@@ -33,44 +33,6 @@ public class NewTaskController {
     @FXML
     private ComboBox<TaskType> taskTypeComboBox;
 
-    // Event handler for selecting a task type from the ComboBox
-//    @FXML
-//    private void onTaskTypeSelected() {
-//        // Get the selected task type from the ComboBox
-//        TaskType selectedTaskType = taskTypeComboBox.getValue();
-//
-//        if (selectedTaskType != null) {
-//            // Display the selected task type in an alert dialog
-//            showAlert("Selected Task Type", "You selected: " + selectedTaskType);
-//        } else {
-//            // If no task type is selected, show an error message
-//            showErrorDialog("Please select a task type.");
-//        }
-//    }
-
-    // Event handler for selecting a deadline from the DatePicker
-//    @FXML
-//    private void onDeadlineSelected() {
-//        // Get the selected deadline from the DatePicker
-//        LocalDateTime deadline = deadlineDp.getValue().atStartOfDay();
-//        TaskType selectedTaskType = taskTypeComboBox.getValue();
-//        String details= detailsTxt.getText();
-//
-//        if (selectedTaskType == null) {
-//            // Display the selected task type in an alert dialog
-//            // If no task type is selected, show an error message
-//            showErrorDialog("Please select a task type.");
-//        }
-//        else if (deadline.isBefore(LocalDateTime.now())) {
-//            showErrorDialog("Please select a future date.");
-//        }
-//        else
-//        {
-//
-//        }
-
-
-
 
     @FXML
     private void check_confirm_display_task() throws IOException {
