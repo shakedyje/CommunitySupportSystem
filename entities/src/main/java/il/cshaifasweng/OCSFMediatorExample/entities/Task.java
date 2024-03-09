@@ -69,6 +69,11 @@ public class Task implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
+    @Override
+    public String toString() {    //add from j&Y
+        // Example with more information:
+        return ("Task ID: " + id + ", Type: " + Type_of_task + ", Status: "+Status);
+}
 
     public TaskType getType_of_task() {
         return Type_of_task;

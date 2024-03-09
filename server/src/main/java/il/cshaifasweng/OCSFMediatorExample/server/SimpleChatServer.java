@@ -238,7 +238,7 @@ public class SimpleChatServer {
                 Registered_user user4 = new Registered_user("Linoy","Ohaion","linoyOhaion2","1232",true,"0502213188","Jerusalem");
                 Registered_user user5 = new Registered_user("Roman","Shapira","romanroman","1231",false,"0521153111","Jerusalem");
                 Registered_user user6 = new Registered_user("Shira","Omer","ShiraOmer22","1220",false,"0502479900","Haifa");
-                Registered_user user7 = new Registered_user("Yarden","Mesgav","yarden_yarden3","1230",false,"0532251580","Tel-Aviv");
+                Registered_user user7 = new Registered_user("Yarden","Mesgav","yarden_yarden3","1230",true,"0532251580","Tel-Aviv");
 
 
                 session.save(user1);

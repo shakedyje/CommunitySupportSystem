@@ -1,15 +1,14 @@
+/*
 package il.cshaifasweng.OCSFMediatorExample.client;
 
 import il.cshaifasweng.OCSFMediatorExample.entities.DisplayTasksMassage;
 import il.cshaifasweng.OCSFMediatorExample.entities.Message;
 import il.cshaifasweng.OCSFMediatorExample.entities.MessageOfStatus;
-import il.cshaifasweng.OCSFMediatorExample.entities.Task;
 import org.greenrobot.eventbus.EventBus;
 
 import il.cshaifasweng.OCSFMediatorExample.client.ocsf.AbstractClient;
 
 import java.io.IOException;
-import java.util.List;
 
 public class SimpleClient extends AbstractClient {
 
@@ -24,7 +23,7 @@ public class SimpleClient extends AbstractClient {
 
 
 	@Override
-	protected void handleMessageFromServer(Object msg) throws IOException {
+	protected ManagerClient handleMessageFromServer(Object msg) throws IOException {
 		System.out.println("got into handleMessageFromServer ");
 
 //		Message message = (Message) msg;
@@ -53,6 +52,7 @@ public class SimpleClient extends AbstractClient {
 			EventBus.getDefault().post(new NewVerifiedInformationEvent(message));
 		}
 
+		return null;
 	}
 
 	public static SimpleClient getClient() {
@@ -62,4 +62,4 @@ public class SimpleClient extends AbstractClient {
 		return client;
 	}
 
-}
+}*/

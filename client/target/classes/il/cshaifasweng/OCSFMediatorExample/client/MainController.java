@@ -85,16 +85,19 @@ private void showAlert(String title, String content) {
 
 
     @Subscribe
-    public void result_user_input(NewVerifiedInformationEvent event) {
+    public void result_user_input(NewVerifiedInformationEvent event) throws IOException {
         System.out.println("in client/after event/result_user_input");
-        if (event.getMessage().getMessage().equals("correct")) {
-            UserClient.setLoggedInUser(event.getMessage().getUser());
-            if(UserClient.getLoggedInUser().getPermission())//1 for manager
+        if (event.getMessage().getMessage().equals("correct"))
+        {
+            if(event.getMessage().getUser().getPermission())//1 for manager
             {
-                System.out.println("result_user_input in manager");
+                ManagerClient.getManagerClient().openConnection();
+                 ManagerClient.setManagerClient(event.getMessage().getUser());
                 switchToMainOfManager();
-            }else
+            }else {
+                UserClient.setLoggedInUser(event.getMessage().getUser());
                 switchToMainOfUser();
+            }
 
         } else if (event.getMessage().getMessage().equals("wrongPassword")) {
 
