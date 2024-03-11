@@ -11,7 +11,7 @@ import java.io.IOException;
 public class UserClient extends AbstractClient {
 
     /*just for the running check*/
-    private static Registered_user loggedInUser;
+    private static Registered_user loggedInUser=null;
     private static UserClient client = null;
 
     //    public static void login(String username, String password) { //rina and malek

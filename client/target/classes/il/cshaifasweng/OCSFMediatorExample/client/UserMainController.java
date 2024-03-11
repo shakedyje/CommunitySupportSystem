@@ -33,6 +33,16 @@ public class UserMainController {
         welcome_label.setText("Welcome " + username);
         welcome_label.setAlignment(Pos.CENTER);
     }
+    @FXML
+    void switchToemergency(ActionEvent event) {
+        Platform.runLater(() -> {
+            try {
+                setRoot("Emergency");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
 
     @FXML
     void switchToNewTask(ActionEvent event) throws IOException {

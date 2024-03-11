@@ -42,8 +42,9 @@ import javafx.util.Duration;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import static il.cshaifasweng.OCSFMediatorExample.client.ManagerClient.getClient;
 import static il.cshaifasweng.OCSFMediatorExample.client.ManagerClient.getManagerClient;
-
+import static il.cshaifasweng.OCSFMediatorExample.client.SimpleChatClient.setRoot;
 
 
 public class Manager  {
@@ -151,7 +152,7 @@ public class Manager  {
         Task task = ListOfTasks.getSelectionModel().getSelectedItem();
         if (task != null) {
             MessageOfStatus message = new MessageOfStatus(task, "accept");
-            getManagerClient().sendToServer(message);
+            getClient().sendToServer(message);
         }
         else {
             Platform.runLater(() -> {
@@ -200,7 +201,7 @@ public class Manager  {
         if (!reason.equals("")) {
             MessageOfStatus message = new MessageOfStatus(task, "reject: "+reason);
 
-            getManagerClient().sendToServer(message);
+            getClient().sendToServer(message);
 
             Send.setVisible(false);
             Reason.setVisible(false);
@@ -274,7 +275,7 @@ public class Manager  {
 
     //ObservableList<Task> observableTasks = FXCollections.observableArrayList();
     @Subscribe
-    public void ShowListView(TasksMessageEvent event) {
+    public void ShowListView(TasksMessageEvent event) {////////////////////////////////////////////////////////
 
         Platform.runLater(() -> {
             //tasksContaine.getChildren().clear(); // Clear existing content
@@ -295,12 +296,6 @@ public class Manager  {
                 showAlert("Error", "Error", "Invalid event received.", Alert.AlertType.ERROR);
             }
 
-            //Scene scene = new Scene(ListOfTasks, 300, 250);
-
-            // Set stage title and scene, then show the stage
-            //Manager.setTitle("Tasks Waiting for Approval");
-            // Manager.setScene(scene);
-            //  Manager.show();
         });
     }
 
@@ -312,10 +307,21 @@ public class Manager  {
     }
 
     @FXML
+    void switchToemergency(ActionEvent event) {
+        Platform.runLater(() -> {
+            try {
+                setRoot("Emergency");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    @FXML
     void initialize() {
         EventBus.getDefault().register(this);
         try {
-            getManagerClient().sendToServer("list view");
+            getClient().sendToServer("list view");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -324,7 +330,7 @@ public class Manager  {
 
         try {
             Message message = new Message(msgId, "add client");
-            getManagerClient().sendToServer(message);
+            getClient().sendToServer(message);
         } catch (IOException e) {
             // TODO Auto-generated catch block
         }

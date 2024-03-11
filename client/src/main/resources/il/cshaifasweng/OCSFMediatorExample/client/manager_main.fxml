@@ -15,7 +15,7 @@
                 <Font name="Calibri Light" size="36.0" />
             </font>
         </Label>
-        <Button fx:id="EmergencyButton" layoutX="3.0" layoutY="513.0" mnemonicParsing="false" onAction="#EmergencyCall" prefHeight="37.0" prefWidth="679.0" text="Emergency Button" textFill="#e10a0a">
+        <Button fx:id="EmergencyButton" layoutX="3.0" layoutY="513.0" mnemonicParsing="false" onAction="#switchToemergency" prefHeight="37.0" prefWidth="679.0" text="Emergency Button" textFill="#e10a0a">
             <font>
                 <Font size="18.0" />
             </font></Button>

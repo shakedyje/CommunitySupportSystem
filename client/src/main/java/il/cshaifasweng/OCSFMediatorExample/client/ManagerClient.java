@@ -9,8 +9,8 @@ import org.greenrobot.eventbus.EventBus;
 
 public class ManagerClient extends AbstractClient {
 
-    private static Registered_user managerClient;
-    private static ManagerClient Client = null;
+    private static Registered_user managerClient=null;
+    private static ManagerClient client = null;
 
 
     /**
@@ -42,14 +42,22 @@ public class ManagerClient extends AbstractClient {
 
     }
 
-    public static ManagerClient getManagerClient() {
-        if (Client == null) {
-            Client = new ManagerClient("localhost", 3000);
-        }
-        return Client;
-    }
+
 
     public static void setManagerClient(Registered_user managerClient) {
         ManagerClient.managerClient = managerClient;
     }
+
+    public static Registered_user getManagerClient() {
+        return managerClient;
+    }
+
+    public static ManagerClient getClient() {
+        if (client == null) {
+            client = new ManagerClient("localhost", 3000);
+        }
+        return client;
+    }
+
+
 }

@@ -29,8 +29,7 @@ public class MainController {
     private Button see_all_task_btn;
 
 
-    @FXML
-    private TextField TF_forErrro;
+
 
     @FXML
     private TextField Username_TF;
@@ -45,6 +44,9 @@ public class MainController {
     @FXML
     private PasswordField password_TF;
     private int msgId;
+
+    @FXML
+    private Button Emergency_btn;
 
 
 
@@ -91,7 +93,7 @@ private void showAlert(String title, String content) {
         {
             if(event.getMessage().getUser().getPermission())//1 for manager
             {
-                ManagerClient.getManagerClient().openConnection();
+                ManagerClient.getClient().openConnection();
                  ManagerClient.setManagerClient(event.getMessage().getUser());
                 switchToMainOfManager();
             }else {
@@ -101,12 +103,10 @@ private void showAlert(String title, String content) {
 
         } else if (event.getMessage().getMessage().equals("wrongPassword")) {
 
-            TF_forErrro.setText("you try to write a wrong password,please try againe");
             Platform.runLater(() -> {
             showErrorDialog("Wrong Password \n you try to write a wrong password, please try again");
             });
         } else if (event.getMessage().getMessage().equals("user is not exist")) {
-            TF_forErrro.setText("you try to write a wrong username, please try again");
             Platform.runLater(() -> {
             showErrorDialog("wrong User Name \n you try to write a wrong username, please try again");
             });
@@ -124,6 +124,23 @@ private void showAlert(String title, String content) {
         });
 
     }
+
+
+
+
+
+    @FXML
+    void switchToemergency(ActionEvent event) {
+        System.out.println("here");
+        Platform.runLater(() -> {
+            try {
+                setRoot("Emergency");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
     void switchToMainOfManager()
     {
         System.out.println("switchToMainOfManager in manager");
@@ -136,6 +153,7 @@ private void showAlert(String title, String content) {
             }
         });
     }
+
 
 
     @FXML
