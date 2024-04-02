@@ -1,10 +1,10 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
+import il.cshaifasweng.OCSFMediatorExample.client.NewTaskEvent;
+import il.cshaifasweng.OCSFMediatorExample.client.NewVerifiedInformationEvent;
 import il.cshaifasweng.OCSFMediatorExample.entities.*;
 
 import il.cshaifasweng.OCSFMediatorExample.client.ocsf.AbstractClient;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import org.greenrobot.eventbus.EventBus;
 import org.hibernate.SessionFactory;
 
@@ -49,24 +49,32 @@ public class UserClient extends AbstractClient {
             EventBus.getDefault().post(new NewTaskEvent(ntm));
 
         }
-//        else if (msg instanceof DisplayDataMessage) {
-//            DisplayDataMessage dis = (DisplayDataMessage) msg;
-//            if (dis.getDataType().equals("all tasks")) {
-//                ObservableList<Task> ALLTask_ = FXCollections.observableArrayList(dis.getTasks());
-//                TasksOb.getInstance().setObservableTasks(ALLTask_);
-//            }
-//        }
-//        else if (msg instanceof AddToObMessage) {
-//            AddToObMessage NT = (AddToObMessage) msg;
-//            TasksOb.getInstance().observableTasks.add(NT.getNewtask());
-//        }
         else if (msg instanceof Message) {
             System.out.println("in client/handlefrom serverr /in message inst");
             Message message=(Message)msg;
             System.out.println(message.getMessage());
             EventBus.getDefault().post(new NewVerifiedInformationEvent(message));
-        }
+        } else if (msg instanceof DisplayDataMessage) {
+            System.out.println("userclient dis");
+            DisplayDataMessage dis = (DisplayDataMessage) msg;
+            System.out.println("8888888888888888888888888888888888888888888888888");
+            if(dis.getDataType().equals("Requested Tasks"))
+            {
+                EventBus.getDefault().post(new RequestedTasksShowEvent(dis));
+                System.out.println("recognized massage as a list of requested tasks in userclient");
+            }else {
+                System.out.println("correct inside ========");
+                EventBus.getDefault().post(new VolunteeringEvent(dis));
+                System.out.println("recognized massage as a list of tasks in userclient");
+            }
 
+        }else if(msg instanceof MessageOfStatus) {
+            MessageOfStatus message1 = (MessageOfStatus) msg;
+            if (message1.getChangeStatus().equals("Thanks for volunteering")) {
+                EventBus.getDefault().post(new PersonVolunteering(message1));
+            }
+
+        }
     }
 
     public static UserClient getClient() {

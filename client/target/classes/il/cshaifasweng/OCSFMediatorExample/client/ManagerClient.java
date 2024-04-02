@@ -1,19 +1,20 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
+import il.cshaifasweng.OCSFMediatorExample.client.Emergency_Call_Event;
+import il.cshaifasweng.OCSFMediatorExample.client.*;
 import il.cshaifasweng.OCSFMediatorExample.client.ocsf.AbstractClient;
 
 import java.io.IOException;
 import java.util.List;
 
 import il.cshaifasweng.OCSFMediatorExample.entities.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import org.greenrobot.eventbus.EventBus;
 
 public class ManagerClient extends AbstractClient {
 
     private static Registered_user managerClient = null;
     private static ManagerClient client = null;
+    private static Registered_user loggedInUser=null;
 
 
     /**

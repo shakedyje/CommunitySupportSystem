@@ -49,7 +49,7 @@
                         </Label>
                         <ImageView fitHeight="182.0" fitWidth="260.0" layoutX="129.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@image-removebg-preview%20(1).png" />
+                                <Image url="@image-removebg-preview (1).png" />
                             </image>
                         </ImageView>
                     </children>

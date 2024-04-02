@@ -1,4 +1,7 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
+import il.cshaifasweng.OCSFMediatorExample.client.NewDetailsEvent;
+import il.cshaifasweng.OCSFMediatorExample.client.TaskRejectEvent;
+import il.cshaifasweng.OCSFMediatorExample.client.TasksMessageEvent;
 import javafx.scene.input.MouseEvent;
 import il.cshaifasweng.OCSFMediatorExample.entities.Message;
 import il.cshaifasweng.OCSFMediatorExample.entities.Task;
@@ -316,12 +319,17 @@ public class Manager  {
     }
 
     @FXML
-    void initialize() {
+    void initialize(String username) {
         EventBus.getDefault().register(this);
+
+        // Initialize ManagerClient instance
+
+        ManagerClient managerClient = ManagerClient.getClient();
         try {
 //            TasksOb.getInstance();
 //            getClient().sendToServer("get tasks");
-            getClient().sendToServer("list view");
+            managerClient.openConnection();
+//            getClient().sendToServer("list view");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -329,9 +337,18 @@ public class Manager  {
         msgId=0;
 
         try {
-            getClient().sendToServer("add manager client");
+            //getClient().sendToServer("add manager client");
+            Message message2 = new Message("list view",username);
+            Message message3 = new Message("add manager client",username);
+            managerClient.sendToServer(message2);
+
+           managerClient.sendToServer(message3);
+
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+            // Handle send error
+            System.err.println("Error: Unable to send message to the server");
+            e.printStackTrace();
+            // Optionally, you may choose to continue initialization or stop here
         }
     }
 

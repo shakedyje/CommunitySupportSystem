@@ -26,6 +26,12 @@ public class DisplayDataMessage implements Serializable {
         this.dataType = task;
     }
 
+    public DisplayDataMessage(List<Task> tasks ) {
+        this.tasks = tasks;
+        this.dataType="";
+
+    }
+
     public DisplayDataMessage(Communities community, String members) {
         this.community=community;
         this.dataType=members;

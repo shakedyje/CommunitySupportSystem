@@ -134,8 +134,6 @@ public class Registered_user implements Serializable { //extends User
     private String phone_number;
     private Communities community;
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    
     // Default constructor for JPA
     public Registered_user() {
         // Default constructor required by JPA

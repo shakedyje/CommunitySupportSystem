@@ -5,8 +5,12 @@ import il.cshaifasweng.OCSFMediatorExample.entities.Registered_user;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -19,6 +23,14 @@ public class EmergencyController {
 
     @FXML
     private Label info_label;
+    private static Scene scene;
+    private static Stage appStage;
+
+
+    public void setAppStage(Stage appStage) {
+        this.appStage = appStage;
+    }
+
 
     @FXML
     void BackToTheMain(ActionEvent event)
@@ -35,14 +47,33 @@ public class EmergencyController {
        }
        else if((UserClient.getLoggedInUser()== null))
        {
+//           UserClient.getLoggedInUser().getUsername();
+//               Platform.runLater(() -> {
+//                   try {
+//                       setRoot("manager_main");
+//                   } catch (IOException e) {
+//                       throw new RuntimeException(e);
+//                   }
+//               });
+           Platform.runLater(() -> {
+               try {
+                   FXMLLoader loader = new FXMLLoader(getClass().getResource("manager_main.fxml"));
+                   Parent root = loader.load();
+                   Manager ManagerController = loader.getController();
+                   ManagerController.initialize(ManagerClient.getManagerClient().getUsername()); // Pass the username to initialize method
 
-               Platform.runLater(() -> {
-                   try {
-                       setRoot("manager_main");
-                   } catch (IOException e) {
-                       throw new RuntimeException(e);
+                   // Show the scene
+                   Scene scene = new Scene(root);
+                   if (appStage == null) {
+                       appStage = new Stage();
                    }
-               });
+
+                   appStage.setScene(scene);
+                   appStage.show();
+               } catch (IOException e) {
+                   throw new RuntimeException(e);
+               }
+           });
 
        }else
        {
@@ -60,7 +91,6 @@ public class EmergencyController {
 
     @FXML
     private void initialize() throws IOException {
-
         if ((UserClient.getLoggedInUser() == null) && (ManagerClient.getManagerClient() == null)) {
             info_label.setText("To make it easier for us to identify you,\nplease log in and press the emergency button again");
             UserClient.getClient().sendToServer(new NewEmergencyCall("Unknown User",null,null));
