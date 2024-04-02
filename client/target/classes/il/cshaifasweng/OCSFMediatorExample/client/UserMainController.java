@@ -98,7 +98,8 @@ public class UserMainController {
 
     }
 
-
+    @FXML
+    void switchToVolunteer(ActionEvent event){}
 
     @FXML
     void turnToVolunteeringPage(ActionEvent event) {

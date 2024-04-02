@@ -2,6 +2,7 @@ package il.cshaifasweng.OCSFMediatorExample.client;
 import il.cshaifasweng.OCSFMediatorExample.client.NewDetailsEvent;
 import il.cshaifasweng.OCSFMediatorExample.client.TaskRejectEvent;
 import il.cshaifasweng.OCSFMediatorExample.client.TasksMessageEvent;
+import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import il.cshaifasweng.OCSFMediatorExample.entities.Message;
 import il.cshaifasweng.OCSFMediatorExample.entities.Task;
@@ -11,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
@@ -161,6 +163,8 @@ public class Manager  {
 
     @FXML
     void LOG_OUT(ActionEvent event) throws IOException {
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        currentStage.close();
         ManagerClient.getClient().closeConnection();
         Platform.runLater(() -> {
             try {
@@ -268,6 +272,8 @@ public class Manager  {
 
     @FXML
     void ShowMembers(ActionEvent event) {
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        currentStage.close();
         Platform.runLater(() -> {
             try {
                 setRoot("members");
@@ -276,7 +282,8 @@ public class Manager  {
 
                 }
             });
-        }
+    }
+
     @FXML
     void ShowTasks(ActionEvent event) {
 
