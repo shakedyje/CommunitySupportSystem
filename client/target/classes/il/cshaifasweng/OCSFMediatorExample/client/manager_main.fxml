@@ -28,15 +28,16 @@
                 <Font name="Kristen ITC" size="16.0" />
             </font>
         </Label>
-        <Button fx:id="Accept" layoutX="510.0" layoutY="377.0" mnemonicParsing="false" onAction="#AcceptRequest" prefHeight="25.0" prefWidth="99.0" text="Accept" textFill="#23b540" />
-        <Button fx:id="Reject" layoutX="341.0" layoutY="378.0" mnemonicParsing="false" onAction="#RejectRequest" prefHeight="25.0" prefWidth="99.0" text="Reject" textFill="#14a823" />
-        <TextField fx:id="Reason" layoutX="436.0" layoutY="445.0" prefHeight="63.0" prefWidth="189.0" visible="false" />
-        <Label fx:id="WriteReason" layoutX="306.0" layoutY="445.0" prefHeight="23.0" prefWidth="129.0" text="Write the reason:" textFill="#19904b" visible="false">
+        <Button fx:id="Accept" layoutX="510.0" layoutY="360.0" mnemonicParsing="false" onAction="#AcceptRequest" prefHeight="25.0" prefWidth="99.0" text="Accept" textFill="#23b540" />
+        <Button fx:id="Reject" layoutX="341.0" layoutY="361.0" mnemonicParsing="false" onAction="#RejectRequest" prefHeight="25.0" prefWidth="99.0" text="Reject" textFill="#14a823" />
+        <TextField fx:id="Reason" layoutX="436.0" layoutY="403.0" prefHeight="63.0" prefWidth="189.0" visible="false" />
+        <Label fx:id="WriteReason" layoutX="306.0" layoutY="403.0" prefHeight="23.0" prefWidth="129.0" text="Write the reason:" textFill="#19904b" visible="false">
             <font>
                 <Font name="Kristen ITC" size="14.0" />
             </font>
         </Label>
         <Button fx:id="Send" layoutX="583.0" layoutY="479.0" mnemonicParsing="false" onAction="#SendReason" text="Send" textFill="#11ba3e" visible="false" />
-        <TextArea fx:id="Request" layoutX="280.0" layoutY="160.0" prefHeight="200.0" prefWidth="389.0" />
+        <TextArea fx:id="Request" layoutX="280.0" layoutY="143.0" prefHeight="200.0" prefWidth="389.0" />
+      <Button fx:id="Log_Out" layoutX="585.0" layoutY="25.0" mnemonicParsing="false" onAction="#LOG_OUT" prefHeight="25.0" prefWidth="76.0" text="LOG OUT" textFill="#52ab70" />
     </children>
 </AnchorPane>
