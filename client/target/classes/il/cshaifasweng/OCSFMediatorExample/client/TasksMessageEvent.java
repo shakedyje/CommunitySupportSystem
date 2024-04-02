@@ -1,21 +1,18 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
-import il.cshaifasweng.OCSFMediatorExample.entities.DisplayTasksMassage;
-import il.cshaifasweng.OCSFMediatorExample.entities.Task;
-
-import java.util.List;
+import il.cshaifasweng.OCSFMediatorExample.entities.DisplayDataMessage;
 
 public class TasksMessageEvent {
 
 
-    private DisplayTasksMassage dis;
+    private DisplayDataMessage dis;
 
 
 
-    public TasksMessageEvent(DisplayTasksMassage dis) {
+    public TasksMessageEvent(DisplayDataMessage dis) {
         this.dis = dis;
     }
 
-    public DisplayTasksMassage getTasksE() {
+    public DisplayDataMessage getTasksE() {
             return this.dis;
         }
     }

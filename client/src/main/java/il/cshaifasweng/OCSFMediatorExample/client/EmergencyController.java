@@ -1,12 +1,11 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
+import il.cshaifasweng.OCSFMediatorExample.entities.NewEmergencyCall;
 import il.cshaifasweng.OCSFMediatorExample.entities.Registered_user;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
@@ -60,18 +59,22 @@ public class EmergencyController {
 
 
     @FXML
-    private void initialize() {
+    private void initialize() throws IOException {
+
         if ((UserClient.getLoggedInUser() == null) && (ManagerClient.getManagerClient() == null)) {
             info_label.setText("To make it easier for us to identify you,\nplease log in and press the emergency button again");
+            UserClient.getClient().sendToServer(new NewEmergencyCall("Unknown User",null,null));
         } else if ((UserClient.getLoggedInUser() == null)) {
             Registered_user user = ManagerClient.getManagerClient();
             info_label.setText("Your firstName : " + user.getGivenName() + "\nyour lastName : " + user.getFamilyName()
                     + "\nYour phoneNumber to contact : " + user.getPhone_number() + "\nYour Community : " + user.getCommunity());
-
+            ManagerClient.getClient().sendToServer(new NewEmergencyCall(user.getGivenName(),user.getPhone_number(),ManagerClient.getManagerClient()));
         } else {
             Registered_user user = UserClient.getLoggedInUser();
             info_label.setText("Your firstName : " + user.getGivenName() + "\nyour lastName : " + user.getFamilyName()
                     + "\nYour phoneNumber to contact : " + user.getPhone_number() + "\nYour Community : " + user.getCommunity());
+
+            UserClient.getClient().sendToServer(new NewEmergencyCall(user.getGivenName(),user.getPhone_number(),UserClient.getLoggedInUser()));
         }
 
     }

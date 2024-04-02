@@ -3,6 +3,8 @@ package il.cshaifasweng.OCSFMediatorExample.client;
 import il.cshaifasweng.OCSFMediatorExample.entities.*;
 
 import il.cshaifasweng.OCSFMediatorExample.client.ocsf.AbstractClient;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.greenrobot.eventbus.EventBus;
 import org.hibernate.SessionFactory;
 
@@ -47,6 +49,17 @@ public class UserClient extends AbstractClient {
             EventBus.getDefault().post(new NewTaskEvent(ntm));
 
         }
+//        else if (msg instanceof DisplayDataMessage) {
+//            DisplayDataMessage dis = (DisplayDataMessage) msg;
+//            if (dis.getDataType().equals("all tasks")) {
+//                ObservableList<Task> ALLTask_ = FXCollections.observableArrayList(dis.getTasks());
+//                TasksOb.getInstance().setObservableTasks(ALLTask_);
+//            }
+//        }
+//        else if (msg instanceof AddToObMessage) {
+//            AddToObMessage NT = (AddToObMessage) msg;
+//            TasksOb.getInstance().observableTasks.add(NT.getNewtask());
+//        }
         else if (msg instanceof Message) {
             System.out.println("in client/handlefrom serverr /in message inst");
             Message message=(Message)msg;
