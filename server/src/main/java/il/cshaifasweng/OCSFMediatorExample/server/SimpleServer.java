@@ -19,7 +19,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -244,10 +243,7 @@ public class SimpleServer extends AbstractServer {
 
     public void deadlineCheck() {
         // Get the current date
-        // Get the current date with specific time
-        LocalDate currentDateTime = LocalDate.now();
-        LocalTime specificTime = LocalTime.of(17, 57, 41, 129660);
-        LocalDateTime currentDate = LocalDateTime.of(currentDateTime, specificTime);
+        LocalDate currentDate = LocalDate.now();
 
         try {
             System.out.println("in the listview func for requested tasks ");
