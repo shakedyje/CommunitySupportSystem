@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -27,20 +28,25 @@
             <TableColumn fx:id="moredetailsu" prefWidth="80.66667683919269" text="Details" />
         </columns>
       </TableView>
-      <Label fx:id="communityM" alignment="TOP_CENTER" layoutX="471.0" layoutY="80.0" prefHeight="44.0" prefWidth="373.0" text="Tasks she preformed" textFill="#a3272f">
+      <Label fx:id="communityM" alignment="TOP_CENTER" layoutX="471.0" layoutY="76.0" prefHeight="44.0" prefWidth="373.0" text="Performed" textFill="#249d24">
          <font>
-            <Font name="Calibri Light" size="24.0" />
+            <Font name="Kristen ITC" size="24.0" />
          </font>
       </Label>
-      <Label fx:id="communityM1" alignment="TOP_CENTER" layoutX="45.0" layoutY="80.0" prefHeight="44.0" prefWidth="373.0" text="Tasks she uploaded" textFill="#a3272f">
+      <Label fx:id="communityM1" alignment="TOP_CENTER" layoutX="45.0" layoutY="73.0" prefHeight="44.0" prefWidth="373.0" text="Uploaded" textFill="#18883c">
          <font>
-            <Font name="Calibri Light" size="24.0" />
+            <Font name="Kristen ITC" size="24.0" />
          </font>
       </Label>
       <Label fx:id="donenotdone" alignment="TOP_CENTER" layoutX="130.0" layoutY="14.0" prefHeight="44.0" prefWidth="649.0" text="Maria's Tasks" textFill="#a3272f">
          <font>
-            <Font name="Calibri Light" size="36.0" />
+            <Font name="Kristen ITC" size="36.0" />
          </font>
       </Label>
+      <Button fx:id="Backbtn" layoutX="765.0" layoutY="16.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="70.0" text="BACK" textFill="#196f2a">
+         <font>
+            <Font name="Kristen ITC" size="14.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

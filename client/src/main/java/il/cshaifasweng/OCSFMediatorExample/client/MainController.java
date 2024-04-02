@@ -184,9 +184,15 @@ private void showAlert(String title, String content) {
 
 
     @FXML
-    void initialize() {
+    void initialize() throws IOException {
         EventBus.getDefault().register(this);
         msgId = 0;
+        try {
+            UserClient.getClient().sendToServer("deadline check");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         // Set initial focus to the Username_TF TextField
         Username_TF.requestFocus();
     }

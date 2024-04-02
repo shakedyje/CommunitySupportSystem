@@ -15,7 +15,11 @@ import org.hibernate.query.Query;
 import org.hibernate.service.ServiceRegistry;
 
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -238,6 +242,58 @@ public class SimpleServer extends AbstractServer {
         }
     }
 
+    public void deadlineCheck() {
+        // Get the current date
+        // Get the current date with specific time
+        LocalDate currentDateTime = LocalDate.now();
+        LocalTime specificTime = LocalTime.of(17, 57, 41, 129660);
+        LocalDateTime currentDate = LocalDateTime.of(currentDateTime, specificTime);
+
+        try {
+            System.out.println("in the listview func for requested tasks ");
+            SessionFactory sessionFactory = FactoryUtil.getSessionFactory();
+            session = sessionFactory.openSession();
+
+            Transaction tx2 = null;
+            try {
+                tx2 = session.beginTransaction();
+                // HQL query to select tasks with status other than "Completed" or "Not Completed" and deadline smaller than today
+                Query<Task> query = session.createQuery(
+                        "FROM Task WHERE Status NOT IN ('Completed', 'Not Completed') AND Deadline < :currentDate", Task.class);
+                query.setParameter("currentDate", currentDate);
+                // Execute the query
+                List<Task> notCompleted = query.getResultList();
+
+                // Check if the list is empty
+                if (notCompleted.isEmpty()) {
+                    System.out.println("No tasks found to update.");
+                } else {
+                    // Iterate over the result set
+                    for (Task task : notCompleted) {
+                        // Update the status to "Not Completed"
+                        task.setStatus("Not Completed");
+                        session.saveOrUpdate(task); // Update the task in the database
+                        System.out.println("Task updated: " + task.getId());
+                    }
+                }
+
+                // Save the changes by committing the transaction
+                tx2.commit();
+            } catch (Exception e) {
+                if (tx2 != null) {
+                    tx2.rollback(); // Rollback the transaction in case of exception
+                }
+                e.printStackTrace(); // Handle the exception appropriately
+            } finally {
+                // Close the Hibernate session
+                if (session != null) {
+                    session.close();
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace(); // Handle the exception appropriately
+        }
+    }
 
     public List<Task> getAllUnApprovedTasks(Session session, String username) {
 //        // Use HQL to retrieve all tasks
@@ -414,6 +470,10 @@ public class SimpleServer extends AbstractServer {
         String request = null;
         if (msg instanceof String) {
             request = (String) msg;
+            if (request.equals("deadline check"))
+            {
+                deadlineCheck();
+            }
         }
         if (msg instanceof DisplayDataMessage) {
             DisplayDataMessage datarequest = (DisplayDataMessage) msg;

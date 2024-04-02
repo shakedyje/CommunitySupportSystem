@@ -1,26 +1,31 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
-import il.cshaifasweng.OCSFMediatorExample.client.ManagerClient;
-import il.cshaifasweng.OCSFMediatorExample.client.CompletedEvent;
-import il.cshaifasweng.OCSFMediatorExample.client.UserTasksDisplayEvent;
 import il.cshaifasweng.OCSFMediatorExample.entities.DisplayDataMessage;
 import il.cshaifasweng.OCSFMediatorExample.entities.Registered_user;
 import il.cshaifasweng.OCSFMediatorExample.entities.Task;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
 
+import static il.cshaifasweng.OCSFMediatorExample.client.SimpleChatClient.setRoot;
+
 public class UserTasksController {
+    @FXML
+    private Button Backbtn;
 
 
     private Registered_user user;
@@ -92,7 +97,9 @@ public class UserTasksController {
 //            deadlineu.setCellValueFactory(new PropertyValueFactory<>("Deadline"));
 //            statusu.setCellValueFactory(new PropertyValueFactory<>("Status"));
             moredetailsd.setCellValueFactory(new PropertyValueFactory<>("Moredetails"));
+                // Your action code here
             try {
+                Backbtn.setOnAction(event -> BackToMembers(event));
                 ManagerClient.getClient().sendToServer(new DisplayDataMessage(user, "uploaded"));
                 ManagerClient.getClient().sendToServer(new DisplayDataMessage(user, "performed"));
             } catch (IOException ex) {
@@ -110,14 +117,15 @@ public class UserTasksController {
     public void displayTasks(UserTasksDisplayEvent event) {
         Platform.runLater(() -> {
             try {
-                if (!event.getDis().getTasks().isEmpty()){
+                if (!event.getDis().getTasks().isEmpty()) {
                     System.out.println(event.getDis().getTasks().getFirst().getId());
                     System.out.println("eventrecognized");
                     ObservableList<Task> observableTasks = FXCollections.observableArrayList(event.getDis().getTasks());
                     if (!observableTasks.isEmpty()) {
                         Tasksuploded.setItems(observableTasks);
 
-                }}
+                    }
+                }
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -128,10 +136,10 @@ public class UserTasksController {
     public void displayCTasks(CompletedEvent event) {
         Platform.runLater(() -> {
             try {
-                if (!event.getDis().getTasks().isEmpty())
-                {System.out.println(event.getDis().getTasks().getFirst().getId());
-                System.out.println("eventrecognizedC");
-                ObservableList<Task> observableTasks = FXCollections.observableArrayList(event.getDis().getTasks());
+                if (!event.getDis().getTasks().isEmpty()) {
+                    System.out.println(event.getDis().getTasks().getFirst().getId());
+                    System.out.println("eventrecognizedC");
+                    ObservableList<Task> observableTasks = FXCollections.observableArrayList(event.getDis().getTasks());
                     Tasksuploded.setItems(observableTasks);
                 }
             } catch (Exception e) {
@@ -139,5 +147,20 @@ public class UserTasksController {
             }
         });
     }
+
+    @FXML
+    void BackToMembers(ActionEvent event) {
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        currentStage.close();
+        System.out.println("in back to members");
+                Platform.runLater(() -> {
+                    try {
+                        setRoot("members");
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+    }
+
 }
 

@@ -163,6 +163,8 @@ public class Manager  {
 
     @FXML
     void LOG_OUT(ActionEvent event) throws IOException {
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        currentStage.close();
         ManagerClient.getClient().closeConnection();
         Platform.runLater(() -> {
             try {

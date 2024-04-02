@@ -6,6 +6,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -47,16 +48,11 @@ public class EmergencyController {
        }
        else if((UserClient.getLoggedInUser()== null))
        {
-//           UserClient.getLoggedInUser().getUsername();
-//               Platform.runLater(() -> {
-//                   try {
-//                       setRoot("manager_main");
-//                   } catch (IOException e) {
-//                       throw new RuntimeException(e);
-//                   }
-//               });
+           Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+           currentStage.close();
            Platform.runLater(() -> {
                try {
+
                    FXMLLoader loader = new FXMLLoader(getClass().getResource("manager_main.fxml"));
                    Parent root = loader.load();
                    Manager ManagerController = loader.getController();
@@ -67,7 +63,6 @@ public class EmergencyController {
                    if (appStage == null) {
                        appStage = new Stage();
                    }
-
                    appStage.setScene(scene);
                    appStage.show();
                } catch (IOException e) {

@@ -1,23 +1,21 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
-import il.cshaifasweng.OCSFMediatorExample.client.ManagerClient;
-import il.cshaifasweng.OCSFMediatorExample.client.MembersDisplayEvent;
 import il.cshaifasweng.OCSFMediatorExample.entities.Communities;
 import il.cshaifasweng.OCSFMediatorExample.entities.DisplayDataMessage;
 import il.cshaifasweng.OCSFMediatorExample.entities.Registered_user;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -43,7 +41,16 @@ public class MembersController {
 
     @FXML
     private Label communityM;
+
+    @FXML
+    private Button Backbtn;
     public Registered_user userdisplay = null;
+
+    public void setAppStage(Stage appStage) {
+        this.appStage = appStage;
+    }
+
+    private static Stage appStage;
 
 
     @FXML
@@ -73,13 +80,41 @@ public class MembersController {
 
     }
 
+    @FXML
+    void BackToTheMain(ActionEvent event) {
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        currentStage.close();
+        Platform.runLater(() -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("manager_main.fxml"));
+                Parent root = loader.load();
+                Manager ManagerController = loader.getController();
+                ManagerController.initialize(ManagerClient.getManagerClient().getUsername()); // Pass the username to initialize method
+
+                // Show the scene
+                Scene scene = new Scene(root);
+                if (appStage == null) {
+                    appStage = new Stage();
+                }
+
+                appStage.setScene(scene);
+                appStage.show();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+    }
+
 
     @FXML
-    private void addRowAction(Registered_user user) throws IOException {
+    private void addRowAction(Registered_user user, MouseEvent event) throws IOException {
         System.out.println("addrowaction");
 
         Platform.runLater(() -> {
             try {
+                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                currentStage.close();
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("UserTasks.fxml"));
 
                 // Create an instance of the UserTasksController and pass the user to its constructor
@@ -112,7 +147,7 @@ public class MembersController {
                     if (!row.isEmpty() && event.getClickCount() == 1) {
                         Registered_user user = row.getItem();
                         try {
-                            addRowAction(user);
+                            addRowAction(user, event);
                         } catch (IOException e) {
                             e.printStackTrace(); // Handle the exception appropriately
                         }
