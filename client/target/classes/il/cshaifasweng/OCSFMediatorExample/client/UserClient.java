@@ -1,12 +1,9 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
-import il.cshaifasweng.OCSFMediatorExample.client.NewTaskEvent;
-import il.cshaifasweng.OCSFMediatorExample.client.NewVerifiedInformationEvent;
 import il.cshaifasweng.OCSFMediatorExample.entities.*;
 
 import il.cshaifasweng.OCSFMediatorExample.client.ocsf.AbstractClient;
 import org.greenrobot.eventbus.EventBus;
-import org.hibernate.SessionFactory;
 
 import java.io.IOException;
 
@@ -60,21 +57,38 @@ public class UserClient extends AbstractClient {
             System.out.println("8888888888888888888888888888888888888888888888888");
             if(dis.getDataType().equals("Requested Tasks"))
             {
+                System.out.println("**********************************************");
                 EventBus.getDefault().post(new RequestedTasksShowEvent(dis));
                 System.out.println("recognized massage as a list of requested tasks in userclient");
-            }else {
+            }else if(dis.getDataType().equals("Volunteered Tasks")) {
+                System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++");
+                EventBus.getDefault().post(new VolunteeredTasksShowEvent(dis));
+                System.out.println("recognized massage as a list of volunteered tasks in userclient");
+            }
+            else {
                 System.out.println("correct inside ========");
                 EventBus.getDefault().post(new VolunteeringEvent(dis));
                 System.out.println("recognized massage as a list of tasks in userclient");
             }
 
         }else if(msg instanceof MessageOfStatus) {
+            System.out.println("thanks");
             MessageOfStatus message1 = (MessageOfStatus) msg;
             if (message1.getChangeStatus().equals("Thanks for volunteering")) {
+                System.out.println("thanks");
                 EventBus.getDefault().post(new PersonVolunteering(message1));
+            }else if (message1.getChangeStatus().equals("volunteering done")) {
+                System.out.println("thanks for doning");
+                EventBus.getDefault().post(new VolunteeringDone(message1));
             }
 
         }
+//        else if (msg instanceof Notification)
+//        {
+//            Notification notification = (Notification) msg;
+//            EventBus.getDefault().post(new UsersNotificationEvent(notification));
+//
+//        }
     }
 
     public static UserClient getClient() {

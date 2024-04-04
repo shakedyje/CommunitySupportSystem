@@ -94,6 +94,7 @@ public class UserTasksController {
             idTaskd.setCellValueFactory(new PropertyValueFactory<>("Id"));
             Type_of_taskd.setCellValueFactory(new PropertyValueFactory<>("Type_of_task"));
             creationtimed.setCellValueFactory(new PropertyValueFactory<>("Creation_time"));
+            completiontimed.setCellValueFactory(new PropertyValueFactory<>("Completiontime"));
 //            deadlineu.setCellValueFactory(new PropertyValueFactory<>("Deadline"));
 //            statusu.setCellValueFactory(new PropertyValueFactory<>("Status"));
             moredetailsd.setCellValueFactory(new PropertyValueFactory<>("Moredetails"));
@@ -109,8 +110,6 @@ public class UserTasksController {
             System.err.println("User is null. Cannot initialize UI components.");
         }
     }
-
-    ;
 
 
     @Subscribe
@@ -147,6 +146,12 @@ public class UserTasksController {
             }
         });
     }
+
+    //    @Subscribe
+//    public void TaskNotification(UsersNotificationEvent event)
+//    {
+//        PostNotifications.getInstance().TaskNotification(event);
+//    }
 
     @FXML
     void BackToMembers(ActionEvent event) {

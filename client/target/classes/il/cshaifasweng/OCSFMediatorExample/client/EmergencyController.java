@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
 
@@ -48,23 +49,11 @@ public class EmergencyController {
        }
        else if((UserClient.getLoggedInUser()== null))
        {
-           Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-           currentStage.close();
+//           Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+//           currentStage.close();
            Platform.runLater(() -> {
                try {
-
-                   FXMLLoader loader = new FXMLLoader(getClass().getResource("manager_main.fxml"));
-                   Parent root = loader.load();
-                   Manager ManagerController = loader.getController();
-                   ManagerController.initialize(ManagerClient.getManagerClient().getUsername()); // Pass the username to initialize method
-
-                   // Show the scene
-                   Scene scene = new Scene(root);
-                   if (appStage == null) {
-                       appStage = new Stage();
-                   }
-                   appStage.setScene(scene);
-                   appStage.show();
+                   setRoot("manager_main");
                } catch (IOException e) {
                    throw new RuntimeException(e);
                }
@@ -82,24 +71,30 @@ public class EmergencyController {
        }
 
     }
-
+//    @Subscribe
+//    public void TaskNotification(UsersNotificationEvent event)
+//    {
+//        PostNotifications.getInstance().TaskNotification(event);
+//    }
 
     @FXML
     private void initialize() throws IOException {
         if ((UserClient.getLoggedInUser() == null) && (ManagerClient.getManagerClient() == null)) {
-            info_label.setText("To make it easier for us to identify you,\nplease log in and press the emergency button again");
-            UserClient.getClient().sendToServer(new NewEmergencyCall("Unknown User",null,null));
+//        if (UnknownUserClient.getClient().isConnected())
+        String host= UserClient.getClient().getHost();
+            info_label.setText("To make it easier for us to identify you,\nplease log in and press the emergency button again\n Your IP Address: "+host);
+            UserClient.getClient().sendToServer(new NewEmergencyCall("Unknown User",null,null, host));
         } else if ((UserClient.getLoggedInUser() == null)) {
             Registered_user user = ManagerClient.getManagerClient();
             info_label.setText("Your firstName : " + user.getGivenName() + "\nyour lastName : " + user.getFamilyName()
                     + "\nYour phoneNumber to contact : " + user.getPhone_number() + "\nYour Community : " + user.getCommunity());
-            ManagerClient.getClient().sendToServer(new NewEmergencyCall(user.getGivenName(),user.getPhone_number(),ManagerClient.getManagerClient()));
+            ManagerClient.getClient().sendToServer(new NewEmergencyCall(user.getGivenName(),user.getPhone_number(),ManagerClient.getManagerClient(), null));
         } else {
             Registered_user user = UserClient.getLoggedInUser();
             info_label.setText("Your firstName : " + user.getGivenName() + "\nyour lastName : " + user.getFamilyName()
                     + "\nYour phoneNumber to contact : " + user.getPhone_number() + "\nYour Community : " + user.getCommunity());
 
-            UserClient.getClient().sendToServer(new NewEmergencyCall(user.getGivenName(),user.getPhone_number(),UserClient.getLoggedInUser()));
+            UserClient.getClient().sendToServer(new NewEmergencyCall(user.getGivenName(),user.getPhone_number(),UserClient.getLoggedInUser(), null));
         }
 
     }

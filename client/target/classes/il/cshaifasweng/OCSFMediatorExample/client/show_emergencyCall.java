@@ -82,29 +82,34 @@ public class show_emergencyCall {
 
     @FXML
     void Back_to_main(ActionEvent event) throws IOException {
-//        SimpleChatClient.setRoot("manager_main");
-        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        currentStage.close();
+//        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+//        currentStage.close();
+//        Platform.runLater(() -> {
+//            try {
+//                FXMLLoader loader = new FXMLLoader(getClass().getResource("manager_main.fxml"));
+//                Parent root = loader.load();
+//                Manager ManagerController = loader.getController();
+//                ManagerController.initialize(ManagerClient.getManagerClient().getUsername()); // Pass the username to initialize method
+//
+//                // Show the scene
+//                Scene scene = new Scene(root);
+//                if (appStage == null) {
+//                    appStage = new Stage();
+//                }
+//
+//                appStage.setScene(scene);
+//                appStage.show();
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//        });
         Platform.runLater(() -> {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("manager_main.fxml"));
-                Parent root = loader.load();
-                Manager ManagerController = loader.getController();
-                ManagerController.initialize(ManagerClient.getManagerClient().getUsername()); // Pass the username to initialize method
-
-                // Show the scene
-                Scene scene = new Scene(root);
-                if (appStage == null) {
-                    appStage = new Stage();
-                }
-
-                appStage.setScene(scene);
-                appStage.show();
+                setRoot("manager_main");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         });
-
     }
 
 
@@ -200,8 +205,6 @@ public class show_emergencyCall {
             }
         });
     }
-
-
 
 
     private void showAlert(String title, String header, String content, Alert.AlertType alertType) {

@@ -33,7 +33,11 @@ public class NewTaskController {
     @FXML
     private ComboBox<TaskType> taskTypeComboBox;
 
-
+//    @Subscribe
+//    public void TaskNotification(UsersNotificationEvent event)
+//    {
+//        PostNotifications.getInstance().TaskNotification(event);
+//    }
 
     @FXML
     private void check_confirm_display_task() throws IOException {

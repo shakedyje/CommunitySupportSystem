@@ -7,6 +7,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.time.LocalDateTime;
 import java.io.IOException;
 
@@ -35,6 +37,10 @@ public class show_new_task_Controller {
                 +"\n\n\n Please note: the task will be published after the approval of the manager");
     }
 
-
+//    @Subscribe
+//    public void TaskNotification(UsersNotificationEvent event)
+//    {
+//        PostNotifications.getInstance().TaskNotification(event);
+//    }
 
 }

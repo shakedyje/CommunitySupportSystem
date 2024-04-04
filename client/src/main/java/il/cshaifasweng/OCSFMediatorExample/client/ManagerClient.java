@@ -29,10 +29,11 @@ public class ManagerClient extends AbstractClient {
 
     @Override
     protected void handleMessageFromServer(Object msg) throws IOException {
-
+        System.out.println("in handle from server");
         if (msg instanceof DisplayDataMessage) {
             DisplayDataMessage dis = (DisplayDataMessage) msg;
             if (dis.getDataType().equals("tasks")) {
+                System.out.println("in tasks");
                 EventBus.getDefault().post(new TasksMessageEvent(dis));
 //            } else if (dis.getDataType().equals("all tasks")) {
 //                ObservableList<Task> ALLTask_ = FXCollections.observableArrayList(dis.getTasks());

@@ -36,6 +36,9 @@ import static il.cshaifasweng.OCSFMediatorExample.client.SimpleChatClient.setRoo
 public class ShowRequestedTasksPage {
 
     @FXML
+    private Button emergency_button;
+
+    @FXML
     private Button BACK;
 
     @FXML
@@ -150,9 +153,22 @@ public class ShowRequestedTasksPage {
 
     }
     @FXML
-    void initialize(String username) throws IOException {
+    void switch_to_emergency(ActionEvent event) {
+        Platform.runLater(() -> {
+            try {
+                setRoot("Emergency");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+    }
+    @FXML
+    void initialize() throws IOException {
+        String username=UserClient.getLoggedInUser().getUsername();
         System.out.println(username+" userclient???????????????????????????????????/");
-        welcome.setText("REQUESTED TASKS OF " + username);
+
+        welcome.setText("REQUESTED TASKS OF " + UserClient.getLoggedInUser().getGivenName());
         welcome.setAlignment(Pos.TOP_LEFT);
         EventBus.getDefault().register(this);
         UserClient userClient = UserClient.getClient();
@@ -183,5 +199,10 @@ public class ShowRequestedTasksPage {
         }
 
     }
+//    @Subscribe
+//    public void TaskNotification(UsersNotificationEvent event)
+//    {
+//        PostNotifications.getInstance().TaskNotification(event);
+//    }
 
 }

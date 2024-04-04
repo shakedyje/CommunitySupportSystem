@@ -22,6 +22,8 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
 
+import static il.cshaifasweng.OCSFMediatorExample.client.SimpleChatClient.setRoot;
+
 public class MembersController {
 
     @FXML
@@ -82,29 +84,17 @@ public class MembersController {
 
     @FXML
     void BackToTheMain(ActionEvent event) {
-        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        currentStage.close();
-        Platform.runLater(() -> {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("manager_main.fxml"));
-                Parent root = loader.load();
-                Manager ManagerController = loader.getController();
-                ManagerController.initialize(ManagerClient.getManagerClient().getUsername()); // Pass the username to initialize method
-
-                // Show the scene
-                Scene scene = new Scene(root);
-                if (appStage == null) {
-                    appStage = new Stage();
+//        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+//        currentStage.close();
+            Platform.runLater(() -> {
+                try {
+                    setRoot("manager_main");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
-
-                appStage.setScene(scene);
-                appStage.show();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-
+            });
     }
+
 
 
     @FXML
@@ -113,8 +103,8 @@ public class MembersController {
 
         Platform.runLater(() -> {
             try {
-                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                currentStage.close();
+//                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+//                currentStage.close();
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("UserTasks.fxml"));
 
                 // Create an instance of the UserTasksController and pass the user to its constructor
