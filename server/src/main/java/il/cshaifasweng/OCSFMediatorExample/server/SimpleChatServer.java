@@ -184,9 +184,11 @@ package il.cshaifasweng.OCSFMediatorExample.server;
 
 
 
+import il.cshaifasweng.OCSFMediatorExample.entities.Communities;
 import il.cshaifasweng.OCSFMediatorExample.entities.Registered_user;
 import il.cshaifasweng.OCSFMediatorExample.entities.Task;
 
+import il.cshaifasweng.OCSFMediatorExample.entities.TaskType;
 import org.hibernate.SessionFactory;
 
 import java.io.IOException;
@@ -231,13 +233,13 @@ public class SimpleChatServer {
                 session.beginTransaction();
                 System.out.println("1");
 
-                Registered_user user1 = new Registered_user("Rom","Levi","rom_levi1","123",false,"0507773121","Haifa");
-                Registered_user user2 = new Registered_user("Yarin","Rabinobi","yarin_rabinobi2","1234",false,"0524373191","Tel-Aviv");
-                Registered_user user3 = new Registered_user("Dan","Shimoni","dan_shimoni1","1235",false,"0547373199","Haifa");
-                Registered_user user4 = new Registered_user("Linoy","Ohaion","linoyOhaion2","1232",true,"0502213188","Jerusalem");
-                Registered_user user5 = new Registered_user("Roman","Shapira","romanroman","1231",false,"0521153111","Jerusalem");
-                Registered_user user6 = new Registered_user("Shira","Omer","ShiraOmer22","1220",false,"0502479900","Haifa");
-                Registered_user user7 = new Registered_user("Yarden","Mesgav","yarden_yarden3","1230",false,"0532251580","Tel-Aviv");
+                Registered_user user1 = new Registered_user("Rom","Levi","rom_levi1","123",true,"0507773121", Communities.AHUZA);
+                Registered_user user2 = new Registered_user("Yarin","Rabinobi","yarin_rabinobi2","1234",false,"0524373191",Communities.BAT_GALIM);
+                Registered_user user3 = new Registered_user("Dan","Shimoni","dan_shimoni1","1235",false,"0547373199",Communities.ROMEMA);
+                Registered_user user4 = new Registered_user("Linoy","Ohaion","linoyOhaion2","111",true,"0502213188",Communities.ROMEMA);
+                Registered_user user5 = new Registered_user("Roman","Shapira","romanroman","1231",false,"0521153111",Communities.ROMEMA);
+                Registered_user user6 = new Registered_user("Shira","Omer","ShiraOmer22","1220",false,"0502479900",Communities.ROMEMA);
+                Registered_user user7 = new Registered_user("Yarden","Mesgav","yarden_yarden3","1230",false,"0532251580",Communities.ROMEMA);
 
 
                 session.save(user1);
@@ -255,16 +257,17 @@ public class SimpleChatServer {
                 session.flush();
 
                 LocalDateTime now = LocalDateTime.now();
+                LocalDateTime past =now.minusDays(2);
                 LocalDateTime futureDeadline1 = now.plusDays(7);
-                Task t1 = new Task("Help with supermarket shopping",user1 , futureDeadline1);
+                Task t1 = new Task(TaskType.BABYSITTING,user1 , futureDeadline1, "in my house loaction: horev 10");
                 LocalDateTime futureDeadline2 = now.plusDays(4);
-                Task t2 = new Task("Ordering medication",user2 , futureDeadline2);
+                Task t2 = new Task(TaskType.CAR_CLEANING,user2 , futureDeadline2);
                 LocalDateTime futureDeadline3 = now.plusDays(12);
-                Task t3 = new Task("A ride somewhere",user3 , futureDeadline3);
+                Task t3 = new Task(TaskType.DOG_WALKING,user3 , futureDeadline3);
                 LocalDateTime futureDeadline4 = now.plusDays(1);
-                Task t4 = new Task("Babysitter",user4 , futureDeadline4);
+                Task t4 = new Task(TaskType.RIDE,user4 , futureDeadline4);
                 LocalDateTime futureDeadline5 = now.plusDays(10);
-                Task t5 = new Task("Help with supermarket shopping",user5 , futureDeadline5);
+                Task t5 = new Task(TaskType.YARD_WORK,user5 , past);
 
 
 
