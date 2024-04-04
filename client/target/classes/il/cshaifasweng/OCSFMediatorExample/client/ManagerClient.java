@@ -44,7 +44,7 @@ public class ManagerClient extends AbstractClient {
             } else if (dis.getDataType().equals("uploaded")) {
                 System.out.println("client");
                 EventBus.getDefault().post(new UserTasksDisplayEvent(dis));
-            } else if (dis.getDataType().equals("preformed")) {
+            } else if (dis.getDataType().equals("performed")) {
                 System.out.println("clientp");
                 EventBus.getDefault().post(new CompletedEvent(dis));
             }

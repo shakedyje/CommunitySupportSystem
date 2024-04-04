@@ -24,7 +24,7 @@
             <Cursor fx:constant="DEFAULT" />
          </cursor>
       </Label>
-      <TableView fx:id="tableView" layoutX="10.0" layoutY="93.0" prefHeight="297.0" prefWidth="656.0">
+      <TableView fx:id="tableView" layoutX="10.0" layoutY="93.0" prefHeight="269.0" prefWidth="656.0">
         <columns>
             <TableColumn fx:id="id" prefWidth="87.33334636688232" text="ID" />
             <TableColumn fx:id="usernameColumn" prefWidth="133.99996185302734" text="User Name" />
@@ -43,5 +43,10 @@
             <Image url="@image-removebg-preview (1).png" />
          </image>
       </ImageView>
+      <Button fx:id="emmergencyBtn" layoutX="3.0" layoutY="375.0" mnemonicParsing="false" onAction="#switchToemergency" prefHeight="37.0" prefWidth="679.0" text="Emergency Button" textFill="#e10a0a">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

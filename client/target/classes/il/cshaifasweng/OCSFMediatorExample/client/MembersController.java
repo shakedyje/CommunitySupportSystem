@@ -25,7 +25,8 @@ import java.io.IOException;
 import static il.cshaifasweng.OCSFMediatorExample.client.SimpleChatClient.setRoot;
 
 public class MembersController {
-
+    @FXML
+    private Button emmergencyBtn;
     @FXML
     private TableView<Registered_user> tableView;
 
@@ -53,8 +54,16 @@ public class MembersController {
     }
 
     private static Stage appStage;
-
-
+    @FXML
+    void switchToemergency(ActionEvent event) {
+        Platform.runLater(() -> {
+            try {
+                setRoot("Emergency");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
     @FXML
     public void initialize() throws IOException {
         System.out.println("hi");
