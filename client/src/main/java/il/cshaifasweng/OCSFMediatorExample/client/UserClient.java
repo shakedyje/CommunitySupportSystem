@@ -83,12 +83,12 @@ public class UserClient extends AbstractClient {
             }
 
         }
-//        else if (msg instanceof Notification)
-//        {
-//            Notification notification = (Notification) msg;
-//            EventBus.getDefault().post(new UsersNotificationEvent(notification));
-//
-//        }
+        else if (msg instanceof Notification)
+        {
+            Notification notification = (Notification) msg;
+            EventBus.getDefault().post(new UsersNotificationEvent(notification));
+
+        }
     }
 
     public static UserClient getClient() {

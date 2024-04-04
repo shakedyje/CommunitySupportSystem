@@ -1,6 +1,9 @@
 
 package il.cshaifasweng.OCSFMediatorExample.client;
-
+import org.controlsfx.control.Notifications;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import java.io.File;
 import il.cshaifasweng.OCSFMediatorExample.entities.LogInOutMessage;
 import il.cshaifasweng.OCSFMediatorExample.entities.Message;
 import il.cshaifasweng.OCSFMediatorExample.entities.MessageOfStatus;
@@ -16,6 +19,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+import org.controlsfx.control.Notifications;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -80,11 +85,39 @@ public class UserMainController {
 //        });
     }
 
-    //    @Subscribe
-////    public void TaskNotification(UsersNotificationEvent event)
-////    {
-////        PostNotifications.getInstance().TaskNotification(event);
-////    }
+    @Subscribe
+    public void TaskNotification(UsersNotificationEvent event)
+    {
+
+        Platform.runLater(() -> {
+            // Create a media file for the notification sound
+            Media errorsound = new Media(new File("sorry_sound.wav").toURI().toString());
+            MediaPlayer mediaPlayer1 = new MediaPlayer(errorsound);
+            Media confirmsound = new Media(new File("yay_sound.mp3").toURI().toString());
+            MediaPlayer mediaPlayer2 = new MediaPlayer(confirmsound);
+            System.out.println("in notification");
+            if (event.getNotification().getNotification().equals("Task Accepted")) {
+                Notifications.create()
+                    .title("Task Accepted!")
+                    .text("Hooray " + event.getNotification().getAddressee().getGivenName() + "!\n" +
+                            "The community manager has approved your task")
+                    .hideAfter(Duration.seconds(5))
+                    .position(Pos.TOP_LEFT)
+                        .showInformation();
+                mediaPlayer2.play();
+            } else if(event.getNotification().getNotification().equals("Task Rejected")) {
+                Notifications.create()
+                    .title("Task Rejected")
+                    .text("Sorry " + event.getNotification().getAddressee().getGivenName() + "...\n" +
+                            "The community manager has rejected your task")
+                    .hideAfter(Duration.seconds(5))
+                    .position(Pos.TOP_LEFT)
+                    .showError();
+                mediaPlayer1.play();
+                }
+        });
+
+    }
     public void cleanup() {
         // Unregister from the event bus during cleanup
         System.out.println("cleaned");
@@ -103,6 +136,7 @@ public class UserMainController {
 //        } catch (IOException e) {
 //            throw new RuntimeException(e);
 //        }
+        EventBus.getDefault().register(this);
         // Assuming you have the username stored in a variable named 'username'
         String username = UserClient.getLoggedInUser().getGivenName();
         SaveUserName = UserClient.getLoggedInUser().getUsername();
@@ -143,10 +177,10 @@ public class UserMainController {
         });
     }
 
-    @Subscribe
-    void TaskAcceptedNotifiction(UsersNotificationEvent event) {
-
-    }
+//    @Subscribe
+//    void TaskAcceptedNotifiction(UsersNotificationEvent event) {
+//
+//    }
 
     @FXML
     void showRequstedTasks(ActionEvent event) {

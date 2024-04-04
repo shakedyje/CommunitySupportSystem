@@ -199,10 +199,10 @@ public class ShowRequestedTasksPage {
         }
 
     }
-//    @Subscribe
-//    public void TaskNotification(UsersNotificationEvent event)
-//    {
-//        PostNotifications.getInstance().TaskNotification(event);
-//    }
+    @Subscribe
+    public void TaskNotification(UsersNotificationEvent event)
+    {
+        PostNotifications.getInstance().TaskNotification(event);
+    }
 
 }

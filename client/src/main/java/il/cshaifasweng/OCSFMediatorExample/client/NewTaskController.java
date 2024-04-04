@@ -39,6 +39,11 @@ public class NewTaskController {
 //        PostNotifications.getInstance().TaskNotification(event);
 //    }
 
+    @Subscribe
+    public void TaskNotification(UsersNotificationEvent event)
+    {
+        PostNotifications.getInstance().TaskNotification(event);
+    }
     @FXML
     private void check_confirm_display_task() throws IOException {
         LocalDateTime deadline = deadlineDp.getValue() == null ? null : deadlineDp.getValue().atStartOfDay();

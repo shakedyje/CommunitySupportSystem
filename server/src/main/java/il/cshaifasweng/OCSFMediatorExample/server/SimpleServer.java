@@ -73,6 +73,72 @@ public class SimpleServer extends AbstractServer {
     }
 
 
+    ConnectionToClient findManagerConnectionbyUser(Registered_user manager)
+    {
+        String username = manager.getUsername();
+        int index=-1, i=0;
+        for (String managerUserName : usernamesformanager)
+        {
+            if(managerUserName.equals(username))
+            {
+                index=i;
+            }
+            i++;
+        }
+        if (index>-1) {
+            return managerClients.get(index);
+        }
+        return null;
+    }
+
+    ConnectionToClient findUserConnectionbyUser(Registered_user user)
+    {
+        String username = user.getUsername();
+        int index=-1, i=0;
+        for (String UserName : usernames)
+        {
+            if(UserName.equals(username))
+            {
+                index=i;
+            }
+            i++;
+        }
+        if (index>-1) {
+            return userClients.get(index);
+        }
+        return null;
+    }
+
+    ConnectionToClient findManagerConnectionbyCommunity(Communities community) {
+        SessionFactory sessionFactory = FactoryUtil.getSessionFactory();
+        session = sessionFactory.openSession();
+
+        Transaction tx2 = null;
+        try {
+            tx2 = session.beginTransaction();
+            Query<Registered_user> query = session.createQuery(
+                    "FROM Registered_user WHERE community = :communinty AND permission=true", Registered_user.class);
+            query.setParameter("communinty", community);
+            System.out.println("username find by co");
+            Registered_user user = query.uniqueResult();
+            System.out.println(user.getUsername());
+            tx2.commit();
+            ConnectionToClient mc= findManagerConnectionbyUser(user);
+            return mc;
+        } catch (Exception e) {
+            if (session != null && session.getTransaction() != null) {
+                session.getTransaction().rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+            return null;
+    }
+
+
     private static SessionFactory getSessionFactory() throws HibernateException {
         Configuration configuration = new Configuration();
 
@@ -809,9 +875,10 @@ public class SimpleServer extends AbstractServer {
                 listviewFromUser();
                 DisplayDataMessage datarequest = new DisplayDataMessage(ntm.getOpenby(), "uploaded");
                 updateUserTasks(datarequest);
-                for (ConnectionToClient manager : managerClients) {
-                    manager.sendToClient(datarequest);
-                }
+//                for (ConnectionToClient manager : managerClients) {
+//                    manager.sendToClient(datarequest);
+//                }
+                findManagerConnectionbyCommunity(ntm.getOpenby().getCommunity()).sendToClient(datarequest);
             } catch (Exception exception) {
                 if (session != null) {
                     session.getTransaction().rollback();
@@ -1154,15 +1221,17 @@ public class SimpleServer extends AbstractServer {
                         listviewForUserRequestedTasks();
                         MessageOfStatus message2 = new MessageOfStatus(task, "task accepted");
                         // Echo back the received message to the client
-                        client.sendToClient(message2);
-                        tx2.commit();
+//                        client.sendToClient(message2);
+//                        tx2.commit();
                         System.out.println("send to manager client");
-//                        Registered_user openedBy = myTask.getRegistered_user();
-//                        ConnectionToClient addressee= findConnectionByUser(openedBy);
-//                        if (addressee!=null)
-//                        {
-//                            addressee.sendToClient(new Notification("Task Accepted", openedBy));
-//                        }
+                        Registered_user openedBy = task.getRegistered_user();
+                        ConnectionToClient addressee= findUserConnectionbyUser(openedBy);
+                        if (addressee!=null)
+                        {
+                            System.out.println("send to user notifi");
+                            addressee.sendToClient(new Notification("Task Accepted", openedBy));
+                        }
+                        client.sendToClient(message2);
                     }
                 } catch (RuntimeException e) {
                     if (tx2 != null) tx2.rollback();
@@ -1193,9 +1262,9 @@ public class SimpleServer extends AbstractServer {
 
                         // Save the changes by committing the transaction
                         tx2.commit();
-//                        Registered_user openedBy = myTask.getRegistered_user();
-//                        ConnectionToClient addressee= findConnectionByUser(openedBy);
-//                        addressee.sendToClient(new Notification("Task Rejected", openedBy));
+                        Registered_user openedBy = myTask.getRegistered_user();
+                        ConnectionToClient addressee= findUserConnectionbyUser(openedBy);
+                        addressee.sendToClient(new Notification("Task Rejected", openedBy));
                         listviewForUserRequestedTasks();
                         MessageOfStatus message2 = new MessageOfStatus(task, "task rejected");
                         // Echo back the received message to the client
@@ -1261,16 +1330,16 @@ public class SimpleServer extends AbstractServer {
                         tx2.commit();
                         listviewForUserRequestedTasks(task.getRegistered_user().getUsername());
                         MessageOfStatus message2 = new MessageOfStatus(task, "volunteering done");
+                        DisplayDataMessage datarequest = new DisplayDataMessage(task.getVolunteer(), "performed");
+                        updateUserTasks_done(datarequest);
+                        findManagerConnectionbyCommunity(task.getVolunteer().getCommunity()).sendToClient(datarequest);
+//                        for (ConnectionToClient manager : managerClients) {
+//                            manager.sendToClient(datarequest);
+//                        }
                         // Echo back the received message to the client
                         client.sendToClient(message2);
                         tx2.commit();
                         System.out.println("send to manager client");
-//                        DisplayDataMessage datarequest = new DisplayDataMessage(ntm.getOpenby(), "completed");
-
-//                        updateUserTasks_done(datarequest);
-//                        for (ConnectionToClient manager : managerClients) {
-//                            manager.sendToClient(datarequest);
-//                        }
                     }
                 } catch (RuntimeException e) {
                     if (tx2 != null) tx2.rollback();

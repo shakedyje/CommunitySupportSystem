@@ -26,12 +26,12 @@ import static il.cshaifasweng.OCSFMediatorExample.client.SimpleChatClient.setRoo
 public class UserTasksController {
     @FXML
     private Button Backbtn;
-
-
+    @FXML
+    private Button emmergencyBtn;
     private Registered_user user;
 
     @FXML
-    private TableView<Registered_user> TasksDone;
+    private TableView<Task> TasksDone;
 
     @FXML
     private TableColumn<Registered_user, String> idTaskd;
@@ -101,6 +101,7 @@ public class UserTasksController {
                 // Your action code here
             try {
                 Backbtn.setOnAction(event -> BackToMembers(event));
+                emmergencyBtn.setOnAction(event -> switchToemergency(event));
                 ManagerClient.getClient().sendToServer(new DisplayDataMessage(user, "uploaded"));
                 ManagerClient.getClient().sendToServer(new DisplayDataMessage(user, "performed"));
             } catch (IOException ex) {
@@ -110,7 +111,19 @@ public class UserTasksController {
             System.err.println("User is null. Cannot initialize UI components.");
         }
     }
+    @FXML
+    void switchToemergency(ActionEvent event) {
+        Platform.runLater(() -> {
+            try {
+                setRoot("Emergency");
+                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                currentStage.close();
 
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
 
     @Subscribe
     public void displayTasks(UserTasksDisplayEvent event) {
@@ -133,13 +146,14 @@ public class UserTasksController {
 
     @Subscribe
     public void displayCTasks(CompletedEvent event) {
+        System.out.println("comoleted controller");
         Platform.runLater(() -> {
             try {
                 if (!event.getDis().getTasks().isEmpty()) {
                     System.out.println(event.getDis().getTasks().getFirst().getId());
                     System.out.println("eventrecognizedC");
                     ObservableList<Task> observableTasks = FXCollections.observableArrayList(event.getDis().getTasks());
-                    Tasksuploded.setItems(observableTasks);
+                    TasksDone.setItems(observableTasks);
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);
