@@ -25,6 +25,8 @@ public class NewTaskController {
     private TextArea detailsTxt;
 
     @FXML
+    private Button BackBtn;
+    @FXML
     private DatePicker deadlineDp;
 
     @FXML
@@ -44,6 +46,7 @@ public class NewTaskController {
     {
         PostNotifications.getInstance().TaskNotification(event);
     }
+
     @FXML
     private void check_confirm_display_task() throws IOException {
         LocalDateTime deadline = deadlineDp.getValue() == null ? null : deadlineDp.getValue().atStartOfDay();
@@ -148,7 +151,14 @@ public class NewTaskController {
     // Helper method to show an error dialog
     @FXML
     void back(ActionEvent event) throws IOException {
-        SimpleChatClient.setRoot("show_tasks");
+        Platform.runLater(() -> {
+            try {
+                setRoot("user_main");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
 
     }
 

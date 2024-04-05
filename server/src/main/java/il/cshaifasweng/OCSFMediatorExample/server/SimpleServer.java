@@ -1,5 +1,6 @@
 package il.cshaifasweng.OCSFMediatorExample.server;
 
+import il.cshaifasweng.OCSFMediatorExample.client.UserClient;
 import il.cshaifasweng.OCSFMediatorExample.entities.*;
 import il.cshaifasweng.OCSFMediatorExample.server.ocsf.AbstractServer;
 import il.cshaifasweng.OCSFMediatorExample.server.ocsf.ConnectionToClient;
@@ -29,6 +30,8 @@ public class SimpleServer extends AbstractServer {
     private static ArrayList<SubscribedClient> SubscribersList = new ArrayList<>();
 
     private List<ConnectionToClient> managerClients = new ArrayList<>(); // Maintain a list of manager clients
+    private List<ConnectionToClient>AllmanagerClients = new ArrayList<>(); // Maintain a list of manager clients
+
     private List<ConnectionToClient> userClients = new ArrayList<>();
     private List<String> usernames = new ArrayList<>();
 
@@ -263,6 +266,15 @@ public class SimpleServer extends AbstractServer {
             }
         }
         System.out.println("the size is:" + managerClients.size());
+    }
+
+    public void addAllManagerClient(ConnectionToClient managerClient) {
+        if (!AllmanagerClients.contains(managerClient)) {
+            System.out.println("Adding a new manager to the ALLLLLLLLL list in the server");
+            AllmanagerClients.add(managerClient);
+        }
+        System.out.println("the size aLLLLL is:" + managerClients.size());
+        System.out.println("out of add all managers");
     }
 
     public void addUserClient(ConnectionToClient UserClient, String username) {
@@ -781,24 +793,7 @@ public class SimpleServer extends AbstractServer {
                 deadlineCheck();
             }
         }
-//        else if (msg instanceof LogInOutMessage){
-////            System.out.println("get into log in");
-////            LogInOutMessage inout = (LogInOutMessage) msg;
-////            System.out.println(((LogInOutMessage) msg).getUser().getUsername());
-////            if (inout.getLoginORout().equals("log in"))
-////            {LoggedInUsers.add(new Pair<>(inout.getUser(), client));
-////                for (Pair<Registered_user, ConnectionToClient> pair : LoggedInUsers) {
-////                    System.out.println(LoggedInUsers.getFirst().getKey().getUsername());
-//                {
-//                    System.out.println("get into log out");
-//
-////                    LoggedInUsers.remove(new Pair<>(inout.getUser(), client));
-//                }
-//                for (Pair<Registered_user, ConnectionToClient> pair : LoggedInUsers) {
-//                    System.out.println(LoggedInUsers.getFirst().getKey().getUsername());
-//                }
-//            }
-//       }
+
         else if (msg instanceof DisplayDataMessage) {
             DisplayDataMessage datarequest = (DisplayDataMessage) msg;
             System.out.println("a");
@@ -859,7 +854,6 @@ public class SimpleServer extends AbstractServer {
         } else if (msg instanceof NewTaskMessage) {
             System.out.println("msg recognized instanceof NewTaskMessage");
             NewTaskMessage ntm = (NewTaskMessage) msg;
-//            AddToObMessage addtoOB = new AddToObMessage();
             try {
                 SessionFactory sessionFactory = FactoryUtil.getSessionFactory();
                 session = sessionFactory.openSession();
@@ -868,17 +862,15 @@ public class SimpleServer extends AbstractServer {
                 LocalDateTime futureDeadline1 = now.plusDays(7);
                 Task nt = new Task(ntm.getType(), ntm.getOpenby(), ntm.getDeadline(), ntm.getDetails());
                 ntm.setNewTask(nt);
-//                addtoOB.setNewtask(nt);
                 session.save(nt);
                 session.getTransaction().commit();
                 System.out.println("in new task");
                 listviewFromUser();
                 DisplayDataMessage datarequest = new DisplayDataMessage(ntm.getOpenby(), "uploaded");
                 updateUserTasks(datarequest);
-//                for (ConnectionToClient manager : managerClients) {
-//                    manager.sendToClient(datarequest);
-//                }
-                findManagerConnectionbyCommunity(ntm.getOpenby().getCommunity()).sendToClient(datarequest);
+                ConnectionToClient connection= findManagerConnectionbyCommunity(ntm.getOpenby().getCommunity());
+                if (connection!=null)
+                    {connection.sendToClient(datarequest);}
             } catch (Exception exception) {
                 if (session != null) {
                     session.getTransaction().rollback();
@@ -891,7 +883,6 @@ public class SimpleServer extends AbstractServer {
             }
             try {
                 client.sendToClient(ntm);
-//                sendToAllClients(addtoOB);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -914,12 +905,16 @@ public class SimpleServer extends AbstractServer {
                 Emergency_call temp = new Emergency_call(ntm.getGiven_name(), ntm.getPhone_number(), ntm.getOpenby1(), ntm.getHost());
                 session.save(temp);
                 session.getTransaction().commit();
+                int i=1;
+                for (ConnectionToClient manager : AllmanagerClients) {
+                    System.out.println("manager number : "+ i++);
+                    listOfEmergency(manager);
+                }
                 System.out.println("successsssssdddddddddddddddddddddddddddddddddddddddddd");
             } catch (Exception exception) {
                 if (session != null) {
                     session.getTransaction().rollback();
                 }
-                System.err.println("An error occured, changes have been rolled back. malekkkkkkkk");
                 exception.printStackTrace();
 
             } finally {
@@ -1169,11 +1164,9 @@ public class SimpleServer extends AbstractServer {
             } else if (((Message) msg).getMessage().equals("add manager client")) {
                 System.out.println("add manger client in server");
                 String username3 = ((Message) msg).getUserName();
-                System.out.println("+++++++++++++++++" + username3);
-                System.out.println("the client is :888888888" + client);
                 addManagerClient(client, username3);
-            }
-            else if (((Message) msg).getMessage().equals("add user client")) {
+                addAllManagerClient(client);
+            } else if (((Message) msg).getMessage().equals("add user client")) {
                 System.out.println("add uder client in server");
                 String username3 = ((Message) msg).getUserName();
                 System.out.println("+++++++++++++++++" + username3);
@@ -1188,11 +1181,6 @@ public class SimpleServer extends AbstractServer {
                 System.out.println("heyyy");
             } else if (request.equals("ShowEmergency")) {
                 listOfEmergency(client);
-//            } else if (request.equals("add user client")) {
-//                System.out.println("enter here in request.equals(\"add user client\"))");
-//                String requestUser = ((MessageOfStatus) msg).getUsername();
-//                System.out.println("check66666" + requestUser);
-//                addUserClient(client, requestUser);
             } else if (request.equals("accept")) {
                 System.out.println("in accept");
                 int id = myTask.getId();
@@ -1220,15 +1208,9 @@ public class SimpleServer extends AbstractServer {
                         listviewForUserTOVolunteer(task.getRegistered_user().getUsername());
                         listviewForUserRequestedTasks();
                         MessageOfStatus message2 = new MessageOfStatus(task, "task accepted");
-                        // Echo back the received message to the client
-//                        client.sendToClient(message2);
-//                        tx2.commit();
-                        System.out.println("send to manager client");
                         Registered_user openedBy = task.getRegistered_user();
-                        ConnectionToClient addressee= findUserConnectionbyUser(openedBy);
-                        if (addressee!=null)
-                        {
-                            System.out.println("send to user notifi");
+                        ConnectionToClient addressee = findUserConnectionbyUser(openedBy);
+                        if (addressee != null) {
                             addressee.sendToClient(new Notification("Task Accepted", openedBy));
                         }
                         client.sendToClient(message2);
@@ -1278,33 +1260,7 @@ public class SimpleServer extends AbstractServer {
                 } finally {
                     session.close(); // Close the second session
                 }
-//            } else if (request.equals("get tasks")) {
-//                System.out.println("in display");
-//
-//
-//                SessionFactory sessionFactory = FactoryUtil.getSessionFactory();
-//                session = sessionFactory.openSession();
-//
-//                Transaction tx2 = null;
-//                try {
-//                    tx2 = session.beginTransaction();
-//
-//                    // Perform operations with the second session
-//
-//                    List<Task> tasks = getAllTasks(session);
-//                    for (Task task : tasks) {
-//                        System.out.println(task.getType_of_task());
-//                    }
-//                    DisplayDataMessage dis = new DisplayDataMessage(tasks, "all tasks");
-//                    System.out.println(dis.getTasks().get(0).getId());
-//                    client.sendToClient(dis);
-//                    tx2.commit();
-//                } catch (RuntimeException e) {
-//                    if (tx2 != null) tx2.rollback();
-//                    throw e;
-//                } finally {
-//                    session.close(); // Close the second session
-//                }
+
             } else if (request.equals("volunteering completed")) {
                 System.out.println("in volunteering completedddddddddddddddddddddddddd =================");
                 int id = myTask.getId();
@@ -1332,14 +1288,10 @@ public class SimpleServer extends AbstractServer {
                         MessageOfStatus message2 = new MessageOfStatus(task, "volunteering done");
                         DisplayDataMessage datarequest = new DisplayDataMessage(task.getVolunteer(), "performed");
                         updateUserTasks_done(datarequest);
-                        findManagerConnectionbyCommunity(task.getVolunteer().getCommunity()).sendToClient(datarequest);
-//                        for (ConnectionToClient manager : managerClients) {
-//                            manager.sendToClient(datarequest);
-//                        }
-                        // Echo back the received message to the client
+                        ConnectionToClient connection= findManagerConnectionbyCommunity(task.getVolunteer().getCommunity());
+                        if (connection!=null){connection.sendToClient(datarequest);}
                         client.sendToClient(message2);
                         tx2.commit();
-                        System.out.println("send to manager client");
                     }
                 } catch (RuntimeException e) {
                     if (tx2 != null) tx2.rollback();
@@ -1371,6 +1323,12 @@ public class SimpleServer extends AbstractServer {
                         task.setVolunteer(user);
                         task.setCompletiontime(LocalDateTime.now());
                         tx2.commit();
+                        Registered_user openby=task.getRegistered_user();
+                        ConnectionToClient connection= findUserConnectionbyUser(openby);
+                        if(connection!=null)
+                        {
+                            connection.sendToClient(new Notification("Volunteer Found", openby, user));
+                        }
                         listviewForUserRequestedTasks(task.getRegistered_user().getUsername());
                         listviewForUserTOVolunteer(task.getRegistered_user().getUsername());
                         MessageOfStatus message2 = new MessageOfStatus(task, "Thanks for volunteering");

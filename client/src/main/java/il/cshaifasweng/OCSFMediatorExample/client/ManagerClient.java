@@ -14,7 +14,7 @@ public class ManagerClient extends AbstractClient {
 
     private static Registered_user managerClient = null;
     private static ManagerClient client = null;
-    private static Registered_user loggedInUser=null;
+    //private static Registered_user loggedInUser=null;
 
 
     /**

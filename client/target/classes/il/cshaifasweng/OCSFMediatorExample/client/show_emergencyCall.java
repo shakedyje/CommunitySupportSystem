@@ -72,37 +72,9 @@ public class show_emergencyCall {
     @FXML
     private TableColumn<Emergency_call, Integer> idColumn;
 
-    private static Scene scene;
-    private static Stage appStage;
-
-
-    public void setAppStage(Stage appStage) {
-        this.appStage = appStage;
-    }
 
     @FXML
     void Back_to_main(ActionEvent event) throws IOException {
-//        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-//        currentStage.close();
-//        Platform.runLater(() -> {
-//            try {
-//                FXMLLoader loader = new FXMLLoader(getClass().getResource("manager_main.fxml"));
-//                Parent root = loader.load();
-//                Manager ManagerController = loader.getController();
-//                ManagerController.initialize(ManagerClient.getManagerClient().getUsername()); // Pass the username to initialize method
-//
-//                // Show the scene
-//                Scene scene = new Scene(root);
-//                if (appStage == null) {
-//                    appStage = new Stage();
-//                }
-//
-//                appStage.setScene(scene);
-//                appStage.show();
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//        });
         Platform.runLater(() -> {
             try {
                 setRoot("manager_main");

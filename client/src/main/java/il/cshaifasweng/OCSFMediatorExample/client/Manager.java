@@ -177,7 +177,7 @@ public class Manager  {
         managerClient.sendToServer(message);
         System.out.println("Logout message sent to server");
         ManagerClient.setManagerClient(null);
-//        UnknownUserClient.getClient().openConnection();
+        UserClient.setLoggedInUser(null);
         Platform.runLater(() -> {
             try {
                 setRoot("log_in");

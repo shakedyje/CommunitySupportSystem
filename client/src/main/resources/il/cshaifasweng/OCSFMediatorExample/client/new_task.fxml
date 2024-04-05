@@ -6,6 +6,8 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -14,26 +16,32 @@
    <children>
       <AnchorPane fx:id="btn1" prefHeight="500.0" prefWidth="600.0" style="-fx-background-color: #c4bfa0;">
          <children>
-            <Label layoutX="102.0" layoutY="14.0" prefHeight="56.0" prefWidth="398.0" style="-fx-background-color: #000000;" text="Fill The New Task Form" textAlignment="CENTER" textFill="WHITE">
+            <Label layoutX="82.0" layoutY="27.0" prefHeight="61.0" prefWidth="471.0" text="Fill The New Task Form" textAlignment="CENTER" textFill="WHITE">
                <font>
-                  <Font size="38.0" />
+                  <Font name="Kristen ITC" size="38.0" />
                </font>
             </Label>
-            <Label layoutX="71.0" layoutY="206.0" prefHeight="44.0" prefWidth="457.0" text="Write here the details about the task, such as exact location or special requests.">
+            <Label layoutX="78.0" layoutY="213.0" prefHeight="44.0" prefWidth="457.0" text="Write here the details about the task, such as exact location or special requests.">
                <font>
-                  <Font name="System Bold" size="12.0" />
+                  <Font name="Kristen ITC" size="11.0" />
                </font>
             </Label>
             <TextArea fx:id="detailsTxt" layoutX="82.0" layoutY="250.0" prefHeight="166.0" prefWidth="436.0" promptText="e.g:  &quot;I prefer manual car wash technology&quot;, &quot;Ride destination: Haifa Center&quot; ">
                <font>
                   <Font name="System Italic" size="12.0" />
                </font></TextArea>
-            <ComboBox fx:id="taskTypeComboBox" layoutX="126.0" layoutY="104.0" prefHeight="25.0" prefWidth="163.0" promptText="select type" />
-            <DatePicker fx:id="deadlineDp" layoutX="305.0" layoutY="104.0" promptText="select deadline" />
+            <ComboBox fx:id="taskTypeComboBox" layoutX="82.0" layoutY="193.0" prefHeight="25.0" prefWidth="151.0" promptText="select type" />
+            <DatePicker fx:id="deadlineDp" layoutX="389.0" layoutY="193.0" prefHeight="25.0" prefWidth="121.0" promptText="select deadline" />
             <Button fx:id="confirm_and_displayBtn" layoutX="277.0" layoutY="443.0" mnemonicParsing="false" onAction="#check_confirm_display_task" text="confirm" />
+            <Button fx:id="BackBtn" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" text="Back" />
+            <ImageView fitHeight="99.0" fitWidth="173.0" layoutX="225.0" layoutY="88.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@image-removebg-preview%20(1).png" />
+               </image>
+            </ImageView>
          </children>
       </AnchorPane>
-      <Button mnemonicParsing="false" onAction="#switchToemergency" prefHeight="48.0" prefWidth="560.0" text="Emergency Button" textFill="#0ca9c7">
+      <Button mnemonicParsing="false" onAction="#switchToemergency" prefHeight="48.0" prefWidth="560.0" text="Emergency Button" textFill="#c7150e">
          <VBox.margin>
             <Insets left="20.0" right="20.0" top="20.0" />
          </VBox.margin>

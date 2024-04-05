@@ -31,6 +31,9 @@ import static il.cshaifasweng.OCSFMediatorExample.client.UserClient.getClient;
 public class MainController {
 
     @FXML
+    private Stage loginStage;
+
+    @FXML
     private AnchorPane btn1;
 
     @FXML

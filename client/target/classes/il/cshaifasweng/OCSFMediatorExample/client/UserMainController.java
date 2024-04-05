@@ -47,75 +47,74 @@ public class UserMainController {
 
     private static Scene scene;
     private static Stage appStage;
+    @FXML
     private Button LogOutBtn;
+    boolean notified= false;
 
 
     @FXML
     void LOG_OUT(ActionEvent event) throws IOException {
-//        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-//        currentStage.close();
-//        ManagerClient.getClient().closeConnection();
         Message message = new Message("log out user", UserClient.getLoggedInUser().getUsername());
         UserClient userClient = UserClient.getClient();
         System.out.println("i will enter");
         userClient.sendToServer(message);
         System.out.println("Logout message sent to server");
         UserClient.setLoggedInUser(null);
-//        UnknownUserClient.getClient().openConnection();
+        ManagerClient.setManagerClient(null);
+
         Platform.runLater(() -> {
             try {
-                setRoot("log_in");
-//                UnknownUserClient.getClient().openConnection();
-//                UserClient.getClient().closeConnection();
+               setRoot("log_in");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         });
         System.out.println("back from platfrom");
-//        cleanup();
 
-//        UserClient.getClient().sendToServer(new LogInOutMessage(getLoggedInUser(), "log out")); //add to logged-in users list
-//
+
+
+
+    }
+//    @FXML
+//    void LOG_OUT(ActionEvent event) throws IOException {
+////        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+////        currentStage.close();
+////        ManagerClient.getClient().closeConnection();
+//        Message message = new Message("log out user", UserClient.getLoggedInUser().getUsername());
+//        UserClient userClient = UserClient.getClient();
+//        System.out.println("i will enter");
+//        userClient.sendToServer(message);
+//        System.out.println("Logout message sent to server");
+//        UserClient.setLoggedInUser(null);
+////        UnknownUserClient.getClient().openConnection();
 //        Platform.runLater(() -> {
 //            try {
+//                cleanup();
 //                setRoot("log_in");
+////                UnknownUserClient.getClient().openConnection();
+////                UserClient.getClient().closeConnection();
 //            } catch (IOException e) {
 //                throw new RuntimeException(e);
 //            }
 //        });
-    }
+//        System.out.println("back from platfrom");
+////        cleanup();
+//
+////        UserClient.getClient().sendToServer(new LogInOutMessage(getLoggedInUser(), "log out")); //add to logged-in users list
+////
+////        Platform.runLater(() -> {
+////            try {
+////                setRoot("log_in");
+////            } catch (IOException e) {
+////                throw new RuntimeException(e);
+////            }
+////        });
+//    }
 
     @Subscribe
     public void TaskNotification(UsersNotificationEvent event)
     {
-
-        Platform.runLater(() -> {
-            // Create a media file for the notification sound
-            Media errorsound = new Media(new File("sorry_sound.wav").toURI().toString());
-            MediaPlayer mediaPlayer1 = new MediaPlayer(errorsound);
-            Media confirmsound = new Media(new File("yay_sound.mp3").toURI().toString());
-            MediaPlayer mediaPlayer2 = new MediaPlayer(confirmsound);
-            System.out.println("in notification");
-            if (event.getNotification().getNotification().equals("Task Accepted")) {
-                Notifications.create()
-                    .title("Task Accepted!")
-                    .text("Hooray " + event.getNotification().getAddressee().getGivenName() + "!\n" +
-                            "The community manager has approved your task")
-                    .hideAfter(Duration.seconds(5))
-                    .position(Pos.TOP_LEFT)
-                        .showInformation();
-                mediaPlayer2.play();
-            } else if(event.getNotification().getNotification().equals("Task Rejected")) {
-                Notifications.create()
-                    .title("Task Rejected")
-                    .text("Sorry " + event.getNotification().getAddressee().getGivenName() + "...\n" +
-                            "The community manager has rejected your task")
-                    .hideAfter(Duration.seconds(5))
-                    .position(Pos.TOP_LEFT)
-                    .showError();
-                mediaPlayer1.play();
-                }
-        });
+            PostNotifications.getInstance().TaskNotification(event);
 
     }
     public void cleanup() {
@@ -125,9 +124,9 @@ public class UserMainController {
         System.out.println("999999999999999999999999999");
     }
 
-    public void setAppStage(Stage appStage) {
-        this.appStage = appStage;
-    }
+//    public void setAppStage(Stage appStage) {
+//        this.appStage = appStage;
+//    }
 
     @FXML
     private void initialize() {
@@ -136,6 +135,7 @@ public class UserMainController {
 //        } catch (IOException e) {
 //            throw new RuntimeException(e);
 //        }
+        System.out.println("init User main");
         EventBus.getDefault().register(this);
         // Assuming you have the username stored in a variable named 'username'
         String username = UserClient.getLoggedInUser().getGivenName();
@@ -159,6 +159,7 @@ public class UserMainController {
     void switchToemergency(ActionEvent event) {
         Platform.runLater(() -> {
             try {
+//                cleanup();
                 setRoot("Emergency");
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -170,6 +171,7 @@ public class UserMainController {
     void switchToNewTask(ActionEvent event) throws IOException {
         Platform.runLater(() -> {
             try {
+//                cleanup();
                 setRoot("new_task");
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -186,6 +188,7 @@ public class UserMainController {
     void showRequstedTasks(ActionEvent event) {
         Platform.runLater(() -> {
             try {
+//                cleanup();
                 setRoot("requestedTasksPage");
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -198,6 +201,7 @@ public class UserMainController {
     void switchToVolunteer(ActionEvent event) {
         Platform.runLater(() -> {
             try {
+//                cleanup();
                 setRoot("showMyVolunteeredTasks");
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -209,6 +213,7 @@ public class UserMainController {
     void turnToVolunteeringPage(ActionEvent event) {
         Platform.runLater(() -> {
             try {
+//                cleanup();
                 setRoot("VolunteeringPage");
             } catch (IOException e) {
                 throw new RuntimeException(e);
