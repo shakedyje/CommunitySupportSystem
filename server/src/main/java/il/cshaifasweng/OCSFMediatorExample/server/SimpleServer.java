@@ -679,7 +679,7 @@ public class SimpleServer extends AbstractServer {
             // HQL query to select tasks with status other than "Completed" or "Not Completed" and deadline smaller than today
             String sqlQuery = "SELECT * FROM Task " +
                     "WHERE Status = 'In Process' AND Volunteer = :user " +
-                    "AND TIMESTAMPDIFF(HOUR, completiontime, :currentTime) >= 24";
+                    "AND TIMESTAMPDIFF(MINUTE, completiontime, :currentTime) >= 1";
 
             SQLQuery<Task> query = session.createSQLQuery(sqlQuery);
             query.setParameter("user", user);

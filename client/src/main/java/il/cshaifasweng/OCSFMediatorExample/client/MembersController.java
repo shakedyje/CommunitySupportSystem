@@ -58,6 +58,7 @@ public class MembersController {
     void switchToemergency(ActionEvent event) {
         Platform.runLater(() -> {
             try {
+                ManagerClient.setLast_fxml("members");
                 setRoot("Emergency");
             } catch (IOException e) {
                 throw new RuntimeException(e);

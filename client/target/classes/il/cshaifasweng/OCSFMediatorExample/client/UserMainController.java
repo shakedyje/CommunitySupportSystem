@@ -6,6 +6,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -154,7 +155,7 @@ public class UserMainController {
     void switchToemergency(ActionEvent event) {
         Platform.runLater(() -> {
             try {
-//                cleanup();
+                UserClient.setLast_fxml("user_main");
                 setRoot("Emergency");
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -168,6 +169,8 @@ public class UserMainController {
     void switchToNewTask(ActionEvent event) throws IOException {
         Platform.runLater(() -> {
             try {
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.close();
 //                cleanup();
                 setRoot("new_task");
             } catch (IOException e) {

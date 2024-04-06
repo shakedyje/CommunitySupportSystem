@@ -12,17 +12,16 @@ public class UserClient extends AbstractClient {
     /*just for the running check*/
     private static Registered_user loggedInUser=null;
     private static UserClient client = null;
+    private static String last_fxml="";
 
-    //    public static void login(String username, String password) { //rina and malek
-//        // Perform login logic and set the loggedInUser
-//        // ...
-//
-//        // Example: Setting the loggedInUser
-//        // here it need to return from server with the user instance
-//        //loggedInUser = new Registered_user(username, /* other user details */);
-//        /*just for the running*/
-////        loggedInUser = new Registered_user("Rom", "Levi", "rom_levi1", "123", false, "0507773121", "Haifa");
-//    }
+    public static String getLast_fxml() {
+        return last_fxml;
+    }
+
+    public static void setLast_fxml(String last_fxml) {
+        UserClient.last_fxml = last_fxml;
+    }
+
     private UserClient(String host, int port) {
         super(host, port);
     }

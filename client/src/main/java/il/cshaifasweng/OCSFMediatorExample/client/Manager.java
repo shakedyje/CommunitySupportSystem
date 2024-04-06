@@ -161,10 +161,7 @@ public class Manager  {
     @FXML
     void LOG_OUT(ActionEvent event) throws IOException {
 
-//        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-//        currentStage.close();
-//        ManagerClient.getClient().closeConnection();
-//        ManagerClient.getClient().sendToServer(new LogInOutMessage(getManagerClient(), "log out")); //add to logged-in users list
+
         Message message = new Message("log out manager", ManagerClient.getManagerClient().getUsername());
         ManagerClient managerClient = ManagerClient.getClient();
         System.out.println("i will enter");
@@ -355,6 +352,7 @@ public class Manager  {
     void switchToemergency(ActionEvent event) {
         Platform.runLater(() -> {
             try {
+                ManagerClient.setLast_fxml("manager_main");
                 setRoot("Emergency");
             } catch (IOException e) {
                 throw new RuntimeException(e);

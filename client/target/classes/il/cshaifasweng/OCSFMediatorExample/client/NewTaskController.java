@@ -42,11 +42,11 @@ public class NewTaskController {
 //        PostNotifications.getInstance().TaskNotification(event);
 //    }
 
-    @Subscribe
-    public void TaskNotification(UsersNotificationEvent event)
-    {
-        PostNotifications.getInstance().TaskNotification(event);
-    }
+//    @Subscribe
+//    public void TaskNotification(UsersNotificationEvent event)
+//    {
+//        PostNotifications.getInstance().TaskNotification(event);
+//    }
 
     @FXML
     private void check_confirm_display_task() throws IOException {
@@ -112,6 +112,8 @@ public class NewTaskController {
                         throw new RuntimeException(e);
                     }
                 });
+        EventBus.getDefault().unregister(this);
+
     }
 
 
@@ -142,11 +144,13 @@ public class NewTaskController {
     void switchToemergency(ActionEvent event) {
         Platform.runLater(() -> {
             try {
+                UserClient.setLast_fxml("new_task");
                 setRoot("Emergency");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         });
+        EventBus.getDefault().unregister(this);
     }
 
     // Helper method to show an error dialog
@@ -158,6 +162,7 @@ public class NewTaskController {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+            EventBus.getDefault().unregister(this);
         });
 
 

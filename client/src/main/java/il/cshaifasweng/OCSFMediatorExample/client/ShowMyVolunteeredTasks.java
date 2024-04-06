@@ -1,5 +1,6 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
+import antlr.ASTNULLType;
 import il.cshaifasweng.OCSFMediatorExample.entities.Message;
 import il.cshaifasweng.OCSFMediatorExample.entities.MessageOfStatus;
 import il.cshaifasweng.OCSFMediatorExample.entities.Task;
@@ -37,6 +38,9 @@ public class ShowMyVolunteeredTasks {
 
     @FXML
     private Label welcome;
+    @FXML
+    private Label welcome1;
+
 
     @FXML
     private Button done;
@@ -59,11 +63,11 @@ public class ShowMyVolunteeredTasks {
         });
 
     }
-    @Subscribe
-    public void TaskNotification(UsersNotificationEvent event)
-    {
-        PostNotifications.getInstance().TaskNotification(event);
-    }
+//    @Subscribe
+//    public void TaskNotification(UsersNotificationEvent event)
+//    {
+//        PostNotifications.getInstance().TaskNotification(event);
+//    }
 
     @FXML
     void display(MouseEvent event) {
@@ -207,10 +211,7 @@ public class ShowMyVolunteeredTasks {
     @FXML
     void initialize() throws IOException {
         String username=UserClient.getLoggedInUser().getUsername();
-        System.out.println(username+" userclient???????????????????????????????????/");
-
-        welcome.setText("Tasks that " + UserClient.getLoggedInUser().getGivenName()+" volunteered to do:");
-        welcome.setAlignment(Pos.TOP_LEFT);
+        welcome1.setText("Wow " + UserClient.getLoggedInUser().getGivenName());
         EventBus.getDefault().register(this);
         UserClient userClient = UserClient.getClient();
         try {
@@ -246,6 +247,7 @@ public class ShowMyVolunteeredTasks {
         System.out.println("here");
         Platform.runLater(() -> {
             try {
+                UserClient.setLast_fxml("showMyVolunteeredTasks");
                 setRoot("Emergency");
             } catch (IOException e) {
                 throw new RuntimeException(e);

@@ -106,6 +106,7 @@ public class show_emergencyCall {
         System.out.println("here");
         Platform.runLater(() -> {
             try {
+                ManagerClient.setLast_fxml("show_emergencyCall");
                 setRoot("Emergency");
             } catch (IOException e) {
                 throw new RuntimeException(e);
