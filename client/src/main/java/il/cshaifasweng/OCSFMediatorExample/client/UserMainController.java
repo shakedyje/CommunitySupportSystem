@@ -1,34 +1,22 @@
 
 package il.cshaifasweng.OCSFMediatorExample.client;
-import org.controlsfx.control.Notifications;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import java.io.File;
-import il.cshaifasweng.OCSFMediatorExample.entities.LogInOutMessage;
+
 import il.cshaifasweng.OCSFMediatorExample.entities.Message;
-import il.cshaifasweng.OCSFMediatorExample.entities.MessageOfStatus;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-import org.controlsfx.control.Notifications;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
 
-import static il.cshaifasweng.OCSFMediatorExample.client.ManagerClient.getManagerClient;
 import static il.cshaifasweng.OCSFMediatorExample.client.SimpleChatClient.setRoot;
-import static il.cshaifasweng.OCSFMediatorExample.client.UserClient.getClient;
 import static il.cshaifasweng.OCSFMediatorExample.client.UserClient.getLoggedInUser;
 
 public class UserMainController {
@@ -69,7 +57,9 @@ public class UserMainController {
                 throw new RuntimeException(e);
             }
         });
+        EventBus.getDefault().unregister(this);
         System.out.println("back from platfrom");
+
 
 
 
@@ -114,9 +104,12 @@ public class UserMainController {
     @Subscribe
     public void TaskNotification(UsersNotificationEvent event)
     {
+        Platform.runLater(() -> {
             PostNotifications.getInstance().TaskNotification(event);
-
+        });
     }
+
+
     public void cleanup() {
         // Unregister from the event bus during cleanup
         System.out.println("cleaned");
@@ -130,13 +123,15 @@ public class UserMainController {
 
     @FXML
     private void initialize() {
-//        try {
-//            UserClient.getClient().openConnection();
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
         System.out.println("init User main");
         EventBus.getDefault().register(this);
+        try {
+            Message doneCheck = new Message("completed?");
+            doneCheck.setUser(getLoggedInUser());
+            UserClient.getClient().sendToServer(doneCheck);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         // Assuming you have the username stored in a variable named 'username'
         String username = UserClient.getLoggedInUser().getGivenName();
         SaveUserName = UserClient.getLoggedInUser().getUsername();
@@ -165,6 +160,8 @@ public class UserMainController {
                 throw new RuntimeException(e);
             }
         });
+        EventBus.getDefault().unregister(this);
+
     }
 
     @FXML
@@ -177,11 +174,14 @@ public class UserMainController {
                 throw new RuntimeException(e);
             }
         });
+        EventBus.getDefault().unregister(this);
+
     }
 
 //    @Subscribe
 //    void TaskAcceptedNotifiction(UsersNotificationEvent event) {
 //
+
 //    }
 
     @FXML
@@ -194,6 +194,8 @@ public class UserMainController {
                 throw new RuntimeException(e);
             }
         });
+        EventBus.getDefault().unregister(this);
+
 
     }
 
@@ -207,6 +209,8 @@ public class UserMainController {
                 throw new RuntimeException(e);
             }
         });
+        EventBus.getDefault().unregister(this);
+
     }
 
     @FXML
@@ -219,6 +223,8 @@ public class UserMainController {
                 throw new RuntimeException(e);
             }
         });
+        EventBus.getDefault().unregister(this);
+
 
 
     }

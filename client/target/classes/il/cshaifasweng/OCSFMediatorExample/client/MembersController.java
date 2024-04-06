@@ -130,6 +130,8 @@ public class MembersController {
                 Stage stage = new Stage();
                 stage.setScene(scene);
                 stage.show();
+       Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        currentStage.close();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

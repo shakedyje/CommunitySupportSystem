@@ -77,7 +77,7 @@ public class UserClient extends AbstractClient {
                 System.out.println("thanks");
                 EventBus.getDefault().post(new PersonVolunteering(message1));
             }else if (message1.getChangeStatus().equals("volunteering done")) {
-                System.out.println("thanks for doning");
+                System.out.println("thanks for doing the task");
                 EventBus.getDefault().post(new VolunteeringDone(message1));
             }
 

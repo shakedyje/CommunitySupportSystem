@@ -41,6 +41,10 @@ public class Emergency_call implements Serializable{
 
     }
 
+    public String getHost() {
+        return host;
+    }
+
     public Registered_user getRegistered_user() {
         return registered_user;
     }
@@ -67,5 +71,5 @@ public class Emergency_call implements Serializable{
 
     public void setPhone_number(String phone_number) {
         this.phone_number = phone_number;
-    }
+}
 }

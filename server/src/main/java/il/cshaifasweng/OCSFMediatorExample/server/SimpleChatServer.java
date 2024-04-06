@@ -234,12 +234,15 @@ public class SimpleChatServer {
                 System.out.println("1");
 
                 Registered_user user1 = new Registered_user("Rom","Levi","rom_levi1","123",true,"0507773121", Communities.AHUZA);
-                Registered_user user2 = new Registered_user("Yarin","Rabinobi","yarin_rabinobi2","1234",false,"0524373191",Communities.BAT_GALIM);
+                Registered_user user2 = new Registered_user("rina","Rabinobi","rina","111",false,"0524373191",Communities.BAT_GALIM);
+                Registered_user user8 = new Registered_user("abd","Rabinobi","abd","111",false,"0524373191",Communities.BAT_GALIM);
                 Registered_user user3 = new Registered_user("Dan","Shimoni","dan_shimoni1","1235",false,"0547373199",Communities.ROMEMA);
-                Registered_user user4 = new Registered_user("Linoy","Ohaion","linoyOhaion2","111",true,"0502213188",Communities.ROMEMA);
+                Registered_user user4 = new Registered_user("mhmd","Ohaion","mhmd","111",true,"0502213188",Communities.BAT_GALIM);
                 Registered_user user5 = new Registered_user("Roman","Shapira","romanroman","1231",false,"0521153111",Communities.ROMEMA);
                 Registered_user user6 = new Registered_user("Shira","Omer","ShiraOmer22","1220",false,"0502479900",Communities.ROMEMA);
                 Registered_user user7 = new Registered_user("Yarden","Mesgav","yarden_yarden3","1230",false,"0532251580",Communities.ROMEMA);
+                Registered_user user9 = new Registered_user("mais","Ohaion","mais","111",true,"0502213188",Communities.ROMEMA);
+
 
 
                 session.save(user1);
@@ -249,6 +252,7 @@ public class SimpleChatServer {
                 session.save(user5);
                 session.save(user6);
                 session.save(user7);
+                session.save(user8);session.save(user9);
                 //  session.getTransaction().commit(); // Save everything.
 
                 System.out.println("2");

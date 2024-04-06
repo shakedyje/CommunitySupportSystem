@@ -1,9 +1,4 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
-import il.cshaifasweng.OCSFMediatorExample.client.NewDetailsEvent;
-import il.cshaifasweng.OCSFMediatorExample.client.TaskRejectEvent;
-import il.cshaifasweng.OCSFMediatorExample.client.TasksMessageEvent;
-import il.cshaifasweng.OCSFMediatorExample.entities.LogInOutMessage;
-import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import il.cshaifasweng.OCSFMediatorExample.entities.Message;
 import il.cshaifasweng.OCSFMediatorExample.entities.Task;
@@ -13,7 +8,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
@@ -188,7 +182,7 @@ public class Manager  {
             }
         });
         System.out.println("back from platfrom");
-//        cleanup();
+        cleanup();
 
 
 
@@ -257,6 +251,8 @@ public class Manager  {
                 throw new RuntimeException(e);
             }
  });
+        cleanup();
+
 
 
     }
@@ -303,6 +299,7 @@ public class Manager  {
 
                 }
             });
+        cleanup();
     }
 
     @FXML
@@ -363,42 +360,10 @@ public class Manager  {
                 throw new RuntimeException(e);
             }
         });
+        cleanup();
+
     }
 
-//    @FXML
-//    void initialize(String username) {
-//        EventBus.getDefault().register(this);
-//
-//        // Initialize ManagerClient instance
-//
-//        ManagerClient managerClient = ManagerClient.getClient();
-//        try {
-////            TasksOb.getInstance();
-////            getClient().sendToServer("get tasks");
-//            managerClient.openConnection();
-////            getClient().sendToServer("list view");
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        msgId=0;
-//
-//        try {
-//            //getClient().sendToServer("add manager client");
-//            Message message2 = new Message("list view",username);
-//            Message message3 = new Message("add manager client",username);
-//            managerClient.sendToServer(message2);
-//
-//           managerClient.sendToServer(message3);
-//           managerClient.sendToServer(new LogInOutMessage(getManagerClient(), "log in")); //add to logged-in users list
-//
-//        } catch (IOException e) {
-//            // Handle send error
-//            System.err.println("Error: Unable to send message to the server");
-//            e.printStackTrace();
-//            // Optionally, you may choose to continue initialization or stop here
-//        }
-//    }
 @FXML
 void initialize() {
     System.out.println("initiza;ies with"+ManagerClient.getManagerClient().getUsername());

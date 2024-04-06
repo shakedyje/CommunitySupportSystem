@@ -7,6 +7,15 @@ public class Notification implements Serializable {
     private Registered_user addressee;
 
     private Registered_user userInvolved;
+    private  Task taskInvolved;
+
+    public Task getTaskInvolved() {
+        return taskInvolved;
+    }
+
+    public void setTaskInvolved(Task taskInvolved) {
+        this.taskInvolved = taskInvolved;
+    }
 
     public Registered_user getUserInvolved() {
         return userInvolved;
@@ -35,6 +44,12 @@ public class Notification implements Serializable {
     public Notification(String notification, Registered_user addressee) {
         this.notification = notification;
         this.addressee = addressee;
+    }
+
+    public Notification(String notification, Registered_user addressee, Task task) {
+        this.notification = notification;
+        this.addressee = addressee;
+        this.taskInvolved=task;
     }
 
     public Notification(String notification, Registered_user addressee, Registered_user userInvolved) {

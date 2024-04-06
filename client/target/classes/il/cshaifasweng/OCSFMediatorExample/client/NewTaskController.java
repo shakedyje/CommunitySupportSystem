@@ -2,6 +2,7 @@ package il.cshaifasweng.OCSFMediatorExample.client;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
@@ -49,7 +50,7 @@ public class NewTaskController {
 
     @FXML
     private void check_confirm_display_task() throws IOException {
-        LocalDateTime deadline = deadlineDp.getValue() == null ? null : deadlineDp.getValue().atStartOfDay();
+        LocalDateTime deadline = deadlineDp.getValue() == null ? null : deadlineDp.getValue().atTime(LocalTime.now());
         TaskType selectedTaskType = taskTypeComboBox.getValue();
         String details = detailsTxt.getText();
 

@@ -177,6 +177,7 @@ public class MainController {
                 });
             }
         }
+
     }
 
     void switchToMainOfUser() {
@@ -187,7 +188,7 @@ public class MainController {
                 throw new RuntimeException(e);
             }
         });
-
+        EventBus.getDefault().unregister(this);
     }
 
 
@@ -201,6 +202,7 @@ public class MainController {
                 throw new RuntimeException(e);
             }
         });
+        EventBus.getDefault().unregister(this);
     }
 
 
@@ -213,6 +215,7 @@ public class MainController {
                 throw new RuntimeException(e);
             }
         });
+        EventBus.getDefault().unregister(this);
     }
 
 /*
