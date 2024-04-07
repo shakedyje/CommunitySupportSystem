@@ -38,7 +38,7 @@
             <Font size="17.0" />
          </font>
       </Button>
-      <Label fx:id="welcome1" layoutX="277.0" layoutY="34.0" onMouseClicked="#back_to_mainUser" prefHeight="46.0" prefWidth="522.0" text="Wow" textFill="WHITE">
+      <Label fx:id="welcome1" layoutX="309.0" layoutY="36.0" onMouseClicked="#back_to_mainUser" prefHeight="46.0" prefWidth="522.0" text="Wow" textFill="WHITE">
          <font>
             <Font size="35.0" />
          </font>

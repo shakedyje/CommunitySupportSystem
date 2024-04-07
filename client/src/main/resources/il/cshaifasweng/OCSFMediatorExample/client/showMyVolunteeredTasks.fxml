@@ -23,7 +23,7 @@
       </Button>
       <ListView fx:id="listviewInProcess" layoutX="17.0" layoutY="131.0" onMouseClicked="#display" prefHeight="314.0" prefWidth="433.0" />
       <TextArea fx:id="show" layoutX="498.0" layoutY="141.0" prefHeight="211.0" prefWidth="351.0" />
-      <Label fx:id="welcome" layoutX="17.0" layoutY="91.0" prefHeight="37.0" prefWidth="583.0" text="We are proud of you!" textFill="WHITE">
+      <Label fx:id="welcome" layoutX="382.0" layoutY="79.0" prefHeight="37.0" prefWidth="583.0" text="We are proud of you!" textFill="WHITE">
          <font>
             <Font name="Kristen ITC" size="18.0" />
          </font>
@@ -38,7 +38,7 @@
             <Font size="17.0" />
          </font>
       </Button>
-      <Label fx:id="welcome1" layoutX="309.0" layoutY="36.0" onMouseClicked="#back_to_mainUser" prefHeight="46.0" prefWidth="522.0" text="Wow" textFill="WHITE">
+      <Label fx:id="welcome1" layoutX="356.0" layoutY="27.0" onMouseClicked="#back_to_mainUser" prefHeight="46.0" prefWidth="522.0" text="Wow" textFill="WHITE">
          <font>
             <Font size="35.0" />
          </font>

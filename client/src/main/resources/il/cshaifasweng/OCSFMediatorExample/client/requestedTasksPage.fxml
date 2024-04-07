@@ -23,7 +23,7 @@
       </ImageView>
       <ListView fx:id="requestedTaskList" layoutX="35.0" layoutY="145.0" onMouseClicked="#displayRequest" prefHeight="296.0" prefWidth="408.0" />
       <TextArea fx:id="RequestedTaskDetails" layoutX="469.0" layoutY="145.0" prefHeight="296.0" prefWidth="337.0" />
-      <Label fx:id="welcome" alignment="TOP_CENTER" contentDisplay="RIGHT" layoutX="168.0" layoutY="17.0" prefHeight="57.0" prefWidth="345.0" text="My Tasks ">
+      <Label fx:id="welcome" alignment="TOP_CENTER" contentDisplay="RIGHT" layoutX="272.0" layoutY="19.0" prefHeight="57.0" prefWidth="345.0" text="My Tasks ">
          <font>
             <Font name="Simplified Arabic Fixed" size="37.0" />
          </font>
