@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 
@@ -78,6 +79,7 @@ public class EmergencyController {
                    throw new RuntimeException(e);
                }
            });
+           EventBus.getDefault().unregister(this);
        }
 
     }

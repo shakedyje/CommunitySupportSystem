@@ -16,16 +16,16 @@
             <Image url="@OAK40C0988.jpg" />
          </image>
       </ImageView>
-      <Button fx:id="back" layoutY="-3.0" mnemonicParsing="false" onAction="#back_to_mainUser" prefHeight="37.0" prefWidth="81.0" text="BACK">
+      <Button fx:id="back" mnemonicParsing="false" onAction="#back_to_mainUser" prefHeight="24.0" prefWidth="63.0" text="Back">
          <font>
-            <Font name="Kristen ITC" size="12.0" />
+            <Font size="16.0" />
          </font>
       </Button>
       <ListView fx:id="listviewInProcess" layoutX="17.0" layoutY="131.0" onMouseClicked="#display" prefHeight="314.0" prefWidth="433.0" />
       <TextArea fx:id="show" layoutX="498.0" layoutY="141.0" prefHeight="211.0" prefWidth="351.0" />
-      <Label fx:id="welcome" layoutX="23.0" layoutY="83.0" prefHeight="37.0" prefWidth="583.0" text=" good job on completing your volunteer task! " textFill="WHITE">
+      <Label fx:id="welcome" layoutX="17.0" layoutY="91.0" prefHeight="37.0" prefWidth="583.0" text="We are proud of you!" textFill="WHITE">
          <font>
-            <Font name="Andalus" size="23.0" />
+            <Font name="Kristen ITC" size="18.0" />
          </font>
       </Label>
       <ImageView fitHeight="158.0" fitWidth="193.0" layoutX="606.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
@@ -38,15 +38,20 @@
             <Font size="17.0" />
          </font>
       </Button>
-      <Label fx:id="welcome1" layoutX="23.0" layoutY="48.0" prefHeight="46.0" prefWidth="522.0" text="Wow" textFill="WHITE">
+      <Label fx:id="welcome1" layoutX="309.0" layoutY="36.0" onMouseClicked="#back_to_mainUser" prefHeight="46.0" prefWidth="522.0" text="Wow" textFill="WHITE">
          <font>
-            <Font name="Comic Sans MS" size="32.0" />
+            <Font size="35.0" />
          </font>
       </Label>
-      <Button fx:id="Emergency_btn" layoutX="-2.0" layoutY="479.0" mnemonicParsing="false" onAction="#switchToemergency" prefHeight="46.0" prefWidth="886.0" text="Emergency Button">
+      <Button fx:id="Emergency_btn" layoutX="-2.0" layoutY="479.0" mnemonicParsing="false" onAction="#switchToemergency" prefHeight="46.0" prefWidth="886.0" text="Emergency Button" textFill="#e20a0a">
          <font>
-            <Font name="Leelawadee UI Semilight" size="17.0" />
+            <Font name="Arial Bold" size="23.0" />
          </font>
       </Button>
+      <ImageView fitHeight="81.0" fitWidth="31.0" layoutX="507.0" layoutY="372.0" onMouseClicked="#task_completed" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@pngwing.com%20(4).png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

@@ -16,7 +16,6 @@ il\cshaifasweng\OCSFMediatorExample\client\show_new_task_Controller.class
 il\cshaifasweng\OCSFMediatorExample\client\ShowRequestedTasksPage.class
 il\cshaifasweng\OCSFMediatorExample\client\UserTasksController.class
 il\cshaifasweng\OCSFMediatorExample\client\UsersNotificationEvent.class
-il\cshaifasweng\OCSFMediatorExample\client\UnknownUserClient.class
 il\cshaifasweng\OCSFMediatorExample\client\UserTasksDisplayEvent.class
 il\cshaifasweng\OCSFMediatorExample\client\NewVerifiedInformationEvent.class
 il\cshaifasweng\OCSFMediatorExample\client\show_emergencyCall$1.class

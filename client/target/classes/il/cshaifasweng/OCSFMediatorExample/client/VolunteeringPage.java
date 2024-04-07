@@ -26,6 +26,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static il.cshaifasweng.OCSFMediatorExample.client.SimpleChatClient.setRoot;
+import static il.cshaifasweng.OCSFMediatorExample.client.UserClient.getLoggedInUser;
 
 
 public class VolunteeringPage {
@@ -194,6 +195,8 @@ public class VolunteeringPage {
                 throw new RuntimeException(e);
             }
         });
+        EventBus.getDefault().unregister(this);
+
 
     }
 
@@ -241,6 +244,7 @@ public class VolunteeringPage {
                 throw new RuntimeException(e);
             }
         });
+        EventBus.getDefault().unregister(this);
     }
 
 }

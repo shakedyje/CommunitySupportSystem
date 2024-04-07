@@ -285,7 +285,6 @@ public class MainController {
     void initialize() throws IOException {
         System.out.println("initialized main controller");
         EventBus.getDefault().register(this);
-//        UnknownUserClient.getClient().openConnection();
         msgId = 0;
         try {
             UserClient.getClient().sendToServer("deadline check");

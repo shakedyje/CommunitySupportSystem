@@ -45,24 +45,24 @@
             <Font name="Kristen ITC" size="24.0" />
          </font>
       </Label>
-      <Label fx:id="donenotdone" alignment="TOP_CENTER" layoutX="168.0" layoutY="12.0" prefHeight="44.0" prefWidth="649.0" text="Maria's Tasks">
+      <Label fx:id="donenotdone" alignment="TOP_CENTER" layoutX="168.0" layoutY="27.0" prefHeight="44.0" prefWidth="649.0" text="Maria's Tasks">
          <font>
             <Font name="Andalus" size="36.0" />
          </font>
       </Label>
-      <Button fx:id="Backbtn" layoutY="1.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="84.0" text="BACK">
+      <Button fx:id="Backbtn" layoutY="1.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="73.0" text="Back">
          <font>
-            <Font name="Kristen ITC" size="14.0" />
+            <Font size="16.0" />
          </font>
       </Button>
       <Button fx:id="emmergencyBtn" layoutY="559.0" mnemonicParsing="false" onAction="#switchToemergency" prefHeight="44.0" prefWidth="984.0" text="Emergency Button" textFill="#e10a0a">
          <font>
-            <Font name="System Bold" size="18.0" />
+            <Font name="Arial Bold" size="23.0" />
          </font>
       </Button>
       <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="784.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@image-removebg-preview%20(1).png" />
+            <Image url="@image-removebg-preview (1).png" />
          </image>
       </ImageView>
    </children>

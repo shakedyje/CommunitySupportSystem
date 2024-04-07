@@ -20,14 +20,14 @@
                   <Image url="@OAK40C01.jpg" />
                </image>
             </ImageView>
-            <Label layoutX="194.0" layoutY="30.0" prefHeight="56.0" prefWidth="529.0" text="Fill The New Task Form" textAlignment="CENTER">
+            <Label layoutX="228.0" layoutY="42.0" prefHeight="56.0" prefWidth="529.0" text="Fill The New Task Form" textAlignment="CENTER">
                <font>
-                  <Font name="Simplified Arabic Fixed" size="31.0" />
+                  <Font size="35.0" />
                </font>
             </Label>
-            <Label layoutX="152.0" layoutY="178.0" prefHeight="44.0" prefWidth="613.0" text="Write here the details about the task, such as exact location or special requests.">
+            <Label layoutX="138.0" layoutY="178.0" prefHeight="44.0" prefWidth="613.0" text="Write here the details about the task, such as exact location or special requests">
                <font>
-                  <Font name="System Bold" size="15.0" />
+                  <Font name="Kristen ITC" size="15.0" />
                </font>
             </Label>
             <TextArea fx:id="detailsTxt" layoutX="53.0" layoutY="222.0" prefHeight="180.0" prefWidth="712.0" promptText="e.g:  &quot;I prefer manual car wash technology&quot;, &quot;Ride destination: Haifa Center&quot; ">
@@ -40,21 +40,27 @@
                <font>
                   <Font name="Traditional Arabic" size="17.0" />
                </font></Button>
-            <Button fx:id="back_button" layoutY="-1.0" mnemonicParsing="false" onAction="#back" prefHeight="38.0" prefWidth="85.0" text="BACK">
+            <Button fx:id="back_button" layoutY="-1.0" mnemonicParsing="false" onAction="#back" prefHeight="31.0" prefWidth="74.0" text="Back">
                <font>
-                  <Font name="System Bold" size="15.0" />
+                  <Font size="15.0" />
                </font>
             </Button>
             <ImageView fitHeight="110.0" fitWidth="190.0" layoutX="626.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@image-removebg-preview%20(1).png" />
+                  <Image url="@image-removebg-preview (1).png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fitHeight="38.0" fitWidth="25.0" layoutX="328.0" layoutY="417.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@pngwing.com%20(3).png" />
                </image>
             </ImageView>
          </children>
       </AnchorPane>
-      <Button fx:id="Emergency_btn" mnemonicParsing="false" onAction="#switchToemergency" prefHeight="38.0" prefWidth="822.0" text="Emergency Button">
+      <Button fx:id="Emergency_btn" mnemonicParsing="false" onAction="#switchToemergency" prefHeight="38.0" prefWidth="822.0" text="Emergency Button" textFill="#dd1212">
          <font>
-            <Font name="Leelawadee UI Semilight" size="17.0" />
+            <Font name="Arial Bold" size="23.0" />
          </font>
       </Button>
    </children>

@@ -32,6 +32,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.io.IOException;
 
 import static il.cshaifasweng.OCSFMediatorExample.client.SimpleChatClient.setRoot;
+import static il.cshaifasweng.OCSFMediatorExample.client.UserClient.getLoggedInUser;
 
 public class ShowRequestedTasksPage {
 
@@ -150,6 +151,8 @@ public class ShowRequestedTasksPage {
                 throw new RuntimeException(e);
             }
         });
+        EventBus.getDefault().unregister(this);
+
 
     }
 
@@ -188,11 +191,11 @@ public class ShowRequestedTasksPage {
         }
 
     }
-//    @Subscribe
-//    public void TaskNotification(UsersNotificationEvent event)
-//    {
-//        PostNotifications.getInstance().TaskNotification(event);
-//    }
+    @Subscribe
+    public void TaskNotification(UsersNotificationEvent event)
+    {
+        PostNotifications.getInstance().TaskNotification(event);
+    }
 
     public void switchToemergency(ActionEvent actionEvent)
     {
@@ -204,6 +207,7 @@ public class ShowRequestedTasksPage {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+            EventBus.getDefault().unregister(this);
         });
 
     }

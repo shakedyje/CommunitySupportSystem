@@ -59,9 +59,9 @@
                 </AnchorPane>
             </children>
         </AnchorPane>
-        <Button fx:id="Emergency_btn" mnemonicParsing="false" onAction="#switchToemergency" prefHeight="45.0" prefWidth="820.0" text="Emergency Button">
+        <Button fx:id="Emergency_btn" mnemonicParsing="false" onAction="#switchToemergency" prefHeight="45.0" prefWidth="820.0" text="Emergency Button" textFill="#e60909">
             <font>
-                <Font name="Leelawadee UI Semilight" size="17.0" />
+                <Font name="Arial Bold" size="17.0" />
             </font>
             <VBox.margin>
                 <Insets />

@@ -38,7 +38,7 @@ public class UserMainController {
     private static Stage appStage;
     @FXML
     private Button LogOutBtn;
-    boolean notified= false;
+
 
 
     @FXML
@@ -50,10 +50,11 @@ public class UserMainController {
         System.out.println("Logout message sent to server");
         UserClient.setLoggedInUser(null);
         ManagerClient.setManagerClient(null);
+        PostNotifications.notified = false;
 
         Platform.runLater(() -> {
             try {
-               setRoot("log_in");
+                setRoot("log_in");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -62,65 +63,21 @@ public class UserMainController {
         System.out.println("back from platfrom");
 
 
-
-
-
     }
-//    @FXML
-//    void LOG_OUT(ActionEvent event) throws IOException {
-////        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-////        currentStage.close();
-////        ManagerClient.getClient().closeConnection();
-//        Message message = new Message("log out user", UserClient.getLoggedInUser().getUsername());
-//        UserClient userClient = UserClient.getClient();
-//        System.out.println("i will enter");
-//        userClient.sendToServer(message);
-//        System.out.println("Logout message sent to server");
-//        UserClient.setLoggedInUser(null);
-////        UnknownUserClient.getClient().openConnection();
-//        Platform.runLater(() -> {
-//            try {
-//                cleanup();
-//                setRoot("log_in");
-////                UnknownUserClient.getClient().openConnection();
-////                UserClient.getClient().closeConnection();
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//        });
-//        System.out.println("back from platfrom");
-////        cleanup();
-//
-////        UserClient.getClient().sendToServer(new LogInOutMessage(getLoggedInUser(), "log out")); //add to logged-in users list
-////
-////        Platform.runLater(() -> {
-////            try {
-////                setRoot("log_in");
-////            } catch (IOException e) {
-////                throw new RuntimeException(e);
-////            }
-////        });
-//    }
-
     @Subscribe
     public void TaskNotification(UsersNotificationEvent event)
     {
         Platform.runLater(() -> {
             PostNotifications.getInstance().TaskNotification(event);
         });
+        if (PostNotifications.unregeister)
+        {
+            System.out.println("got inside");
+            EventBus.getDefault().unregister(this);
+            System.out.println("unregistered");
+        }
     }
 
-
-    public void cleanup() {
-        // Unregister from the event bus during cleanup
-        System.out.println("cleaned");
-        EventBus.getDefault().unregister(this);
-        System.out.println("999999999999999999999999999");
-    }
-
-//    public void setAppStage(Stage appStage) {
-//        this.appStage = appStage;
-//    }
 
     @FXML
     private void initialize() {
@@ -141,7 +98,7 @@ public class UserMainController {
         welcome_label.setAlignment(Pos.CENTER);
 
         try {
-          //  MessageOfStatus message = new MessageOfStatus("add user client", SaveUserName);
+            //  MessageOfStatus message = new MessageOfStatus("add user client", SaveUserName);
             Message message3 = new Message("add user client", UserClient.getLoggedInUser().getUsername());
             UserClient.getClient().sendToServer(message3);
 //           UserClient.getClient().sendToServer(new LogInOutMessage(getLoggedInUser(), "log in"));
@@ -155,7 +112,8 @@ public class UserMainController {
     void switchToemergency(ActionEvent event) {
         Platform.runLater(() -> {
             try {
-                UserClient.setLast_fxml("user_main");
+//                cleanup();
+                UserClient.setLast_fxml("user main");
                 setRoot("Emergency");
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -169,8 +127,8 @@ public class UserMainController {
     void switchToNewTask(ActionEvent event) throws IOException {
         Platform.runLater(() -> {
             try {
-                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                stage.close();
+//                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+//                stage.close();
 //                cleanup();
                 setRoot("new_task");
             } catch (IOException e) {

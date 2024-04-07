@@ -64,6 +64,7 @@ public class MembersController {
                 throw new RuntimeException(e);
             }
         });
+        EventBus.getDefault().unregister(this);
     }
     @FXML
     public void initialize() throws IOException {
@@ -98,11 +99,14 @@ public class MembersController {
 //        currentStage.close();
             Platform.runLater(() -> {
                 try {
+//                    ManagerClient.setLast_fxml("manager main");
                     setRoot("manager_main");
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
             });
+        EventBus.getDefault().unregister(this);
+
     }
 
 

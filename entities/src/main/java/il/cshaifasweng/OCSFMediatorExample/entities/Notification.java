@@ -46,10 +46,11 @@ public class Notification implements Serializable {
         this.addressee = addressee;
     }
 
-    public Notification(String notification, Registered_user addressee, Task task) {
+    public Notification(String notification, Registered_user addressee,Registered_user userInvolved, Task task) {
         this.notification = notification;
         this.addressee = addressee;
         this.taskInvolved=task;
+        this.userInvolved=userInvolved;
     }
 
     public Notification(String notification, Registered_user addressee, Registered_user userInvolved) {

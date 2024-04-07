@@ -93,6 +93,8 @@ public class show_emergencyCall {
                 throw new RuntimeException(e);
             }
         });
+        EventBus.getDefault().unregister(this);
+
     }
 
 
@@ -115,6 +117,7 @@ public class show_emergencyCall {
 
         updateListOfCalls();
         // updateChartData();
+
     }
 
     @Subscribe

@@ -162,11 +162,11 @@ public class UserTasksController {
         });
     }
 
-    //    @Subscribe
-//    public void TaskNotification(UsersNotificationEvent event)
-//    {
-//        PostNotifications.getInstance().TaskNotification(event);
-//    }
+        @Subscribe
+    public void TaskNotification(UsersNotificationEvent event)
+    {
+        PostNotifications.getInstance().TaskNotification(event);
+    }
 
     @FXML
     void BackToMembers(ActionEvent event) {
@@ -180,6 +180,8 @@ public class UserTasksController {
                         throw new RuntimeException(e);
                     }
                 });
+        EventBus.getDefault().unregister(this);
+
     }
 
 }

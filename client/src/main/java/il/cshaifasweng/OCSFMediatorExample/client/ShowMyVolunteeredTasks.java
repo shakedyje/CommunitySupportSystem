@@ -61,13 +61,14 @@ public class ShowMyVolunteeredTasks {
                 throw new RuntimeException(e);
             }
         });
+        EventBus.getDefault().unregister(this);
 
     }
-//    @Subscribe
-//    public void TaskNotification(UsersNotificationEvent event)
-//    {
-//        PostNotifications.getInstance().TaskNotification(event);
-//    }
+    @Subscribe
+    public void TaskNotification(UsersNotificationEvent event)
+    {
+        PostNotifications.getInstance().TaskNotification(event);
+    }
 
     @FXML
     void display(MouseEvent event) {
@@ -95,18 +96,6 @@ public class ShowMyVolunteeredTasks {
             });
         }
 
-
-    }
-
-    @FXML
-    void switch_to_emergency(ActionEvent event) {
-        Platform.runLater(() -> {
-            try {
-                setRoot("Emergency");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
 
     }
 
@@ -253,6 +242,8 @@ public class ShowMyVolunteeredTasks {
                 throw new RuntimeException(e);
             }
         });
+        EventBus.getDefault().unregister(this);
+
 
     }
 }

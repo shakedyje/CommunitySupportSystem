@@ -677,12 +677,12 @@ public class SimpleServer extends AbstractServer {
 
             tx2 = session.beginTransaction();
             // HQL query to select tasks with status other than "Completed" or "Not Completed" and deadline smaller than today
-            String sqlQuery = "SELECT * FROM Task " +
-                    "WHERE Status = 'In Process' AND Volunteer = :user " +
+            String sqlQuery = "SELECT * FROM Tasks " +
+                    "WHERE Status = 'In Process' AND volunteer_id = :user " +
                     "AND TIMESTAMPDIFF(MINUTE, completiontime, :currentTime) >= 1";
 
             SQLQuery<Task> query = session.createSQLQuery(sqlQuery);
-            query.setParameter("user", user);
+            query.setParameter("user", user.getId());
             query.setParameter("currentTime", currentTime);
             query.addEntity(Task.class);
             // Execute the query
@@ -693,6 +693,7 @@ public class SimpleServer extends AbstractServer {
             if (inProcess.isEmpty()) {
                 return null;
             }
+            System.out.println("in process not null");
             return inProcess;
         }
         // Save the changes by committing the transaction
@@ -1216,6 +1217,13 @@ public class SimpleServer extends AbstractServer {
                             addressee.sendToClient(new Notification("Task Accepted", openedBy));
                         }
                         client.sendToClient(message2);
+
+                        DisplayDataMessage datarequest = new DisplayDataMessage(openedBy, "uploaded");
+                        updateUserTasks(datarequest);
+                        ConnectionToClient connection= findManagerConnectionbyCommunity(openedBy.getCommunity());
+                        if (connection!=null)
+                        {connection.sendToClient(datarequest);}
+                        System.out.println("no problem in here");
                     }
                 } catch (RuntimeException e) {
                     if (tx2 != null) tx2.rollback();
@@ -1257,6 +1265,13 @@ public class SimpleServer extends AbstractServer {
                         client.sendToClient(message2);
                         tx2.commit();
                         System.out.println("send to manager client");
+
+                        DisplayDataMessage datarequest = new DisplayDataMessage(openedBy, "uploaded");
+                        updateUserTasks(datarequest);
+                        ConnectionToClient connection= findManagerConnectionbyCommunity(openedBy.getCommunity());
+                        if (connection!=null)
+                        {connection.sendToClient(datarequest);}
+                        System.out.println("no problem in here");
                     }
                 } catch (RuntimeException e) {
                     if (tx2 != null) tx2.rollback();
@@ -1295,6 +1310,14 @@ public class SimpleServer extends AbstractServer {
                         ConnectionToClient connection= findManagerConnectionbyCommunity(task.getVolunteer().getCommunity());
                         if (connection!=null){connection.sendToClient(datarequest);}
                         client.sendToClient(message2);
+
+                        DisplayDataMessage datarequest_u = new DisplayDataMessage(task.getRegistered_user(), "uploaded");
+                        updateUserTasks(datarequest_u);
+
+                        ConnectionToClient connection_u= findManagerConnectionbyCommunity(task.getRegistered_user().getCommunity());
+                        if (connection_u!=null)
+                        {connection_u.sendToClient(datarequest_u);}
+                        System.out.println("no problem in here");
                         tx2.commit();
                     }
                 } catch (RuntimeException e) {
@@ -1331,7 +1354,7 @@ public class SimpleServer extends AbstractServer {
                         ConnectionToClient connection= findUserConnectionbyUser(openby);
                         if(connection!=null)
                         {
-                            connection.sendToClient(new Notification("Volunteer Found", openby, user));
+                            connection.sendToClient(new Notification("Volunteer Found", openby, user, task));
                         }
                         listviewForUserRequestedTasks(task.getRegistered_user().getUsername());
                         listviewForUserTOVolunteer(task.getRegistered_user().getUsername());
@@ -1340,6 +1363,13 @@ public class SimpleServer extends AbstractServer {
                         client.sendToClient(message2);
                         tx2.commit();
                         System.out.println("send to manager client");
+
+                        DisplayDataMessage datarequest = new DisplayDataMessage(openby, "uploaded");
+                        updateUserTasks(datarequest);
+                        ConnectionToClient connection_u= findManagerConnectionbyCommunity(openby.getCommunity());
+                        if (connection_u!=null)
+                        {connection_u.sendToClient(datarequest);}
+                        System.out.println("no problem in here");
                     }
                 } catch (RuntimeException e) {
                     if (tx2 != null) tx2.rollback();

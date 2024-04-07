@@ -6,6 +6,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
+import il.cshaifasweng.OCSFMediatorExample.entities.Message;
 import il.cshaifasweng.OCSFMediatorExample.entities.NewTaskMessage;
 import il.cshaifasweng.OCSFMediatorExample.entities.TaskType;
 import javafx.application.Platform;
@@ -19,6 +20,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import static il.cshaifasweng.OCSFMediatorExample.client.SimpleChatClient.setRoot;
+import static il.cshaifasweng.OCSFMediatorExample.client.UserClient.getLoggedInUser;
 
 public class NewTaskController {
 
@@ -36,17 +38,13 @@ public class NewTaskController {
     @FXML
     private ComboBox<TaskType> taskTypeComboBox;
 
-//    @Subscribe
-//    public void TaskNotification(UsersNotificationEvent event)
-//    {
-//        PostNotifications.getInstance().TaskNotification(event);
-//    }
+    @Subscribe
+    public void TaskNotification(UsersNotificationEvent event)
+    {
+        System.out.println("post in newTask");
+        PostNotifications.getInstance().TaskNotification(event);
+    }
 
-//    @Subscribe
-//    public void TaskNotification(UsersNotificationEvent event)
-//    {
-//        PostNotifications.getInstance().TaskNotification(event);
-//    }
 
     @FXML
     private void check_confirm_display_task() throws IOException {
@@ -162,8 +160,9 @@ public class NewTaskController {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            EventBus.getDefault().unregister(this);
         });
+            EventBus.getDefault().unregister(this);
+
 
 
     }
