@@ -153,6 +153,7 @@ public class MembersController {
                 throw new RuntimeException(e);
             }
         });
+        EventBus.getDefault().unregister(this);
     }
 
     public void populateTableM(ObservableList<Registered_user> users) {

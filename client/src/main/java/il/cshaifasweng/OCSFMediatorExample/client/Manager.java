@@ -258,9 +258,6 @@ public class Manager  {
             }
  });
         cleanup();
-
-
-
     }
 
     @FXML
@@ -318,17 +315,6 @@ public class Manager  {
             });
         cleanup();
     }
-
-    @FXML
-    void ShowTasks(ActionEvent event) {
-
-    }
-
-    @FXML
-    void WriteReason(ActionEvent event) {
-
-    }
-
 
 
     //ObservableList<Task> observableTasks = FXCollections.observableArrayList();
