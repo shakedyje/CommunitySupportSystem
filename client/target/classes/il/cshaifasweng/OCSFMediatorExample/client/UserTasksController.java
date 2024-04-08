@@ -127,6 +127,19 @@ public class UserTasksController {
     }
 
     @Subscribe
+    public void TaskNotification(UsersNotificationEvent event)
+    {
+        Platform.runLater(() -> {
+            PostNotifications.getInstance().TaskNotification(event);
+        });
+        if (PostNotifications.unregeister)
+        {
+            System.out.println("got inside");
+            EventBus.getDefault().unregister(this);
+            System.out.println("unregistered");
+        }
+    }
+    @Subscribe
     public void displayTasks(UserTasksDisplayEvent event) {
         Platform.runLater(() -> {
             try {
@@ -162,11 +175,6 @@ public class UserTasksController {
         });
     }
 
-        @Subscribe
-    public void TaskNotification(UsersNotificationEvent event)
-    {
-        PostNotifications.getInstance().TaskNotification(event);
-    }
 
     @FXML
     void BackToMembers(ActionEvent event) {

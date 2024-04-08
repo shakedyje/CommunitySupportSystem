@@ -33,7 +33,7 @@
             <Font size="16.0" />
          </font>
       </Button>
-      <Label fx:id="welcome" layoutX="11.0" layoutY="56.0" prefHeight="127.0" prefWidth="506.0" text="Choose which task you would like to volunteer for" textFill="WHITE">
+      <Label fx:id="welcome" layoutX="11.0" layoutY="56.0" prefHeight="88.0" prefWidth="506.0" text="Choose which task you would like to volunteer for" textFill="WHITE">
          <font>
             <Font name="Kristen ITC" size="19.0" />
          </font>

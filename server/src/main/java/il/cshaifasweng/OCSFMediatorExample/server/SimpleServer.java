@@ -28,7 +28,7 @@ public class SimpleServer extends AbstractServer {
     private static ArrayList<SubscribedClient> SubscribersList = new ArrayList<>();
 
     private List<ConnectionToClient> managerClients = new ArrayList<>(); // Maintain a list of manager clients
-    private List<ConnectionToClient>AllmanagerClients = new ArrayList<>(); // Maintain a list of manager clients
+    private List<ConnectionToClient> AllmanagerClients = new ArrayList<>(); // Maintain a list of manager clients
 
     private List<ConnectionToClient> userClients = new ArrayList<>();
     private List<String> usernames = new ArrayList<>();
@@ -74,43 +74,37 @@ public class SimpleServer extends AbstractServer {
     }
 
 
-    ConnectionToClient findManagerConnectionbyUser(Registered_user manager)
-    {
+    ConnectionToClient findManagerConnectionbyUser(Registered_user manager) {
         String username = manager.getUsername();
-        int index=-1, i=0;
-        for (String managerUserName : usernamesformanager)
-        {
-            if(managerUserName.equals(username))
-            {
-                index=i;
+        int index = -1, i = 0;
+        for (String managerUserName : usernamesformanager) {
+            if (managerUserName.equals(username)) {
+                index = i;
             }
             i++;
         }
-        if (index>-1) {
+        if (index > -1) {
             return managerClients.get(index);
         }
         return null;
     }
 
-    ConnectionToClient findUserConnectionbyUser(Registered_user user)
-    {
+    ConnectionToClient findUserConnectionbyUser(Registered_user user) {
         String username = user.getUsername();
-        int index=-1, i=0;
-        for (String UserName : usernames)
-        {
-            if(UserName.equals(username))
-            {
-                index=i;
+        int index = -1, i = 0;
+        for (String UserName : usernames) {
+            if (UserName.equals(username)) {
+                index = i;
             }
             i++;
         }
-        if (index>-1) {
+        if (index > -1) {
             return userClients.get(index);
         }
         return null;
     }
 
-    ConnectionToClient findManagerConnectionbyCommunity(Communities community) {
+    Registered_user findManagerUserbyCommunity(Communities community) {
         SessionFactory sessionFactory = FactoryUtil.getSessionFactory();
         session = sessionFactory.openSession();
 
@@ -124,7 +118,24 @@ public class SimpleServer extends AbstractServer {
             Registered_user user = query.uniqueResult();
             System.out.println(user.getUsername());
             tx2.commit();
-            ConnectionToClient mc= findManagerConnectionbyUser(user);
+            return user;
+        } catch (Exception e) {
+            if (session != null && session.getTransaction() != null) {
+                session.getTransaction().rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return null;
+    }
+
+    ConnectionToClient findManagerConnectionbyCommunity(Communities community) {
+        try {
+            Registered_user user = findManagerUserbyCommunity(community);
+            ConnectionToClient mc = findManagerConnectionbyUser(user);
             return mc;
         } catch (Exception e) {
             if (session != null && session.getTransaction() != null) {
@@ -136,7 +147,7 @@ public class SimpleServer extends AbstractServer {
                 session.close();
             }
         }
-            return null;
+        return null;
     }
 
 
@@ -667,7 +678,8 @@ public class SimpleServer extends AbstractServer {
 
     }
 
-    private  List<Task> userInProcess(Registered_user user) {
+
+    private List<Task> userInProcess(Registered_user user) {
         System.out.println("doneCheck");
         LocalDateTime currentTime = LocalDateTime.now();
         Transaction tx2 = null;
@@ -708,9 +720,52 @@ public class SimpleServer extends AbstractServer {
                 session.close();
             }
         }
-        return  null;
+        return null;
     }
 
+    private List<Task> checkTasksWnoVolunteer(Registered_user user) {
+        System.out.println("no volunteer check");
+        LocalDateTime currentTime = LocalDateTime.now();
+        Transaction tx2 = null;
+        try {
+            SessionFactory sessionFactory = FactoryUtil.getSessionFactory();
+            session = sessionFactory.openSession();
+
+            tx2 = session.beginTransaction();
+            // HQL query to select tasks with status other than "Completed" or "Not Completed" and deadline smaller than today
+            String sqlQuery = "SELECT * FROM Tasks " +
+                    "WHERE Status = 'waiting for volunteer' AND registered_user_id != :user " +
+                    "AND TIMESTAMPDIFF(MINUTE, approvalTime, :currentTime) >= 1";
+
+            SQLQuery<Task> query = session.createSQLQuery(sqlQuery);
+            query.setParameter("user", user.getId());
+            query.setParameter("currentTime", currentTime);
+            query.addEntity(Task.class);
+            // Execute the query
+            List<Task> oldTasks = query.list();
+            tx2.commit();
+
+            // Check if the list is empty
+            if (oldTasks.isEmpty()) {
+                return null;
+            }
+            System.out.println("in process not null");
+            return oldTasks;
+        }
+        // Save the changes by committing the transaction
+        catch (Exception e) {
+            if (tx2 != null) {
+                tx2.rollback(); // Rollback the transaction in case of exception
+            }
+            e.printStackTrace(); // Handle the exception appropriately
+        } finally {
+            // Close the Hibernate session
+            if (session != null) {
+                session.close();
+            }
+        }
+        return null;
+    }
 
 
     private Communities getCommunity(Session session, String username) {
@@ -782,9 +837,7 @@ public class SimpleServer extends AbstractServer {
             if (request.equals("deadline check")) {
                 deadlineCheck();
             }
-        }
-
-        else if (msg instanceof DisplayDataMessage) {
+        } else if (msg instanceof DisplayDataMessage) {
             DisplayDataMessage datarequest = (DisplayDataMessage) msg;
             System.out.println("a");
 
@@ -858,9 +911,10 @@ public class SimpleServer extends AbstractServer {
                 listviewFromUser();
                 DisplayDataMessage datarequest = new DisplayDataMessage(ntm.getOpenby(), "uploaded");
                 updateUserTasks(datarequest);
-                ConnectionToClient connection= findManagerConnectionbyCommunity(ntm.getOpenby().getCommunity());
-                if (connection!=null)
-                    {connection.sendToClient(datarequest);}
+                ConnectionToClient connection = findManagerConnectionbyCommunity(ntm.getOpenby().getCommunity());
+                if (connection != null) {
+                    connection.sendToClient(datarequest);
+                }
             } catch (Exception exception) {
                 if (session != null) {
                     session.getTransaction().rollback();
@@ -895,9 +949,9 @@ public class SimpleServer extends AbstractServer {
                 Emergency_call temp = new Emergency_call(ntm.getGiven_name(), ntm.getPhone_number(), ntm.getOpenby1(), ntm.getHost());
                 session.save(temp);
                 session.getTransaction().commit();
-                int i=1;
+                int i = 1;
                 for (ConnectionToClient manager : AllmanagerClients) {
-                    System.out.println("manager number : "+ i++);
+                    System.out.println("manager number : " + i++);
                     listOfEmergency(manager);
                 }
                 System.out.println("successsssssdddddddddddddddddddddddddddddddddddddddddd");
@@ -1162,12 +1216,10 @@ public class SimpleServer extends AbstractServer {
                 System.out.println("+++++++++++++++++" + username3);
                 System.out.println("the client is :888888888" + client);
                 addUserClient(client, username3);
-            }
-            else if (((Message) msg).getMessage().equals("completed?")) {
-                Message message = (Message)msg;
-                List<Task> tasksToComplete= userInProcess(((Message) message).getUser());
-                if(tasksToComplete!=null)
-                {
+            } else if (((Message) msg).getMessage().equals("completed?")) {
+                Message message = (Message) msg;
+                List<Task> tasksToComplete = userInProcess(((Message) message).getUser());
+                if (tasksToComplete != null) {
                     try {
                         client.sendToClient(new Notification("Completed?", message.getUser()));
                     } catch (IOException ex) {
@@ -1175,247 +1227,270 @@ public class SimpleServer extends AbstractServer {
                     }
 
                 }
+            } else if (((Message) msg).getMessage().equals("go volunteer")) {
+                System.out.println("in go volunteer server");
+                Message message = (Message) msg;
+                List<Task> noVolunteerTasks24hrs = checkTasksWnoVolunteer(((Message) message).getUser());
+                if (noVolunteerTasks24hrs != null) {
+                    try {
+                        client.sendToClient(new Notification("Go Volunteer", message.getUser()));
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    System.out.println("no problem in here GV");
+
+                }
+            }
+        }
+            try {
+                if (request.isBlank()) {
+                    System.out.println("heyyy");
+                } else if (request.equals("ShowEmergency")) {
+                    listOfEmergency(client);
+                } else if (request.equals("accept")) {
+                    System.out.println("in accept");
+                    int id = myTask.getId();
+
+                    SessionFactory sessionFactory = FactoryUtil.getSessionFactory();
+                    session = sessionFactory.openSession();
+
+                    Transaction tx2 = null;
+                    try {
+                        tx2 = session.beginTransaction();
+
+                        // Perform operations with the second session
+                        System.out.println("in try accept");
+                        Task task = session.get(Task.class, id);
+
+                        // Check if the entity exists
+                        if (task != null) {
+                            // Modify the properties of the entity
+                            task.setStatus("waiting for volunteer");
+                            task.setApprovalTime(LocalDateTime.now());
+                            System.out.println("looking for volunteer");
+
+                            // Save the changes by committing the transaction
+                            tx2.commit();
+                            System.out.println("ppppppppppppppppppppppppppppppppppppppppppppppppppp" + task.getRegistered_user().getUsername());
+                            listviewForUserTOVolunteer(task.getRegistered_user().getUsername());
+                            listviewForUserRequestedTasks();
+                            MessageOfStatus message2 = new MessageOfStatus(task, "task accepted");
+                            Registered_user openedBy = task.getRegistered_user();
+                            ConnectionToClient addressee = findUserConnectionbyUser(openedBy);
+                            if (addressee != null) {
+                                addressee.sendToClient(new Notification("Task Accepted", openedBy));
+                            }
+                            client.sendToClient(message2);
+
+                            DisplayDataMessage datarequest = new DisplayDataMessage(openedBy, "uploaded");
+                            updateUserTasks(datarequest);
+                            ConnectionToClient connection = findManagerConnectionbyCommunity(openedBy.getCommunity());
+                            if (connection != null) {
+                                connection.sendToClient(datarequest);
+                            }
+                            System.out.println("no problem in here");
+                        }
+                    } catch (RuntimeException e) {
+                        if (tx2 != null) tx2.rollback();
+                        throw e;
+                    } finally {
+                        session.close(); // Close the second session
+                    }
+                } else if (request.startsWith("reject")) {
+                    System.out.println("in reject");
+                    int id = myTask.getId();
+
+                    SessionFactory sessionFactory = FactoryUtil.getSessionFactory();
+                    session = sessionFactory.openSession();
+
+                    Transaction tx2 = null;
+                    try {
+                        tx2 = session.beginTransaction();
+
+                        // Perform operations with the second session
+                        System.out.println("in try reject");
+                        Task task = session.get(Task.class, id);
+
+                        // Check if the entity exists
+                        if (task != null) {
+                            // Modify the properties of the entity
+                            task.setStatus(request);
+                            System.out.println("rejected");
+
+                            // Save the changes by committing the transaction
+                            tx2.commit();
+                            Registered_user openedBy = myTask.getRegistered_user();
+                            listviewForUserRequestedTasks();
+                            MessageOfStatus message2 = new MessageOfStatus(task, "task rejected");
+                            ConnectionToClient addressee = findUserConnectionbyUser(openedBy);
+                            if (addressee != null) {
+                                addressee.sendToClient(new Notification("Task Rejected", openedBy));
+                            }
+                            // Echo back the received message to the client
+                            client.sendToClient(message2);
+                            tx2.commit();
+                            System.out.println("send to manager client");
+
+                            DisplayDataMessage datarequest = new DisplayDataMessage(openedBy, "uploaded");
+                            updateUserTasks(datarequest);
+                            ConnectionToClient connection = findManagerConnectionbyCommunity(openedBy.getCommunity());
+                            if (connection != null) {
+                                connection.sendToClient(datarequest);
+                            }
+                            System.out.println("no problem in here");
+                        }
+                    } catch (RuntimeException e) {
+                        if (tx2 != null) tx2.rollback();
+                        throw e;
+                    } finally {
+                        session.close(); // Close the second session
+                    }
+
+                } else if (request.equals("volunteering completed")) {
+                    System.out.println("in volunteering completedddddddddddddddddddddddddd =================");
+                    int id = myTask.getId();
+                    String username10 = ((MessageOfStatus) msg).getUsername();
+                    System.out.println("try volunteer username" + username10);
+                    SessionFactory sessionFactory = FactoryUtil.getSessionFactory();
+                    session = sessionFactory.openSession();
+
+                    Transaction tx2 = null;
+                    try {
+                        tx2 = session.beginTransaction();
+
+                        // Perform operations with the second session
+                        System.out.println("in try volunteering completed");
+                        Task task = session.get(Task.class, id);
+                        Registered_user user = getUsernameId(session, username10);
+                        System.out.println("succesed ------------" + user.getId());
+                        // Check if the entity exists
+                        if (task != null) {
+                            // Modify the properties of the entity
+                            task.setStatus("Completed");
+                            task.setCompletiontime(LocalDateTime.now());
+                            tx2.commit();
+                            listviewForUserRequestedTasks(task.getRegistered_user().getUsername());
+                            MessageOfStatus message2 = new MessageOfStatus(task, "volunteering done");
+                            DisplayDataMessage datarequest = new DisplayDataMessage(task.getVolunteer(), "performed");
+                            updateUserTasks_done(datarequest);
+                            ConnectionToClient connection = findManagerConnectionbyCommunity(task.getVolunteer().getCommunity());
+                            if (connection != null) {
+                                connection.sendToClient(datarequest);
+                            }
+                            client.sendToClient(message2);
+
+                            DisplayDataMessage datarequest_u = new DisplayDataMessage(task.getRegistered_user(), "uploaded");
+                            updateUserTasks(datarequest_u);
+                            Registered_user manager = findManagerUserbyCommunity(task.getRegistered_user().getCommunity());
+                            ConnectionToClient connection_m = findManagerConnectionbyCommunity(task.getRegistered_user().getCommunity());
+
+                            if (connection_m != null) {
+                                connection_m.sendToClient(datarequest_u);
+                                connection_m.sendToClient(new Notification("Task Completed", manager, task.getVolunteer(), task));
+                            }
+                            System.out.println("no problem in here");
+
+
+                            tx2.commit();
+                        }
+                    } catch (RuntimeException e) {
+                        if (tx2 != null) tx2.rollback();
+                        throw e;
+                    } finally {
+                        session.close(); // Close the second session
+                    }
+                } else if (request.equals("volunteering")) {
+                    System.out.println("in volunteering =================");
+                    int id = myTask.getId();
+                    String username10 = ((MessageOfStatus) msg).getUsername();
+                    System.out.println("try volunteer username" + username10);
+                    SessionFactory sessionFactory = FactoryUtil.getSessionFactory();
+                    session = sessionFactory.openSession();
+
+                    Transaction tx2 = null;
+                    try {
+                        tx2 = session.beginTransaction();
+
+                        // Perform operations with the second session
+                        System.out.println("in try volunteering");
+                        Task task = session.get(Task.class, id);
+                        Registered_user user = getUsernameId(session, username10);
+                        System.out.println("succesed ------------" + user.getId());
+                        // Check if the entity exists
+                        if (task != null) {
+                            // Modify the properties of the entity
+                            task.setStatus("In Process");
+                            task.setVolunteer(user);
+                            task.setCompletiontime(LocalDateTime.now());
+                            tx2.commit();
+                            Registered_user openby = task.getRegistered_user();
+                            ConnectionToClient connection = findUserConnectionbyUser(openby);
+                            if (connection != null) {
+                                connection.sendToClient(new Notification("Volunteer Found", openby, user, task));
+                            }
+                            listviewForUserRequestedTasks(task.getRegistered_user().getUsername());
+                            listviewForUserTOVolunteer(task.getRegistered_user().getUsername());
+                            MessageOfStatus message2 = new MessageOfStatus(task, "Thanks for volunteering");
+                            // Echo back the received message to the client
+                            client.sendToClient(message2);
+                            tx2.commit();
+                            System.out.println("send to manager client");
+
+                            DisplayDataMessage datarequest = new DisplayDataMessage(openby, "uploaded");
+                            updateUserTasks(datarequest);
+                            ConnectionToClient connection_u = findManagerConnectionbyCommunity(openby.getCommunity());
+                            if (connection_u != null) {
+                                connection_u.sendToClient(datarequest);
+                            }
+                            System.out.println("no problem in here");
+                        }
+                    } catch (RuntimeException e) {
+                        if (tx2 != null) tx2.rollback();
+                        throw e;
+                    } finally {
+                        session.close(); // Close the second session
+                    }
+
+
+                }
+
+            } catch (HibernateException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+    }
+
+
+        private void listOfEmergency (ConnectionToClient client) throws IOException {
+            System.out.println("in listOfEmergency");
+            SessionFactory sessionFactory = FactoryUtil.getSessionFactory();
+            session = sessionFactory.openSession();
+            System.out.println("11");
+            Transaction tx2 = null;
+            try {
+                tx2 = session.beginTransaction();
+                System.out.println("22");
+                List<Emergency_call> calls = getAllEmergency(session);
+                DisplayCalls dis = new DisplayCalls(calls);
+
+                client.sendToClient(dis);
+                tx2.commit();
+            } catch (RuntimeException e) {
+                if (tx2 != null) tx2.rollback();
+                throw e;
+            } finally {
+                session.close(); // Close the second session
             }
         }
 
-
-        try {
-            if (request.isBlank()) {
-                System.out.println("heyyy");
-            } else if (request.equals("ShowEmergency")) {
-                listOfEmergency(client);
-            } else if (request.equals("accept")) {
-                System.out.println("in accept");
-                int id = myTask.getId();
-
-                SessionFactory sessionFactory = FactoryUtil.getSessionFactory();
-                session = sessionFactory.openSession();
-
-                Transaction tx2 = null;
-                try {
-                    tx2 = session.beginTransaction();
-
-                    // Perform operations with the second session
-                    System.out.println("in try accept");
-                    Task task = session.get(Task.class, id);
-
-                    // Check if the entity exists
-                    if (task != null) {
-                        // Modify the properties of the entity
-                        task.setStatus("waiting for volunteer");
-                        System.out.println("looking for volunteer");
-
-                        // Save the changes by committing the transaction
-                        tx2.commit();
-                        System.out.println("ppppppppppppppppppppppppppppppppppppppppppppppppppp" + task.getRegistered_user().getUsername());
-                        listviewForUserTOVolunteer(task.getRegistered_user().getUsername());
-                        listviewForUserRequestedTasks();
-                        MessageOfStatus message2 = new MessageOfStatus(task, "task accepted");
-                        Registered_user openedBy = task.getRegistered_user();
-                        ConnectionToClient addressee = findUserConnectionbyUser(openedBy);
-                        if (addressee != null) {
-                            addressee.sendToClient(new Notification("Task Accepted", openedBy));
-                        }
-                        client.sendToClient(message2);
-
-                        DisplayDataMessage datarequest = new DisplayDataMessage(openedBy, "uploaded");
-                        updateUserTasks(datarequest);
-                        ConnectionToClient connection= findManagerConnectionbyCommunity(openedBy.getCommunity());
-                        if (connection!=null)
-                        {connection.sendToClient(datarequest);}
-                        System.out.println("no problem in here");
-                    }
-                } catch (RuntimeException e) {
-                    if (tx2 != null) tx2.rollback();
-                    throw e;
-                } finally {
-                    session.close(); // Close the second session
-                }
-            } else if (request.startsWith("reject")) {
-                System.out.println("in reject");
-                int id = myTask.getId();
-
-                SessionFactory sessionFactory = FactoryUtil.getSessionFactory();
-                session = sessionFactory.openSession();
-
-                Transaction tx2 = null;
-                try {
-                    tx2 = session.beginTransaction();
-
-                    // Perform operations with the second session
-                    System.out.println("in try reject");
-                    Task task = session.get(Task.class, id);
-
-                    // Check if the entity exists
-                    if (task != null) {
-                        // Modify the properties of the entity
-                        task.setStatus(request);
-                        System.out.println("rejected");
-
-                        // Save the changes by committing the transaction
-                        tx2.commit();
-                        Registered_user openedBy = myTask.getRegistered_user();
-                        listviewForUserRequestedTasks();
-                        MessageOfStatus message2 = new MessageOfStatus(task, "task rejected");
-                        ConnectionToClient addressee = findUserConnectionbyUser(openedBy);
-                        if (addressee != null) {
-                            addressee.sendToClient(new Notification("Task Rejected", openedBy));
-                        }
-                        // Echo back the received message to the client
-                        client.sendToClient(message2);
-                        tx2.commit();
-                        System.out.println("send to manager client");
-
-                        DisplayDataMessage datarequest = new DisplayDataMessage(openedBy, "uploaded");
-                        updateUserTasks(datarequest);
-                        ConnectionToClient connection= findManagerConnectionbyCommunity(openedBy.getCommunity());
-                        if (connection!=null)
-                        {connection.sendToClient(datarequest);}
-                        System.out.println("no problem in here");
-                    }
-                } catch (RuntimeException e) {
-                    if (tx2 != null) tx2.rollback();
-                    throw e;
-                } finally {
-                    session.close(); // Close the second session
-                }
-
-            } else if (request.equals("volunteering completed")) {
-                System.out.println("in volunteering completedddddddddddddddddddddddddd =================");
-                int id = myTask.getId();
-                String username10 = ((MessageOfStatus) msg).getUsername();
-                System.out.println("try volunteer username" + username10);
-                SessionFactory sessionFactory = FactoryUtil.getSessionFactory();
-                session = sessionFactory.openSession();
-
-                Transaction tx2 = null;
-                try {
-                    tx2 = session.beginTransaction();
-
-                    // Perform operations with the second session
-                    System.out.println("in try volunteering completed");
-                    Task task = session.get(Task.class, id);
-                    Registered_user user = getUsernameId(session, username10);
-                    System.out.println("succesed ------------" + user.getId());
-                    // Check if the entity exists
-                    if (task != null) {
-                        // Modify the properties of the entity
-                        task.setStatus("Completed");
-                        task.setCompletiontime(LocalDateTime.now());
-                        tx2.commit();
-                        listviewForUserRequestedTasks(task.getRegistered_user().getUsername());
-                        MessageOfStatus message2 = new MessageOfStatus(task, "volunteering done");
-                        DisplayDataMessage datarequest = new DisplayDataMessage(task.getVolunteer(), "performed");
-                        updateUserTasks_done(datarequest);
-                        ConnectionToClient connection= findManagerConnectionbyCommunity(task.getVolunteer().getCommunity());
-                        if (connection!=null){connection.sendToClient(datarequest);}
-                        client.sendToClient(message2);
-
-                        DisplayDataMessage datarequest_u = new DisplayDataMessage(task.getRegistered_user(), "uploaded");
-                        updateUserTasks(datarequest_u);
-
-                        ConnectionToClient connection_u= findManagerConnectionbyCommunity(task.getRegistered_user().getCommunity());
-                        if (connection_u!=null)
-                        {connection_u.sendToClient(datarequest_u);}
-                        System.out.println("no problem in here");
-                        tx2.commit();
-                    }
-                } catch (RuntimeException e) {
-                    if (tx2 != null) tx2.rollback();
-                    throw e;
-                } finally {
-                    session.close(); // Close the second session
-                }
-            } else if (request.equals("volunteering")) {
-                System.out.println("in volunteering =================");
-                int id = myTask.getId();
-                String username10 = ((MessageOfStatus) msg).getUsername();
-                System.out.println("try volunteer username" + username10);
-                SessionFactory sessionFactory = FactoryUtil.getSessionFactory();
-                session = sessionFactory.openSession();
-
-                Transaction tx2 = null;
-                try {
-                    tx2 = session.beginTransaction();
-
-                    // Perform operations with the second session
-                    System.out.println("in try volunteering");
-                    Task task = session.get(Task.class, id);
-                    Registered_user user = getUsernameId(session, username10);
-                    System.out.println("succesed ------------" + user.getId());
-                    // Check if the entity exists
-                    if (task != null) {
-                        // Modify the properties of the entity
-                        task.setStatus("In Process");
-                        task.setVolunteer(user);
-                        task.setCompletiontime(LocalDateTime.now());
-                        tx2.commit();
-                        Registered_user openby=task.getRegistered_user();
-                        ConnectionToClient connection= findUserConnectionbyUser(openby);
-                        if(connection!=null)
-                        {
-                            connection.sendToClient(new Notification("Volunteer Found", openby, user, task));
-                        }
-                        listviewForUserRequestedTasks(task.getRegistered_user().getUsername());
-                        listviewForUserTOVolunteer(task.getRegistered_user().getUsername());
-                        MessageOfStatus message2 = new MessageOfStatus(task, "Thanks for volunteering");
-                        // Echo back the received message to the client
-                        client.sendToClient(message2);
-                        tx2.commit();
-                        System.out.println("send to manager client");
-
-                        DisplayDataMessage datarequest = new DisplayDataMessage(openby, "uploaded");
-                        updateUserTasks(datarequest);
-                        ConnectionToClient connection_u= findManagerConnectionbyCommunity(openby.getCommunity());
-                        if (connection_u!=null)
-                        {connection_u.sendToClient(datarequest);}
-                        System.out.println("no problem in here");
-                    }
-                } catch (RuntimeException e) {
-                    if (tx2 != null) tx2.rollback();
-                    throw e;
-                } finally {
-                    session.close(); // Close the second session
-                }
-
-
-            }
-
-        } catch (HibernateException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        private List<Emergency_call> getAllEmergency (Session session){
+            Query<Emergency_call> query = session.createQuery("FROM Emergency_call ", Emergency_call.class);
+            return query.getResultList();
         }
     }
 
-
-    private void listOfEmergency(ConnectionToClient client) throws IOException {
-        System.out.println("in listOfEmergency");
-        SessionFactory sessionFactory = FactoryUtil.getSessionFactory();
-        session = sessionFactory.openSession();
-        System.out.println("11");
-        Transaction tx2 = null;
-        try {
-            tx2 = session.beginTransaction();
-            System.out.println("22");
-            List<Emergency_call> calls = getAllEmergency(session);
-            DisplayCalls dis = new DisplayCalls(calls);
-
-            client.sendToClient(dis);
-            tx2.commit();
-        } catch (RuntimeException e) {
-            if (tx2 != null) tx2.rollback();
-            throw e;
-        } finally {
-            session.close(); // Close the second session
-        }
-    }
-
-    private List<Emergency_call> getAllEmergency(Session session) {
-        Query<Emergency_call> query = session.createQuery("FROM Emergency_call ", Emergency_call.class);
-        return query.getResultList();
-    }
-}
 
 
 

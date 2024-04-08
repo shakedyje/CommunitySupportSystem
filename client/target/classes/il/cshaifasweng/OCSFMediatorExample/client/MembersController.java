@@ -109,7 +109,19 @@ public class MembersController {
 
     }
 
-
+    @Subscribe
+    public void TaskNotification(UsersNotificationEvent event)
+    {
+        Platform.runLater(() -> {
+            PostNotifications.getInstance().TaskNotification(event);
+        });
+        if (PostNotifications.unregeister)
+        {
+            System.out.println("got inside");
+            EventBus.getDefault().unregister(this);
+            System.out.println("unregistered");
+        }
+    }
 
     @FXML
     private void addRowAction(Registered_user user, MouseEvent event) throws IOException {

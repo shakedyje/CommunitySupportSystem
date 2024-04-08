@@ -16,6 +16,16 @@ public class Task implements Serializable {
     private TaskType Type_of_task;
     private LocalDateTime Creation_time;
     private LocalDateTime completiontime;
+    private LocalDateTime approvalTime;
+
+    public LocalDateTime getApprovalTime() {
+        return approvalTime;
+    }
+
+    public void setApprovalTime(LocalDateTime approvalTime) {
+        this.approvalTime = approvalTime;
+    }
+
     @ManyToOne
     @JoinColumn(name = "registered_user_id", referencedColumnName = "id")
     private Registered_user registered_user;

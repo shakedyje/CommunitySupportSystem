@@ -50,7 +50,8 @@ public class UserMainController {
         System.out.println("Logout message sent to server");
         UserClient.setLoggedInUser(null);
         ManagerClient.setManagerClient(null);
-        PostNotifications.notified = false;
+        PostNotifications.notified_done_check = false;
+        PostNotifications.notified_volunteer_please = false;
 
         Platform.runLater(() -> {
             try {
@@ -87,6 +88,9 @@ public class UserMainController {
             Message doneCheck = new Message("completed?");
             doneCheck.setUser(getLoggedInUser());
             UserClient.getClient().sendToServer(doneCheck);
+            Message noVolunteerForTasks24hrs = new Message("go volunteer");
+            noVolunteerForTasks24hrs.setUser(getLoggedInUser());
+            UserClient.getClient().sendToServer(noVolunteerForTasks24hrs);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

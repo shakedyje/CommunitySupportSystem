@@ -22,8 +22,9 @@ import static il.cshaifasweng.OCSFMediatorExample.client.SimpleChatClient.setRoo
 public class PostNotifications {
 
     private static PostNotifications instance;
-    static boolean notified=false;
-    static boolean unregeister=false;
+    static boolean notified_done_check = false;
+    static boolean notified_volunteer_please = false;
+    static boolean unregeister = false;
 
     private PostNotifications() {
         // Private constructor to prevent instantiation
@@ -35,10 +36,10 @@ public class PostNotifications {
         }
         return instance;
     }
-    public void TaskNotification(UsersNotificationEvent event)
-    {
+
+    public void TaskNotification(UsersNotificationEvent event) {
         Platform.runLater(() -> {
-            unregeister=false;
+            unregeister = false;
             // Create a media file for the notification sound
             Media errorsound = new Media(new File("sorry_sound.wav").toURI().toString());
             MediaPlayer mediaPlayer1 = new MediaPlayer(errorsound);
@@ -46,10 +47,14 @@ public class PostNotifications {
             MediaPlayer mediaPlayer2 = new MediaPlayer(confirmsound);
             Media victorysound = new Media(new File("victory_sound.wav").toURI().toString());
             MediaPlayer mediaPlayer3 = new MediaPlayer(victorysound);
+            Media donesound = new Media(new File("done_sound.wav").toURI().toString());
+            MediaPlayer mediaPlayer4 = new MediaPlayer(donesound);
+            Media pleasesound = new Media(new File("please_sound.wav").toURI().toString());
+            MediaPlayer mediaPlayer5 = new MediaPlayer(pleasesound);
             System.out.println("in notification");
             if (event.getNotification().getNotification().equals("Task Accepted")) {
-                Image img= new Image("small_tick.png");
-                ImageView small_tick =new ImageView(img);
+                Image img = new Image("small_tick.png");
+                ImageView small_tick = new ImageView(img);
                 small_tick.setFitWidth(50); // Set the width to 50 pixels
                 small_tick.setFitHeight(50);
                 Notifications.create()
@@ -57,29 +62,58 @@ public class PostNotifications {
                         .graphic(small_tick)
                         .text("Hooray " + event.getNotification().getAddressee().getGivenName() + "!\n" +
                                 "The community manager has approved your task")
-                        .hideAfter(Duration.seconds(5))
+                        .hideAfter(Duration.seconds(8))
                         .position(Pos.TOP_LEFT)
                         .show();
                 mediaPlayer2.play();
-            } else if(event.getNotification().getNotification().equals("Task Rejected")) {
+            } else if (event.getNotification().getNotification().equals("Task Rejected")) {
                 Notifications.create()
                         .title("Task Rejected")
                         .text("Sorry " + event.getNotification().getAddressee().getGivenName() + "...\n" +
                                 "The community manager has rejected your task")
-                        .hideAfter(Duration.seconds(5))
+                        .hideAfter(Duration.seconds(8))
                         .position(Pos.TOP_LEFT)
                         .showError();
                 mediaPlayer1.play();
             } else if (event.getNotification().getNotification().equals("Volunteer Found")) {
+                Image v_img = new Image("volunteer.jpg");
+                ImageView volunteer = new ImageView(v_img);
+                volunteer.setFitWidth(50); // Set the width to 50 pixels
+                volunteer.setFitHeight(50);
                 Notifications.create()
                         .title("Volunteer Found!")
+                        .graphic(volunteer)
                         .text("Luck you! " + event.getNotification().getUserInvolved().getUsername() +
-                                " has just volunteered for your task number "+ event.getNotification().getTaskInvolved().getId())
-                        .hideAfter(Duration.seconds(5))
+                                " has just volunteered for your task number " + event.getNotification().getTaskInvolved().getId())
+                        .hideAfter(Duration.seconds(8))
+                        .position(Pos.TOP_LEFT)
+                        .show();
+                mediaPlayer3.play();
+            } else if (event.getNotification().getNotification().equals("Task Completed")) {
+                System.out.println("post notification");
+                Notifications.create()
+                        .title("Task Completed!")
+                        .text("Manager " + event.getNotification().getAddressee().getGivenName() + ",\n" +
+                                "\n" +
+                                "we want to inform you that " + event.getNotification().getUserInvolved().getUsername() + " has just completed task number " + event.getNotification().getTaskInvolved().getId())
+                        .hideAfter(Duration.seconds(8))
                         .position(Pos.TOP_LEFT)
                         .showInformation();
-                        mediaPlayer3.play();
-            } else if (event.getNotification().getNotification().equals("Completed?") && !notified) {
+                mediaPlayer4.play();
+
+            } else if (event.getNotification().getNotification().equals("Go Volunteer") && !notified_volunteer_please) {
+                System.out.println("in volunteer now");
+                Notifications.create()
+                        .title("Volunteer Now")
+                        .text(event.getNotification().getAddressee().getGivenName() + ", There are open tasks with no volunteer for more than a day.\n We encourage you to volunteer for the betterment of the community.")
+                        .hideAfter(Duration.seconds(8))
+                        .position(Pos.TOP_LEFT)
+                        .showWarning();
+                mediaPlayer5.play();
+                notified_volunteer_please = true;
+
+//            EventBus.getDefault().unregister(this);
+            } else if (event.getNotification().getNotification().equals("Completed?") && !notified_done_check) {
                 System.out.println("in notification completed?");
                 ButtonType seeMore = new ButtonType("See Tasks", ButtonBar.ButtonData.YES);
                 ButtonType off = new ButtonType("Don't Show Again");
@@ -91,7 +125,7 @@ public class PostNotifications {
                 alert.getDialogPane().setPrefHeight(100); // Set the height as needed
 
                 // Add the "Don't Show Again" button
-                alert.getButtonTypes().addAll(seeMore,off); // Add the custom button
+                alert.getButtonTypes().addAll(seeMore, off); // Add the custom button
                 Button okButton = (Button) alert.getDialogPane().lookupButton(ButtonType.OK);
                 if (okButton != null) {
                     // Set the text for the OK button
@@ -103,7 +137,10 @@ public class PostNotifications {
                 Optional<ButtonType> result = alert.showAndWait();
 
                 // Check if the custom button was clicked
-                if (result.isPresent() && result.get() == seeMore) {
+
+                if (result.isPresent() && result.get() == off) {
+                    notified_done_check = true;
+                } else if (result.isPresent() && result.get() == seeMore) {
                     // Perform the action when the custom button is clicked
                     Platform.runLater(() -> {
                         try {
@@ -113,22 +150,16 @@ public class PostNotifications {
                         }
                     });
 
-                    notified=true;
+                    notified_done_check = true;
                     alert.close();
-                    unregeister=true;
-                } else if (result.isPresent() && result.get() == off) {
-                    notified = true;
+                    unregeister = true;
                 }
-
-
             }
-
-//            EventBus.getDefault().unregister(this);
         });
+
     }
+}
 
-
-            }
 
 
 

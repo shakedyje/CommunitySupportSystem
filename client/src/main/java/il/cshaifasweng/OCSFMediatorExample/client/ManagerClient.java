@@ -57,8 +57,14 @@ public class ManagerClient extends AbstractClient {
                 System.out.println("clientp");
                 EventBus.getDefault().post(new CompletedEvent(dis));
             }
+        } else if (msg instanceof Notification) {
+            Notification notification = (Notification) msg;
+            EventBus.getDefault().post(new UsersNotificationEvent(notification));
 
         }
+
+
+
 //        else if (msg instanceof ) {
 ////            List <Emergency_call> calls=((DisplayCalls) msg).getCalls();
 //            UserTasksController.class.

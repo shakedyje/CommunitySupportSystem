@@ -83,7 +83,19 @@ public class show_emergencyCall {
     @FXML
     private TableColumn<Emergency_call, Integer> idColumn;
 
-
+    @Subscribe
+    public void TaskNotification(UsersNotificationEvent event)
+    {
+        Platform.runLater(() -> {
+            PostNotifications.getInstance().TaskNotification(event);
+        });
+        if (PostNotifications.unregeister)
+        {
+            System.out.println("got inside");
+            EventBus.getDefault().unregister(this);
+            System.out.println("unregistered");
+        }
+    }
     @FXML
     void Back_to_main(ActionEvent event) throws IOException {
         Platform.runLater(() -> {

@@ -63,6 +63,11 @@ public class VolunteeringPage {
 
     String Saveuser;
 
+    public void TaskNotification(UsersNotificationEvent event)
+    {
+        PostNotifications.getInstance().TaskNotification(event);
+    }
+
 
     @FXML
     void volunteeringTaskShow(MouseEvent event) {
