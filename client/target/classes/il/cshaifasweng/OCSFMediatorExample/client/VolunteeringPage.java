@@ -63,6 +63,11 @@ public class VolunteeringPage {
 
     String Saveuser;
 
+    public void TaskNotification(UsersNotificationEvent event)
+    {
+        PostNotifications.getInstance().TaskNotification(event);
+    }
+
 
     @FXML
     void volunteeringTaskShow(MouseEvent event) {
@@ -71,11 +76,22 @@ public class VolunteeringPage {
         if (tempTask != null) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             String formattedDeadline = tempTask.getDeadline().format(formatter);
-            String taskDetails = String.format("Task ID: %d\n\nType: %s\n\nDeadline: %s\n\nStatus: %s\n\nName: %s %s",
-                    tempTask.getId(), tempTask.getType_of_task(), formattedDeadline, tempTask.getStatus(),
-                    tempTask.getRegistered_user().getGivenName(), tempTask.getRegistered_user().getFamilyName());
-            // Update the TextArea with task details
-            VolunteeringTaskDetails.setText(taskDetails);
+            String moreDetails = tempTask.getMoredetails();
+
+            if (moreDetails != null) {
+                String taskDetails = String.format("Task ID: %d\n\nType: %s\n\nDeadline: %s\n\nStatus: %s\n\nName: %s %s\n\nMore Details: %s",
+                        tempTask.getId(), tempTask.getType_of_task(), formattedDeadline, tempTask.getStatus(),
+                        tempTask.getRegistered_user().getGivenName(), tempTask.getRegistered_user().getFamilyName(), moreDetails);
+                System.out.println(taskDetails);
+                VolunteeringTaskDetails.setText(taskDetails);
+
+            } else {
+                String taskDetailsWithoutMoreDetails = String.format("Task ID: %d\n\nType: %s\n\nDeadline: %s\n\nStatus: %s\n\nName: %s %s",
+                        tempTask.getId(), tempTask.getType_of_task(), formattedDeadline, tempTask.getStatus(),
+                        tempTask.getRegistered_user().getGivenName(), tempTask.getRegistered_user().getFamilyName());
+                System.out.println(taskDetailsWithoutMoreDetails);
+                VolunteeringTaskDetails.setText(taskDetailsWithoutMoreDetails);
+            }
             VolunteeringTaskDetails.setVisible(true);
             VolunteeringTaskDetails.setWrapText(true);
             VolunteeringTaskDetails.setFont(font);

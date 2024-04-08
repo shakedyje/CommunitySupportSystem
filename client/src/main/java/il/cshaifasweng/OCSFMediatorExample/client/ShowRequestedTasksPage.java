@@ -67,11 +67,23 @@ public class ShowRequestedTasksPage {
         if (tempTask != null) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             String formattedDeadline = tempTask.getDeadline().format(formatter);
-            String taskDetails = String.format("Task ID: %d\n\nType: %s\n\nDeadline: %s\n\nStatus: %s\n\nName: %s %s",
-                    tempTask.getId(), tempTask.getType_of_task(), formattedDeadline, tempTask.getStatus(),
-                    tempTask.getRegistered_user().getGivenName(), tempTask.getRegistered_user().getFamilyName());
+            String moreDetails = tempTask.getMoredetails();
+
+            if (moreDetails != null) {
+                String taskDetails = String.format("Task ID: %d\n\nType: %s\n\nDeadline: %s\n\nStatus: %s\n\nName: %s %s\n\nMore Details: %s",
+                        tempTask.getId(), tempTask.getType_of_task(), formattedDeadline, tempTask.getStatus(),
+                        tempTask.getRegistered_user().getGivenName(), tempTask.getRegistered_user().getFamilyName(), moreDetails);
+                System.out.println(taskDetails);
+                RequestedTaskDetails.setText(taskDetails);
+
+            } else {
+                String taskDetailsWithoutMoreDetails = String.format("Task ID: %d\n\nType: %s\n\nDeadline: %s\n\nStatus: %s\n\nName: %s %s",
+                        tempTask.getId(), tempTask.getType_of_task(), formattedDeadline, tempTask.getStatus(),
+                        tempTask.getRegistered_user().getGivenName(), tempTask.getRegistered_user().getFamilyName());
+                System.out.println(taskDetailsWithoutMoreDetails);
+                RequestedTaskDetails.setText(taskDetailsWithoutMoreDetails);
+            }
             // Update the TextArea with task details
-            RequestedTaskDetails.setText(taskDetails);
             RequestedTaskDetails.setVisible(true);
             RequestedTaskDetails.setWrapText(true);
             RequestedTaskDetails.setFont(font);

@@ -7,51 +7,57 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="525.0" prefWidth="853.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="il.cshaifasweng.OCSFMediatorExample.client.ShowMyVolunteeredTasks">
+
+<VBox fillWidth="false" prefHeight="491.0" prefWidth="911.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="il.cshaifasweng.OCSFMediatorExample.client.ShowMyVolunteeredTasks">
    <children>
-      <ImageView fitHeight="492.0" fitWidth="886.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@OAK40C0988.jpg" />
-         </image>
-      </ImageView>
-      <Button fx:id="back" mnemonicParsing="false" onAction="#back_to_mainUser" prefHeight="24.0" prefWidth="63.0" text="Back">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Button>
-      <ListView fx:id="listviewInProcess" layoutX="17.0" layoutY="131.0" onMouseClicked="#display" prefHeight="314.0" prefWidth="433.0" />
-      <TextArea fx:id="show" layoutX="498.0" layoutY="141.0" prefHeight="211.0" prefWidth="351.0" />
-      <Label fx:id="welcome" layoutX="382.0" layoutY="79.0" prefHeight="37.0" prefWidth="583.0" text="We are proud of you!" textFill="WHITE">
-         <font>
-            <Font name="Kristen ITC" size="18.0" />
-         </font>
-      </Label>
-      <ImageView fitHeight="158.0" fitWidth="193.0" layoutX="606.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@image-removebg-preview%20(1).png" />
-         </image>
-      </ImageView>
-      <Button fx:id="done" layoutX="498.0" layoutY="368.0" mnemonicParsing="false" onAction="#task_completed" prefHeight="37.0" prefWidth="351.0" text="Done">
-         <font>
-            <Font size="17.0" />
-         </font>
-      </Button>
-      <Label fx:id="welcome1" layoutX="379.0" layoutY="27.0" onMouseClicked="#back_to_mainUser" prefHeight="46.0" prefWidth="522.0" text="Wow" textFill="WHITE">
-         <font>
-            <Font size="35.0" />
-         </font>
-      </Label>
-      <Button fx:id="Emergency_btn" layoutX="-2.0" layoutY="479.0" mnemonicParsing="false" onAction="#switchToemergency" prefHeight="46.0" prefWidth="886.0" text="Emergency Button" textFill="#e20a0a">
-         <font>
-            <Font name="Arial Bold" size="23.0" />
-         </font>
-      </Button>
-      <ImageView fitHeight="81.0" fitWidth="31.0" layoutX="507.0" layoutY="372.0" onMouseClicked="#task_completed" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@pngwing.com%20(4).png" />
-         </image>
-      </ImageView>
+      <AnchorPane prefHeight="525.0" prefWidth="936.0">
+         <children>
+            <ImageView fitHeight="546.0" fitWidth="968.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@OAK40C0988.jpg" />
+               </image>
+            </ImageView>
+            <Button fx:id="back" mnemonicParsing="false" onAction="#back_to_mainUser" prefHeight="24.0" prefWidth="63.0" text="Back">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+            <ListView fx:id="listviewInProcess" layoutX="17.0" layoutY="142.0" onMouseClicked="#display" prefHeight="310.0" prefWidth="433.0" />
+            <TextArea fx:id="show" layoutX="498.0" layoutY="141.0" prefHeight="261.0" prefWidth="351.0" />
+            <Label fx:id="welcome" layoutX="382.0" layoutY="79.0" prefHeight="37.0" prefWidth="583.0" text="We are proud of you!" textFill="WHITE">
+               <font>
+                  <Font name="Kristen ITC" size="18.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="158.0" fitWidth="193.0" layoutX="606.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@image-removebg-preview%20(1).png" />
+               </image>
+            </ImageView>
+            <Button fx:id="done" layoutX="498.0" layoutY="413.0" mnemonicParsing="false" onAction="#task_completed" prefHeight="37.0" prefWidth="351.0" text="Done">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Button>
+            <Label fx:id="welcome1" layoutX="379.0" layoutY="27.0" prefHeight="51.0" prefWidth="221.0" text="Wow" textFill="WHITE">
+               <font>
+                  <Font size="35.0" />
+               </font>
+            </Label>
+            <Button fx:id="Emergency_btn" layoutY="489.0" mnemonicParsing="false" onAction="#switchToemergency" prefHeight="46.0" prefWidth="967.0" text="Emergency Button" textFill="#e20a0a">
+               <font>
+                  <Font name="Arial Bold" size="23.0" />
+               </font>
+            </Button>
+            <ImageView fitHeight="81.0" fitWidth="31.0" layoutX="505.0" layoutY="418.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@pngwing.com%20(4).png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
    </children>
-</AnchorPane>
+</VBox>

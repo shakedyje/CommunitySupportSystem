@@ -85,7 +85,7 @@ public class PostNotifications {
                         .graphic(volunteer)
                         .text("Luck you! " + event.getNotification().getUserInvolved().getUsername() +
                                 " has just volunteered for your task number " + event.getNotification().getTaskInvolved().getId())
-                        .hideAfter(Duration.seconds(8))
+                        .hideAfter(Duration.seconds(10))
                         .position(Pos.TOP_LEFT)
                         .show();
                 mediaPlayer3.play();
