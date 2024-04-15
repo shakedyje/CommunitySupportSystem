@@ -32,6 +32,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.io.IOException;
 
 import static il.cshaifasweng.OCSFMediatorExample.client.SimpleChatClient.setRoot;
+import static il.cshaifasweng.OCSFMediatorExample.client.UserClient.getLoggedInUser;
 
 public class ShowRequestedTasksPage {
 
@@ -66,11 +67,23 @@ public class ShowRequestedTasksPage {
         if (tempTask != null) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             String formattedDeadline = tempTask.getDeadline().format(formatter);
-            String taskDetails = String.format("Task ID: %d\n\nType: %s\n\nDeadline: %s\n\nStatus: %s\n\nName: %s %s",
-                    tempTask.getId(), tempTask.getType_of_task(), formattedDeadline, tempTask.getStatus(),
-                    tempTask.getRegistered_user().getGivenName(), tempTask.getRegistered_user().getFamilyName());
+            String moreDetails = tempTask.getMoredetails();
+
+            if (moreDetails != null) {
+                String taskDetails = String.format("Task ID: %d\n\nType: %s\n\nDeadline: %s\n\nStatus: %s\n\nName: %s %s\n\nMore Details: %s",
+                        tempTask.getId(), tempTask.getType_of_task(), formattedDeadline, tempTask.getStatus(),
+                        tempTask.getRegistered_user().getGivenName(), tempTask.getRegistered_user().getFamilyName(), moreDetails);
+                System.out.println(taskDetails);
+                RequestedTaskDetails.setText(taskDetails);
+
+            } else {
+                String taskDetailsWithoutMoreDetails = String.format("Task ID: %d\n\nType: %s\n\nDeadline: %s\n\nStatus: %s\n\nName: %s %s",
+                        tempTask.getId(), tempTask.getType_of_task(), formattedDeadline, tempTask.getStatus(),
+                        tempTask.getRegistered_user().getGivenName(), tempTask.getRegistered_user().getFamilyName());
+                System.out.println(taskDetailsWithoutMoreDetails);
+                RequestedTaskDetails.setText(taskDetailsWithoutMoreDetails);
+            }
             // Update the TextArea with task details
-            RequestedTaskDetails.setText(taskDetails);
             RequestedTaskDetails.setVisible(true);
             RequestedTaskDetails.setWrapText(true);
             RequestedTaskDetails.setFont(font);
@@ -150,26 +163,17 @@ public class ShowRequestedTasksPage {
                 throw new RuntimeException(e);
             }
         });
+        EventBus.getDefault().unregister(this);
+
 
     }
-    @FXML
-    void switch_to_emergency(ActionEvent event) {
-        Platform.runLater(() -> {
-            try {
-                setRoot("Emergency");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
 
-    }
     @FXML
     void initialize() throws IOException {
         String username=UserClient.getLoggedInUser().getUsername();
         System.out.println(username+" userclient???????????????????????????????????/");
 
-        welcome.setText("REQUESTED TASKS OF " + UserClient.getLoggedInUser().getGivenName());
-        welcome.setAlignment(Pos.TOP_LEFT);
+        welcome.setText( UserClient.getLoggedInUser().getGivenName()+"'s Tasks");
         EventBus.getDefault().register(this);
         UserClient userClient = UserClient.getClient();
         try {
@@ -199,10 +203,24 @@ public class ShowRequestedTasksPage {
         }
 
     }
-//    @Subscribe
-//    public void TaskNotification(UsersNotificationEvent event)
-//    {
-//        PostNotifications.getInstance().TaskNotification(event);
-//    }
+    @Subscribe
+    public void TaskNotification(UsersNotificationEvent event)
+    {
+        PostNotifications.getInstance().TaskNotification(event);
+    }
 
+    public void switchToemergency(ActionEvent actionEvent)
+    {
+        System.out.println("here");
+        Platform.runLater(() -> {
+            try {
+                UserClient.setLast_fxml("requestedTasksPage");
+                setRoot("Emergency");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            EventBus.getDefault().unregister(this);
+        });
+
+    }
 }

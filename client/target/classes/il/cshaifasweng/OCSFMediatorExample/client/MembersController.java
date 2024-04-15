@@ -25,7 +25,8 @@ import java.io.IOException;
 import static il.cshaifasweng.OCSFMediatorExample.client.SimpleChatClient.setRoot;
 
 public class MembersController {
-
+    @FXML
+    private Button emmergencyBtn;
     @FXML
     private TableView<Registered_user> tableView;
 
@@ -53,8 +54,18 @@ public class MembersController {
     }
 
     private static Stage appStage;
-
-
+    @FXML
+    void switchToemergency(ActionEvent event) {
+        Platform.runLater(() -> {
+            try {
+                ManagerClient.setLast_fxml("members");
+                setRoot("Emergency");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        EventBus.getDefault().unregister(this);
+    }
     @FXML
     public void initialize() throws IOException {
         System.out.println("hi");
@@ -88,14 +99,29 @@ public class MembersController {
 //        currentStage.close();
             Platform.runLater(() -> {
                 try {
+//                    ManagerClient.setLast_fxml("manager main");
                     setRoot("manager_main");
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
             });
+        EventBus.getDefault().unregister(this);
+
     }
 
-
+    @Subscribe
+    public void TaskNotification(UsersNotificationEvent event)
+    {
+        Platform.runLater(() -> {
+            PostNotifications.getInstance().TaskNotification(event);
+        });
+        if (PostNotifications.unregeister)
+        {
+            System.out.println("got inside");
+            EventBus.getDefault().unregister(this);
+            System.out.println("unregistered");
+        }
+    }
 
     @FXML
     private void addRowAction(Registered_user user, MouseEvent event) throws IOException {
@@ -121,10 +147,13 @@ public class MembersController {
                 Stage stage = new Stage();
                 stage.setScene(scene);
                 stage.show();
+       Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        currentStage.close();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         });
+        EventBus.getDefault().unregister(this);
     }
 
     public void populateTableM(ObservableList<Registered_user> users) {

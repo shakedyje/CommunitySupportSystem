@@ -1,9 +1,4 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
-import il.cshaifasweng.OCSFMediatorExample.client.NewDetailsEvent;
-import il.cshaifasweng.OCSFMediatorExample.client.TaskRejectEvent;
-import il.cshaifasweng.OCSFMediatorExample.client.TasksMessageEvent;
-import il.cshaifasweng.OCSFMediatorExample.entities.LogInOutMessage;
-import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import il.cshaifasweng.OCSFMediatorExample.entities.Message;
 import il.cshaifasweng.OCSFMediatorExample.entities.Task;
@@ -13,7 +8,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
@@ -159,25 +153,31 @@ public class Manager  {
         }
     }
 
-    @FXML
-    void EmergencyCall(ActionEvent event) {
-
+    @Subscribe
+    public void TaskNotification(UsersNotificationEvent event)
+    {
+        Platform.runLater(() -> {
+            PostNotifications.getInstance().TaskNotification(event);
+        });
+        if (PostNotifications.unregeister)
+        {
+            System.out.println("got inside");
+            EventBus.getDefault().unregister(this);
+            System.out.println("unregistered");
+        }
     }
 
     @FXML
     void LOG_OUT(ActionEvent event) throws IOException {
 
-//        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-//        currentStage.close();
-//        ManagerClient.getClient().closeConnection();
-//        ManagerClient.getClient().sendToServer(new LogInOutMessage(getManagerClient(), "log out")); //add to logged-in users list
+
         Message message = new Message("log out manager", ManagerClient.getManagerClient().getUsername());
         ManagerClient managerClient = ManagerClient.getClient();
         System.out.println("i will enter");
         managerClient.sendToServer(message);
         System.out.println("Logout message sent to server");
         ManagerClient.setManagerClient(null);
-//        UnknownUserClient.getClient().openConnection();
+        UserClient.setLoggedInUser(null);
         Platform.runLater(() -> {
             try {
                 setRoot("log_in");
@@ -188,7 +188,7 @@ public class Manager  {
             }
         });
         System.out.println("back from platfrom");
-//        cleanup();
+        cleanup();
 
 
 
@@ -257,8 +257,7 @@ public class Manager  {
                 throw new RuntimeException(e);
             }
  });
-
-
+        cleanup();
     }
 
     @FXML
@@ -270,11 +269,22 @@ public class Manager  {
         if (tempTask != null) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             String formattedDeadline = tempTask.getDeadline().format(formatter);
-            String taskDetails = String.format("Task ID: %d\n\nType: %s\n\nDeadline: %s\n\nStatus: %s\n\nName: %s %s",
-                    tempTask.getId(), tempTask.getType_of_task(), formattedDeadline, tempTask.getStatus(),
-                    tempTask.getRegistered_user().getGivenName(), tempTask.getRegistered_user().getFamilyName());
-            // Update the TextArea with task details
-            Request.setText(taskDetails);
+            String moreDetails = tempTask.getMoredetails();
+
+            if (moreDetails != null) {
+                String taskDetails = String.format("Task ID: %d\n\nType: %s\n\nDeadline: %s\n\nStatus: %s\n\nName: %s %s\n\nMore Details: %s",
+                        tempTask.getId(), tempTask.getType_of_task(), formattedDeadline, tempTask.getStatus(),
+                        tempTask.getRegistered_user().getGivenName(), tempTask.getRegistered_user().getFamilyName(), moreDetails);
+                System.out.println(taskDetails);
+                Request.setText(taskDetails);
+
+            } else {
+                String taskDetailsWithoutMoreDetails = String.format("Task ID: %d\n\nType: %s\n\nDeadline: %s\n\nStatus: %s\n\nName: %s %s",
+                        tempTask.getId(), tempTask.getType_of_task(), formattedDeadline, tempTask.getStatus(),
+                        tempTask.getRegistered_user().getGivenName(), tempTask.getRegistered_user().getFamilyName());
+                System.out.println(taskDetailsWithoutMoreDetails);
+                Request.setText(taskDetailsWithoutMoreDetails);
+            }
             Request.setVisible(true);
             Request.setWrapText(true);
             Request.setFont(font);
@@ -303,18 +313,8 @@ public class Manager  {
 
                 }
             });
+        cleanup();
     }
-
-    @FXML
-    void ShowTasks(ActionEvent event) {
-
-    }
-
-    @FXML
-    void WriteReason(ActionEvent event) {
-
-    }
-
 
 
     //ObservableList<Task> observableTasks = FXCollections.observableArrayList();
@@ -358,47 +358,16 @@ public class Manager  {
     void switchToemergency(ActionEvent event) {
         Platform.runLater(() -> {
             try {
+                ManagerClient.setLast_fxml("manager_main");
                 setRoot("Emergency");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         });
+        cleanup();
+
     }
 
-//    @FXML
-//    void initialize(String username) {
-//        EventBus.getDefault().register(this);
-//
-//        // Initialize ManagerClient instance
-//
-//        ManagerClient managerClient = ManagerClient.getClient();
-//        try {
-////            TasksOb.getInstance();
-////            getClient().sendToServer("get tasks");
-//            managerClient.openConnection();
-////            getClient().sendToServer("list view");
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        msgId=0;
-//
-//        try {
-//            //getClient().sendToServer("add manager client");
-//            Message message2 = new Message("list view",username);
-//            Message message3 = new Message("add manager client",username);
-//            managerClient.sendToServer(message2);
-//
-//           managerClient.sendToServer(message3);
-//           managerClient.sendToServer(new LogInOutMessage(getManagerClient(), "log in")); //add to logged-in users list
-//
-//        } catch (IOException e) {
-//            // Handle send error
-//            System.err.println("Error: Unable to send message to the server");
-//            e.printStackTrace();
-//            // Optionally, you may choose to continue initialization or stop here
-//        }
-//    }
 @FXML
 void initialize() {
     System.out.println("initiza;ies with"+ManagerClient.getManagerClient().getUsername());

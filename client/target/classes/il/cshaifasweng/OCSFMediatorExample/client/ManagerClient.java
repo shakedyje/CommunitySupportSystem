@@ -14,7 +14,16 @@ public class ManagerClient extends AbstractClient {
 
     private static Registered_user managerClient = null;
     private static ManagerClient client = null;
-    private static Registered_user loggedInUser=null;
+
+    private static String last_fxml="";
+
+    public static String getLast_fxml() {
+        return last_fxml;
+    }
+
+    public static void setLast_fxml(String last_fxml) {
+        ManagerClient.last_fxml = last_fxml;
+    }
 
 
     /**
@@ -44,12 +53,18 @@ public class ManagerClient extends AbstractClient {
             } else if (dis.getDataType().equals("uploaded")) {
                 System.out.println("client");
                 EventBus.getDefault().post(new UserTasksDisplayEvent(dis));
-            } else if (dis.getDataType().equals("preformed")) {
+            } else if (dis.getDataType().equals("performed")) {
                 System.out.println("clientp");
                 EventBus.getDefault().post(new CompletedEvent(dis));
             }
+        } else if (msg instanceof Notification) {
+            Notification notification = (Notification) msg;
+            EventBus.getDefault().post(new UsersNotificationEvent(notification));
 
         }
+
+
+
 //        else if (msg instanceof ) {
 ////            List <Emergency_call> calls=((DisplayCalls) msg).getCalls();
 //            UserTasksController.class.
