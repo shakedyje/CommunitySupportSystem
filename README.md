@@ -1,5 +1,5 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/DOjhUdA7)
-# Software Engineering Course Project, Haifa University 2023
+# Software Engineering Course Project, Haifa University 2024
 ## Community Support System - ATIS (All Together Information System)
 ATIS system is an emergency management platform that allows users to request help or volunteer for tasks like transportation, childcare, and food delivery. It includes an emergency alert button and a task management system to coordinate aid. Community managers can oversee requests, approve tasks, and track volunteer activity. The system is built with a client-server architecture and a relational database to support efficient and scalable operations.
 
